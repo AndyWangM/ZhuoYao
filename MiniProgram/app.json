@@ -1,0 +1,33 @@
+{
+  "pages": [
+    "pages/sprite/search/search",
+    "pages/sprite/filter/filter"
+  ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "国双",
+    "navigationBarTextStyle": "black"
+  },
+  "navigateToMiniProgramAppIdList": [
+    ""
+  ],
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/sprite/search/search",
+        "text": "妖灵搜索"
+      },
+      {
+        "pagePath": "pages/sprite/filter/filter",
+        "text": "妖灵过滤"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

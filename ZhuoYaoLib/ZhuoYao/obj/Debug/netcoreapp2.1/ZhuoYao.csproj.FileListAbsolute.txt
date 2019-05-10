@@ -1,0 +1,14 @@
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/obj/Debug/netcoreapp2.1/ZhuoYao.csprojAssemblyReference.cache
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/obj/Debug/netcoreapp2.1/ZhuoYao.csproj.CoreCompileInputs.cache
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/obj/Debug/netcoreapp2.1/ZhuoYao.RazorAssemblyInfo.cache
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/obj/Debug/netcoreapp2.1/ZhuoYao.RazorAssemblyInfo.cs
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/obj/Debug/netcoreapp2.1/ZhuoYao.AssemblyInfoInputs.cache
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/obj/Debug/netcoreapp2.1/ZhuoYao.AssemblyInfo.cs
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/bin/Debug/netcoreapp2.1/ZhuoYao.deps.json
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/bin/Debug/netcoreapp2.1/ZhuoYao.runtimeconfig.json
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/bin/Debug/netcoreapp2.1/ZhuoYao.runtimeconfig.dev.json
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/bin/Debug/netcoreapp2.1/ZhuoYao.dll
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/bin/Debug/netcoreapp2.1/ZhuoYao.pdb
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/obj/Debug/netcoreapp2.1/ZhuoYao.RazorTargetAssemblyInfo.cache
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/obj/Debug/netcoreapp2.1/ZhuoYao.dll
+/Users/wangandi/Projects/ZhuoYao/ZhuoYao/obj/Debug/netcoreapp2.1/ZhuoYao.pdb
