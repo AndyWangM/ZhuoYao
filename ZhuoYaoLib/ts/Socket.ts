@@ -9,7 +9,9 @@ namespace ZhuoYao {
         requestIds: number[] = [];
         requestResult: RequestResult;
         content: any;
-        isOpen: boolean;
+        isOpen: boolean = false;
+        messageQueue: Object[] = [];
+        isReceiving: boolean = false;
 
         constructor(content) {
             this.requestResult = new RequestResult();
@@ -24,12 +26,15 @@ namespace ZhuoYao {
             });
             wx["onSocketError"](function (e) {
                 console.log("WebSocket连接打开失败，请检查！")
+                setTimeout(function () {
+                    that.connectSocket()
+                }, 1000);
             });
             wx["onSocketClose"](function (e) {
                 console.log("WebSocket 已关闭！");
                 setTimeout(function () {
                     that.connectSocket()
-                }, 1000);
+                }, 500);
             });
             wx["onSocketMessage"](function (t) {
                 that.recMessage(t)
@@ -47,15 +52,46 @@ namespace ZhuoYao {
             this.isOpen = true;
         }
 
-        public sendSocketMessage(str: string, callback: Function) {
+        public sendMessage(str) {
+            var that = this;
+            // if (str) {
+            //     that.messageQueue.push(str);
+            // }
+            that.sendSocketMessage(str);
+        }
+
+        // public sendSocketMessage(str?: string, callback?: Function) {
+        //     var that: Socket = this;
+        //     if (that.isReceiving || that.messageQueue.length ==0) {
+        //         return;
+        //     }
+        //     that.isReceiving = true;
+        //     var obj: any = that.messageQueue.shift();
+        //     wx["sendSocketMessage"]({
+        //         data: Utils.str2ab(obj),
+        //         success: function (n) {
+        //             // console.log("发送服务器成功");
+        //             console.log("发送服务器成功", str);
+        //         },
+        //         fail: function (n) {
+        //             console.log("发送服务器失败");
+        //             that.messageQueue.unshift(obj);
+        //             that.sendSocketMessage();
+        //             // console.log("发送服务器失败", str), callback && callback();
+        //         }
+        //     });
+        // }
+        public sendSocketMessage(str?: Object, callback?: Function) {
             var that: Socket = this;
             wx["sendSocketMessage"]({
                 data: Utils.str2ab(str),
                 success: function (n) {
+                    // console.log("发送服务器成功");
                     console.log("发送服务器成功", str);
                 },
                 fail: function (n) {
-                    console.log("发送服务器失败", str), callback && callback();
+                    console.log("发送服务器失败");
+                    // console.log("发送服务器失败", str), callback && callback();
                 }
             });
         }
@@ -64,7 +100,8 @@ namespace ZhuoYao {
             var that: Socket = this;
             var str: string = Utils.utf8ByteToUnicodeStr(new Uint8Array(e.data).slice(4));
             if (str.length > 0) {
-                // console.log("收到服务器消息", str);
+                console.log("收到服务器消息")
+                // console.log("收到服务器消息", str.substring(0, 100));
                 var obj = JSON.parse(str);
                 if (obj["retcode"] != 0) {
                     wx["hideLoading"]();
@@ -73,24 +110,25 @@ namespace ZhuoYao {
                 if (id == "10041") {
                     this.getVersionFileName(obj["filename"]);
                 } else {
+                    if (obj.sprite_list) {
                     var spriteResult: SpriteResult = that.requestResult.getSpriteResult(obj);
-                    var minLat = 1000000000;
-                    var maxLat = 0;
-                    var minLong = 1000000000;
-                    var maxLong = 0;
+                    // var minLat = 1000000000;
+                    // var maxLat = 0;
+                    // var minLong = 1000000000;
+                    // var maxLong = 0;
                     for (const aliveSprite of spriteResult.sprite_list) {
-                        if (aliveSprite.latitude < minLat) {
-                            minLat = aliveSprite.latitude;
-                        }
-                        if (aliveSprite.latitude > maxLat) {
-                            maxLat = aliveSprite.latitude;
-                        }
-                        if (aliveSprite.longtitude < minLong) {
-                            minLong = aliveSprite.longtitude;
-                        }
-                        if (aliveSprite.longtitude > maxLong) {
-                            maxLong = aliveSprite.longtitude;
-                        }
+                        // if (aliveSprite.latitude < minLat) {
+                        //     minLat = aliveSprite.latitude;
+                        // }
+                        // if (aliveSprite.latitude > maxLat) {
+                        //     maxLat = aliveSprite.latitude;
+                        // }
+                        // if (aliveSprite.longtitude < minLong) {
+                        //     minLong = aliveSprite.longtitude;
+                        // }
+                        // if (aliveSprite.longtitude > maxLong) {
+                        //     maxLong = aliveSprite.longtitude;
+                        // }
                         if (!aliveSprite.sprite) {
                             // 无效妖灵
                             // console.log(aliveSprite)
@@ -111,8 +149,13 @@ namespace ZhuoYao {
                                             "latitude": latitude,
                                             "longtitude": longtitude,
                                             "lefttime": aliveSprite.getLeftTime()
+                                        };
+                                        var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
+                                        var hashValue = Utils.hash(hashStr);
+                                        if (!Utils.getTempResults().containsKey(hashValue)) {
+                                            Utils.getTempResults().put(hashStr, resultObj);
                                         }
-                                        that.content.data.result.push(resultObj);
+                                        // console.log(resultObj)
                                         // console.log("名称: " + aliveSprite.sprite.Name,aliveSprite.getLeftTime());
                                         // console.log("纬度: " + latitude);
                                         // console.log("经度: " + longtitude);
@@ -130,7 +173,7 @@ namespace ZhuoYao {
                     // console.log("最大经度: "+ maxLong);
                     // console.log("纬度差值: " + (maxLat - minLat));
                     // console.log("经度差值: " + (maxLong - minLong));
-                }
+                }}
                 // switch (id) {
                 //     case "10041":
                 //         this.getVersionFileName(obj["filename"]);
@@ -189,6 +232,8 @@ namespace ZhuoYao {
                 //         break;
                 // }
             }
+            // that.isReceiving = false;
+            // that.sendSocketMessage();
         }
 
         public genRequestId(n) {

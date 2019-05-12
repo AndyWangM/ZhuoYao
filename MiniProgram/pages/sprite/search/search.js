@@ -7,15 +7,21 @@ Page({
   data: {
     mapInfo: {},
     spriteName: null,
-    result: []
+    result: [],
+    xIndex: 2,
+    yIndex: 2
   },
   onLoad() {
     var that = this;
     setInterval(function () {
+      // var 
+      // for(var i = 0; i< that.data.tempresult.length;i++) {
+        
+      // }
       that.setData({
-        result: that.data.result
+        result: ZhuoYao.Utils.getTempResults().values() || []
       })
-    }, 3000)
+    }, 1000)
   },
   onShow() {
     var that = this;
@@ -25,7 +31,7 @@ Page({
   tapview(e) {
     var content = e.currentTarget.dataset.content;
     wx.setClipboardData({
-      data: content.longtitude + ", " + content.latitude,
+      data: content.longtitude + " " + content.latitude,
       success(res) {
         wx.getClipboardData({
           success(res) {
@@ -37,6 +43,16 @@ Page({
   },
   getConfig() {
     this.getSettingFileName()
+  },
+  bindXInput(e) {
+    this.setData({
+      "xIndex":e.detail.value
+    })
+  },
+  bindYInput(e) {
+    this.setData({
+      "yIndex": e.detail.value
+    })
   },
   selectLocation() {
     var that = this;
@@ -95,6 +111,8 @@ Page({
       return parseInt(1e6 * numStr);
     }
     var mapInfo = that.data.mapInfo;
+    ZhuoYao.Utils.getTempResults().clear();
+    this.data.result = [];
     that.getYaojingInfo();
   },
   getSettingFileName: function () {
@@ -119,13 +137,12 @@ Page({
   },
   getYaojingInfo: function () {
     var that = this;
-    this.data.result = [];
     var mapInfo = that.data.mapInfo;
     var latStep = 0.017860;
     var longStep = 0.015182;
     var a = [];
-    var aindex = 3;
-    var bindex = 3;
+    var aindex = this.data.xIndex;
+    var bindex = this.data.yIndex;
     for (var i = 0; i < aindex; i++) {
       var lat = mapInfo.latitude + i * latStep;
       var b = [];
@@ -150,7 +167,7 @@ Page({
             };
             that.sendMessage(e, "1001")
           }, 3000 * (count));
-          console.log((count))
+          console.log(count)
         })(a, m, n, count)
         count++;
       }
@@ -173,6 +190,6 @@ Page({
   },
   sendMessage: function (e, t) {
     var a = this;
-    socket.sendSocketMessage(e);
+    socket.sendMessage(e);
   }
 });

@@ -4,7 +4,9 @@
   <view wx:if="{{mapInfo.address}}">
     <text>{{mapInfo.address}}</text>
     <!-- <button bindtap='searchLeitai'>擂台搜索</button> -->
-    <button bindtap='searchYaojing'>妖精搜索</button>
+    <button bindtap='searchYaojing'>妖灵搜索</button>
+    <input type="text" bindinput='bindXInput' placeholder='x范围'></input>
+    <input type="text" bindinput='bindYInput' placeholder='y范围'></input>
   </view>
 </view>
 
@@ -14,10 +16,10 @@
       <view class="info-wrapper">
         <view class="info-desc">
           <view class="name">{{item.name}}</view>
-          <!-- <view class="time">{{item.time}}</view> -->
+          <view class="time">{{item.lefttime}}</view>
         </view>
         <!-- <view class="info-content">{{item.info}}</view> -->
-        <view class="info-content">{{item.lefttime}}</view>
+        <view class="info-content">{{item.latitude + ", " + item.longtitude}}</view>
       </view>
     </view>
   </view>

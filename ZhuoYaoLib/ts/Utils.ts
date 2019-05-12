@@ -215,7 +215,32 @@ namespace ZhuoYao {
     export class Utils {
         public static spriteHash: HashMap<Sprite>;
         public static spriteNameHash: HashMap<Object>;
-
+        public static tempResults: HashMap<Object> = new HashMap<Object>();
+        public static I64BIT_TABLE: string[] =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
+         
+       public static hash(input){
+        var hash = 5381;
+        var i = input.length - 1;
+         
+        if(typeof input == 'string'){
+         for (; i > -1; i--)
+          hash += (hash << 5) + input.charCodeAt(i);
+        }
+        else{
+         for (; i > -1; i--)
+          hash += (hash << 5) + input[i];
+        }
+        var value = hash & 0x7FFFFFFF;
+         
+        var retValue = '';
+        do{
+         retValue += this.I64BIT_TABLE[value & 0x3F];
+        }
+        while(value >>= 6);
+         
+        return retValue;
+       }
         public static utf8ByteToUnicodeStr(utf8Bytes) {
             var unicodeStr = "";
             for (var pos = 0; pos < utf8Bytes.length;) {
@@ -282,7 +307,7 @@ namespace ZhuoYao {
         }
 
         // 字符串转为ArrayBuffer，参数为字符串
-        public static str2ab(str: string): ArrayBuffer {
+        public static str2ab(str: Object): ArrayBuffer {
             var uint16array: Uint16Array = Utils.str2abUint16Array(JSON.stringify(str));
             var arrayLength: number = uint16array.length;
             var buf: ArrayBuffer = new ArrayBuffer(4);
@@ -383,6 +408,10 @@ namespace ZhuoYao {
                 }
             }
             return arr;
+        }
+
+        public static getTempResults() {
+            return this.tempResults;
         }
     }
 
