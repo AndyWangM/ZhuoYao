@@ -296,13 +296,15 @@ var ZhuoYao;
             return Number(numStr) * 1000000;
         };
         Utils.setStorage = function (key, value) {
-            wx["setStorage"]({
-                key: key,
-                data: value
-            });
+            window.localStorage.setItem(key, value);
+            // wx["setStorage"]({
+            //     key: key,
+            //     data: value
+            // })
         };
         Utils.getStorage = function (key) {
-            return wx["getStorageSync"](key);
+            return window.localStorage.getItem(key);
+            // return wx["getStorageSync"](key);
         };
         Utils.setSpriteList = function (spriteList) {
             Utils.setStorage("SpriteList", spriteList);

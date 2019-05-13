@@ -325,14 +325,16 @@ namespace ZhuoYao {
         }
 
         public static setStorage(key, value) {
-            wx["setStorage"]({
-                key: key,
-                data: value
-            })
+            window.localStorage.setItem(key,value);
+            // wx["setStorage"]({
+            //     key: key,
+            //     data: value
+            // })
         }
 
         public static getStorage(key): any {
-            return wx["getStorageSync"](key);
+            return window.localStorage.getItem(key);
+            // return wx["getStorageSync"](key);
         }
 
         public static setSpriteList(spriteList) {

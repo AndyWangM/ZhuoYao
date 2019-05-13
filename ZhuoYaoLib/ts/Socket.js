@@ -13,29 +13,33 @@ var ZhuoYao;
         Socket.prototype.initSocket = function () {
             var that = this;
             that.connectSocket();
-            wx["onSocketOpen"](function (t) {
+            that.socket.onopen = function (t) {
+                console.log("open");
                 that.socketConnectedCallback(t);
-            });
-            wx["onSocketError"](function (e) {
+            };
+            that.socket.onerror = function (e) {
                 console.log("WebSocket连接打开失败，请检查！");
                 setTimeout(function () {
                     that.connectSocket();
                 }, 1000);
-            });
-            wx["onSocketClose"](function (e) {
+            };
+            that.socket.onclose = function (e) {
                 console.log("WebSocket 已关闭！");
                 setTimeout(function () {
                     that.connectSocket();
                 }, 500);
-            });
-            wx["onSocketMessage"](function (t) {
+            };
+            that.socket.onmessage = function (t) {
                 that.recMessage(t);
-            });
+            };
         };
         Socket.prototype.connectSocket = function () {
-            wx["connectSocket"]({
-                url: 'wss://publicld.gwgo.qq.com?account_value=0&account_type=0&appid=0&token=0'
-            });
+            console.log("connect");
+            this.socket = new WebSocketClient("wss://publicld.gwgo.qq.com?account_value=0&account_type=0&appid=0&token=0");
+            console.log(this.socket);
+            // wx["connectSocket"]({
+            //     url: 'wss://publicld.gwgo.qq.com?account_value=0&account_type=0&appid=0&token=0'
+            // })
         };
         Socket.prototype.socketConnectedCallback = function (t) {
             console.log("WebSocket连接已打开！");
@@ -71,33 +75,36 @@ var ZhuoYao;
         // }
         Socket.prototype.sendSocketMessage = function (str, callback) {
             var that = this;
-            wx["sendSocketMessage"]({
-                data: ZhuoYao.Utils.str2ab(str),
-                success: function (n) {
-                    // console.log("发送服务器成功");
-                    console.log("发送服务器成功", str);
-                },
-                fail: function (n) {
-                    console.log("发送服务器失败");
-                    // console.log("发送服务器失败", str), callback && callback();
-                }
-            });
+            that.socket.send(ZhuoYao.Utils.str2ab(str)
+            //     {
+            //     data: Utils.str2ab(str),
+            //     success: function (n) {
+            //         // console.log("发送服务器成功");
+            //         console.log("发送服务器成功", str);
+            //     },
+            //     fail: function (n) {
+            //         console.log("发送服务器失败");
+            //         // console.log("发送服务器失败", str), callback && callback();
+            //     }
+            // }
+            );
         };
         Socket.prototype.recMessage = function (e) {
             var that = this;
             var str = ZhuoYao.Utils.utf8ByteToUnicodeStr(new Uint8Array(e.data).slice(4));
             if (str.length > 0) {
-                console.log("收到服务器消息");
+                // console.log("收到服务器消息",str.substring(0, 200))
                 // console.log("收到服务器消息", str.substring(0, 100));
                 var obj = JSON.parse(str);
                 if (obj["retcode"] != 0) {
-                    wx["hideLoading"]();
+                    // wx["hideLoading"]();
                 }
                 var id = that.getRequestTypeFromId(obj["requestid"]);
                 if (id == "10041") {
                     this.getVersionFileName(obj["filename"]);
                 }
                 else {
+                    console;
                     if (obj.sprite_list) {
                         var spriteResult = that.requestResult.getSpriteResult(obj);
                         // var minLat = 1000000000;
