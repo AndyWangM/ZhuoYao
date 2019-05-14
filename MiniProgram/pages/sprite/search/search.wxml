@@ -7,6 +7,7 @@
     <button bindtap='searchYaojing'>妖灵搜索</button>
     <input type="text" bindinput='bindXInput' placeholder='x范围'></input>
     <input type="text" bindinput='bindYInput' placeholder='y范围'></input>
+    <!-- <text wx:if="{{isSearching}}">搜索中</text> -->
   </view>
 </view>
 

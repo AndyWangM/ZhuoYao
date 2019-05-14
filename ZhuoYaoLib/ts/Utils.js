@@ -306,12 +306,14 @@ var ZhuoYao;
         };
         Utils.setSpriteList = function (spriteList) {
             Utils.setStorage("SpriteList", spriteList);
+            // getSpriteSearchNameFilter();
         };
         Utils.setSpriteHash = function (spriteList) {
             this.spriteHash = new HashMap();
             this.spriteNameHash = new HashMap();
-            for (var _i = 0, spriteList_1 = spriteList; _i < spriteList_1.length; _i++) {
-                var spriteInfo = spriteList_1[_i];
+            for (var i = spriteList.length; i--;) {
+                var spriteInfo = spriteList[i];
+                // for (const spriteInfo of spriteList) {
                 this.spriteHash.put(spriteInfo.Id, spriteInfo);
                 this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
             }
@@ -321,8 +323,9 @@ var ZhuoYao;
                 this.spriteHash = new HashMap();
                 this.spriteNameHash = new HashMap();
                 var spriteList = Utils.getStorage("SpriteList");
-                for (var _i = 0, spriteList_2 = spriteList; _i < spriteList_2.length; _i++) {
-                    var spriteInfo = spriteList_2[_i];
+                for (var i = spriteList.length; i--;) {
+                    var spriteInfo = spriteList[i];
+                    // for (const spriteInfo of spriteList) {
                     this.spriteHash.put(spriteInfo.Id, spriteInfo);
                     this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
                 }
@@ -334,8 +337,9 @@ var ZhuoYao;
                 this.spriteHash = new HashMap();
                 this.spriteNameHash = new HashMap();
                 var spriteList = Utils.getStorage("SpriteList");
-                for (var _i = 0, spriteList_3 = spriteList; _i < spriteList_3.length; _i++) {
-                    var spriteInfo = spriteList_3[_i];
+                for (var i = spriteList.length; i--;) {
+                    var spriteInfo = spriteList[i];
+                    // for (const spriteInfo of spriteList) {
                     this.spriteHash.put(spriteInfo.Id, spriteInfo);
                     this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
                 }
@@ -346,6 +350,7 @@ var ZhuoYao;
             var sprite = Utils.getStorage("SpriteList") || [];
             var itemData = [];
             if (sprite.length > 0) {
+                // for (var i = sprite.length; i--;) {
                 for (var i = 0; i < sprite.length; i++) {
                     if (name) {
                         if (sprite[i].Name.indexOf(name) != -1) {
@@ -366,20 +371,42 @@ var ZhuoYao;
             return this.getStorage("spriteNameFilter");
         };
         Utils.getSpriteSearchNameFilter = function () {
-            var spriteList = this.getStorage("SpriteList");
+            // if (!this.spriteIdFilter) {
             var arr = [];
-            for (var i = 0; i < spriteList.length; i++) {
+            var spriteList = Utils.getStorage("SpriteList");
+            for (var i = spriteList.length; i--;) {
+                // for (var i = 0; i< spriteList.length; i++) {
                 if (spriteList[i].Checked) {
-                    arr.push(spriteList[i].Name);
+                    arr.push(spriteList[i].Id);
                 }
             }
+            //     this.spriteIdFilter = arr;
+            // }
             return arr;
         };
         Utils.getTempResults = function () {
             return this.tempResults;
         };
+        Utils.formatTime = function (timeStr) {
+            var time = Number(timeStr);
+            var hour = parseInt((time / 3600).toString());
+            time = time % 3600;
+            var minute = parseInt((time / 60).toString());
+            time = time % 60;
+            var second = parseInt(time.toString());
+            return ([hour, minute, second]).map(function (n) {
+                var num = n.toString();
+                return num[1] ? num : '0' + num;
+            }).join(':');
+        };
+        Utils.getLeftTime = function (gentime, lifetime) {
+            var time = gentime + lifetime;
+            var leftTime = time - (new Date).getTime() / 1000;
+            return this.formatTime(leftTime.toFixed(0));
+        };
         Utils.tempResults = new HashMap();
         Utils.I64BIT_TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
+        Utils.spriteIdFilter = [];
         return Utils;
     }());
     ZhuoYao.Utils = Utils;

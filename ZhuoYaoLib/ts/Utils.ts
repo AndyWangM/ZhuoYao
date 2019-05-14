@@ -218,7 +218,8 @@ namespace ZhuoYao {
         public static tempResults: HashMap<Object> = new HashMap<Object>();
         public static I64BIT_TABLE: string[] =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
-         
+        public static spriteIdFilter: number[] = []; 
+
        public static hash(input){
         var hash = 5381;
         var i = input.length - 1;
@@ -337,12 +338,15 @@ namespace ZhuoYao {
 
         public static setSpriteList(spriteList) {
             Utils.setStorage("SpriteList", spriteList);
+            // getSpriteSearchNameFilter();
         }
 
         public static setSpriteHash(spriteList: Sprite[]) {
             this.spriteHash = new HashMap<Sprite>()
             this.spriteNameHash = new HashMap<Sprite>()
-            for (const spriteInfo of spriteList) {
+            for (var i = spriteList.length; i--;) {
+                var spriteInfo = spriteList[i];
+            // for (const spriteInfo of spriteList) {
                 this.spriteHash.put(spriteInfo.Id, spriteInfo);
                 this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
             }
@@ -352,8 +356,10 @@ namespace ZhuoYao {
             if (!this.spriteHash || !this.spriteNameHash) {
                 this.spriteHash = new HashMap<Sprite>()
                 this.spriteNameHash = new HashMap<Sprite>()
-                var spriteList: Sprite[] = Utils.getStorage("SpriteList")
-                for (const spriteInfo of spriteList) {
+                var spriteList: Sprite[] = Utils.getStorage("SpriteList");
+                for (var i = spriteList.length; i--;) {
+                    var spriteInfo = spriteList[i];
+                // for (const spriteInfo of spriteList) {
                     this.spriteHash.put(spriteInfo.Id, spriteInfo);
                     this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
                 }
@@ -366,7 +372,9 @@ namespace ZhuoYao {
                 this.spriteHash = new HashMap<Sprite>()
                 this.spriteNameHash = new HashMap<Sprite>()
                 var spriteList: Sprite[] = Utils.getStorage("SpriteList")
-                for (const spriteInfo of spriteList) {
+                for (var i = spriteList.length; i--;) {
+                    var spriteInfo = spriteList[i];
+                // for (const spriteInfo of spriteList) {
                     this.spriteHash.put(spriteInfo.Id, spriteInfo);
                     this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
                 }
@@ -378,6 +386,8 @@ namespace ZhuoYao {
             var sprite: Sprite[] = Utils.getStorage("SpriteList")||[];
             var itemData = [];
             if (sprite.length > 0) {
+                // for (var i = sprite.length; i--;) {
+
               for (var i = 0; i < sprite.length; i++) {
                 if (name) {
                   if (sprite[i].Name.indexOf(name) != -1) {
@@ -400,18 +410,42 @@ namespace ZhuoYao {
         }
 
         public static getSpriteSearchNameFilter() {
-            var spriteList: Sprite[] = this.getStorage("SpriteList");
-            var arr: string[] = [];
-            for (var i = 0; i< spriteList.length; i++) {
-                if (spriteList[i].Checked) {
-                    arr.push(spriteList[i].Name);
+            // if (!this.spriteIdFilter) {
+                var arr: number[] = [];
+                var spriteList: Sprite[] = Utils.getStorage("SpriteList");
+                for (var i = spriteList.length; i--;) {
+                // for (var i = 0; i< spriteList.length; i++) {
+                    if (spriteList[i].Checked) {
+                        arr.push(spriteList[i].Id);
+                    }
                 }
-            }
+            //     this.spriteIdFilter = arr;
+            // }
             return arr;
         }
 
         public static getTempResults() {
             return this.tempResults;
+        }
+
+        public static formatTime(timeStr: string) {
+            var time: number = Number(timeStr);
+
+            var hour = parseInt((time / 3600).toString());
+            time = time % 3600;
+            var minute = parseInt((time / 60).toString());
+            time = time % 60;
+            var second = parseInt(time.toString());
+
+            return ([hour, minute, second]).map(function (n) {
+                var num: string = n.toString();
+                return num[1] ? num : '0' + num;
+            }).join(':');
+        }
+        public static getLeftTime(gentime, lifetime) {
+            var time = gentime + lifetime;
+            var leftTime = time - (new Date).getTime() / 1000;
+            return this.formatTime(leftTime.toFixed(0));
         }
     }
 

@@ -8,14 +8,14 @@ namespace ZhuoYao {
 
         requestIds: number[] = [];
         requestResult: RequestResult;
-        content: any;
+        worker: any;
         isOpen: boolean = false;
         messageQueue: Object[] = [];
-        isReceiving: boolean = false;
+        lastTime: number;
 
-        constructor(content) {
+        constructor(worker) {
             this.requestResult = new RequestResult();
-            this.content = content;
+            this.worker = worker;
         }
 
         public initSocket(): void {
@@ -86,8 +86,8 @@ namespace ZhuoYao {
             wx["sendSocketMessage"]({
                 data: Utils.str2ab(str),
                 success: function (n) {
-                    // console.log("发送服务器成功");
-                    console.log("发送服务器成功", str);
+                    console.log("发送服务器成功");
+                    // console.log("发送服务器成功", str);
                 },
                 fail: function (n) {
                     console.log("发送服务器失败");
@@ -110,130 +110,86 @@ namespace ZhuoYao {
                 if (id == "10041") {
                     this.getVersionFileName(obj["filename"]);
                 } else {
-                    if (obj.sprite_list) {
-                    var spriteResult: SpriteResult = that.requestResult.getSpriteResult(obj);
-                    // var minLat = 1000000000;
-                    // var maxLat = 0;
-                    // var minLong = 1000000000;
-                    // var maxLong = 0;
-                    for (const aliveSprite of spriteResult.sprite_list) {
-                        // if (aliveSprite.latitude < minLat) {
-                        //     minLat = aliveSprite.latitude;
-                        // }
-                        // if (aliveSprite.latitude > maxLat) {
-                        //     maxLat = aliveSprite.latitude;
-                        // }
-                        // if (aliveSprite.longtitude < minLong) {
-                        //     minLong = aliveSprite.longtitude;
-                        // }
-                        // if (aliveSprite.longtitude > maxLong) {
-                        //     maxLong = aliveSprite.longtitude;
-                        // }
-                        if (!aliveSprite.sprite) {
-                            // 无效妖灵
-                            // console.log(aliveSprite)
-                            continue;
-                        }
-                        var sprite: Sprite = aliveSprite.sprite;
-                        if (sprite) {
-                            var spriteNameFilter = Utils.getSpriteSearchNameFilter();
-                            if (spriteNameFilter.length > 0) {
-                                for (const spriteName of spriteNameFilter) {
-                                    if (sprite.Name == spriteName) {
-                                        // console.log(aliveSprite);
-                                        var latitude = aliveSprite.latitude.toString().substr(0, 2) + "." + aliveSprite.latitude.toString().substr(2)
-                                        var longtitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
-                                        // console.log([aliveSprite.sprite.Name, latitude,longtitude,aliveSprite.getLeftTime()])
-                                        var resultObj = {
-                                            "name": aliveSprite.sprite.Name,
-                                            "latitude": latitude,
-                                            "longtitude": longtitude,
-                                            "lefttime": aliveSprite.getLeftTime()
-                                        };
-                                        var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
-                                        var hashValue = Utils.hash(hashStr);
-                                        if (!Utils.getTempResults().containsKey(hashValue)) {
-                                            Utils.getTempResults().put(hashStr, resultObj);
-                                        }
-                                        // console.log(resultObj)
-                                        // console.log("名称: " + aliveSprite.sprite.Name,aliveSprite.getLeftTime());
-                                        // console.log("纬度: " + latitude);
-                                        // console.log("经度: " + longtitude);
-                                        // console.log("消失时间: " + aliveSprite.getLeftTime())
-                                    }
-                                }
-                            } else {
-                                console.log(sprite);
-                            }
-                        }
-                    }
-                    // console.log("最小纬度: "+ minLat);
-                    // console.log("最大纬度: "+ maxLat);
-                    // console.log("最小经度: "+ minLong);
-                    // console.log("最大经度: "+ maxLong);
-                    // console.log("纬度差值: " + (maxLat - minLat));
-                    // console.log("经度差值: " + (maxLong - minLong));
-                }}
-                // switch (id) {
-                //     case "10041":
-                //         this.getVersionFileName(obj["filename"]);
-                //         break;
-                //     case "1001":
-                //         var spriteResult: SpriteResult = that.requestResult.getSpriteResult(obj);
-                //         var minLat = 1000000000;
-                //         var maxLat = 0;
-                //         var minLong = 1000000000;
-                //         var maxLong = 0;
-                //         for (const aliveSprite of spriteResult.sprite_list) {
-                //             if (aliveSprite.latitude < minLat) {
-                //                 minLat = aliveSprite.latitude;
-                //             }
-                //             if (aliveSprite.latitude > maxLat) {
-                //                 maxLat = aliveSprite.latitude;
-                //             }
-                //             if (aliveSprite.longtitude < minLong) {
-                //                 minLong = aliveSprite.longtitude;
-                //             }
-                //             if (aliveSprite.longtitude > maxLong) {
-                //                 maxLong = aliveSprite.longtitude;
-                //             }
-                //             if (!aliveSprite.sprite) {
-                //                 // 无效妖灵
-                //                 // console.log(aliveSprite)
-                //                 continue;
-                //             }
-                //             var sprite: Sprite = aliveSprite.sprite;
-                //             if (sprite) {
-                //                 var spriteName = that.getSpriteNameFilter();
-                //                 if (spriteName.length > 0) {
-                //                     for (const spriteName of that.getSpriteNameFilter()) {
-                //                         if (sprite.Name == spriteName) {
-                //                             // console.log(aliveSprite);
-                //                             var latitude = aliveSprite.latitude.toString().substr(0, 2) + "." + aliveSprite.latitude.toString().substr(2)
-                //                             var longtitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
-                //                             console.log([aliveSprite.sprite.Name, latitude,longtitude,aliveSprite.getLeftTime()])
-                //                             // console.log("名称: " + aliveSprite.sprite.Name,aliveSprite.getLeftTime());
-                //                             // console.log("纬度: " + latitude);
-                //                             // console.log("经度: " + longtitude);
-                //                             // console.log("消失时间: " + aliveSprite.getLeftTime())
-                //                         }
-                //                     }
-                //                 } else {
-                //                     console.log(sprite);
-                //                 }
-                //             }
-                //         }
-                //         // console.log("最小纬度: "+ minLat);
-                //         // console.log("最大纬度: "+ maxLat);
-                //         // console.log("最小经度: "+ minLong);
-                //         // console.log("最大经度: "+ maxLong);
-                //         // console.log("纬度差值: " + (maxLat - minLat));
-                //         // console.log("经度差值: " + (maxLong - minLong));
-                //         break;
-                // }
+                    // console.log(obj.sprite_list);
+                    obj.filter = Utils.getSpriteSearchNameFilter();
+                    that.worker.postMessage(obj);
+                    that.lastTime = (new Date()).getTime();
+                    // if (obj.sprite_list) {
+                    //     for (var i = obj.sprite_list.length; i--;) {
+                    //         var aliveSprite = obj.sprite_list[i];
+                    //     // for (const aliveSprite of obj.sprite_list) {
+                    //         // if (sprite) {
+                    //             var spriteNameFilter = Utils.getSpriteSearchNameFilter();
+                    //             if (spriteNameFilter.length > 0) {
+                    //                 if (spriteNameFilter.indexOf(aliveSprite.sprite_id) != -1) {
+                    //                     var sprite: Sprite = Utils.getSpriteList().get(aliveSprite.sprite_id);
+                    //                     var latitude = aliveSprite.latitude.toString().substr(0, 2) + "." + aliveSprite.latitude.toString().substr(2)
+                    //                     var longtitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
+                    //                     var resultObj = {
+                    //                         "name": sprite.Name,
+                    //                         "latitude": latitude,
+                    //                         "longtitude": longtitude,
+                    //                         "lefttime": Utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime)
+                    //                     };
+                    //                     var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
+                    //                     var hashValue = Utils.hash(hashStr);
+                    //                     // if (!Utils.getTempResults().containsKey(hashValue)) {
+                    //                     Utils.getTempResults().put(hashStr, resultObj);
+                    //                     // }
+                    //                 }
+                    //             // } else {
+                    //             //     console.log(sprite);
+                    //             // }
+                    //         }
+                    //     }
+                    // }
+                    // if (obj.sprite_list) {
+                    //     var spriteResult: SpriteResult = that.requestResult.getSpriteResult(obj);
+                    //     for (var i = spriteResult.sprite_list.length; i--;) {
+                    //         // for (const aliveSprite of spriteResult.sprite_list) {
+                    //         var aliveSprite = spriteResult.sprite_list[i];
+                    //         // if (!aliveSprite.sprite) {
+                    //         //     continue;
+                    //         // }
+                    //         var sprite: Sprite = aliveSprite.sprite;
+                    //         if (sprite) {
+                    //             var spriteNameFilter = Utils.getSpriteSearchNameFilter();
+                    //             if (spriteNameFilter.length > 0) {
+                    //                 if (spriteNameFilter.indexOf(sprite.Name) != -1) {
+                    //                     var latitude = aliveSprite.latitude.toString().substr(0, 2) + "." + aliveSprite.latitude.toString().substr(2)
+                    //                     var longtitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
+                    //                     var resultObj = {
+                    //                         "name": aliveSprite.sprite.Name,
+                    //                         "latitude": latitude,
+                    //                         "longtitude": longtitude,
+                    //                         "lefttime": aliveSprite.getLeftTime()
+                    //                     };
+                    //                     var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
+                    //                     var hashValue = Utils.hash(hashStr);
+                    //                     // if (!Utils.getTempResults().containsKey(hashValue)) {
+                    //                     Utils.getTempResults().put(hashStr, resultObj);
+                    //                     // }
+                    //                 }
+                    //             } else {
+                    //                 console.log(sprite);
+                    //             }
+                    //         }
+                    //     }
+
+                    // }
+                }
             }
-            // that.isReceiving = false;
-            // that.sendSocketMessage();
+        }
+
+        public isSearching() {
+            var time = (new Date()).getTime();
+            if (!this.lastTime) {
+                return false;
+            }
+            if (time - this.lastTime > 5000) {
+                return false;
+            } 
+            return true;
         }
 
         public genRequestId(n) {
@@ -343,7 +299,7 @@ namespace ZhuoYao {
         }
     }
 
-    class AliveSprite {
+    export class AliveSprite {
         gentime: number;
         public latitude: number;
         lifetime: number;
@@ -393,7 +349,7 @@ namespace ZhuoYao {
         }
     }
 
-    class SpriteResult {
+    export class SpriteResult {
         end: number;
         packageNO: number;
         requestid: number;
@@ -408,7 +364,8 @@ namespace ZhuoYao {
             this.retcode = obj["retcode"];
             this.retmsg = obj["retmsg"];
             this.sprite_list = [];
-            for (var i: number = 0; i < obj["sprite_list"].length; i++) {
+            for (var i = obj["sprite_list"].length; i--;) {
+                // for (var i: number = 0; i < obj["sprite_list"].length; i++) {
                 this.sprite_list[i] = new AliveSprite(obj["sprite_list"][i]);
                 if (!this.sprite_list[i]) {
                     console.log(1)

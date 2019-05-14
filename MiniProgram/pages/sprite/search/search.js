@@ -2,7 +2,30 @@ import ZhuoYao from '../../../utils/zhuoyao.js'
 
 const app = getApp();
 var socket;
-
+const worker = wx.createWorker('workers/request/index.js') // 文件名指定 worker 的入口文件路径，绝对路径
+worker.postMessage({
+  msg: 'hello worker'
+})
+worker.onMessage(function (res) {
+  // console.log(res)
+  if (res.length > 0) {
+    for (var i = res.length; i--;) {
+      var aliveSprite = res[i];
+      var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id);
+      var latitude = aliveSprite.latitude.toString().substr(0, 2) + "." + aliveSprite.latitude.toString().substr(2)
+      var longtitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
+      var resultObj = {
+        "name": sprite.Name,
+        "latitude": latitude,
+        "longtitude": longtitude,
+        "lefttime": ZhuoYao.Utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime)
+      };
+      var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
+      var hashValue = ZhuoYao.Utils.hash(hashStr);
+      ZhuoYao.Utils.getTempResults().put(hashStr, resultObj);
+    }
+  }
+})
 Page({
   data: {
     mapInfo: {},
@@ -14,10 +37,15 @@ Page({
   onLoad() {
     var that = this;
     setInterval(function () {
-      // var 
-      // for(var i = 0; i< that.data.tempresult.length;i++) {
-        
-      // }
+      if (socket.isSearching()) {
+        that.setData({
+          isSearching: true
+        })
+      } else {
+        that.setData({
+          isSearching: false
+        })
+      }
       that.setData({
         result: ZhuoYao.Utils.getTempResults().values() || []
       })
@@ -25,7 +53,7 @@ Page({
   },
   onShow() {
     var that = this;
-    socket = new ZhuoYao.Socket(that);
+    socket = new ZhuoYao.Socket(worker);
     socket.initSocket();
   },
   tapview(e) {
@@ -46,7 +74,7 @@ Page({
   },
   bindXInput(e) {
     this.setData({
-      "xIndex":e.detail.value
+      "xIndex": e.detail.value
     })
   },
   bindYInput(e) {
@@ -113,6 +141,9 @@ Page({
     var mapInfo = that.data.mapInfo;
     ZhuoYao.Utils.getTempResults().clear();
     this.data.result = [];
+    // that.setData({
+    //   isSearching: false
+    // })
     that.getYaojingInfo();
   },
   getSettingFileName: function () {
