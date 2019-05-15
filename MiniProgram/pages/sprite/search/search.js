@@ -3,9 +3,9 @@ import ZhuoYao from '../../../utils/zhuoyao.js'
 const app = getApp();
 var socket;
 const worker = wx.createWorker('workers/request/index.js') // 文件名指定 worker 的入口文件路径，绝对路径
-worker.postMessage({
-  msg: 'hello worker'
-})
+// worker.postMessage({
+//   msg: 'hello worker'
+// })
 worker.onMessage(function (res) {
   // console.log(res)
   if (res.length > 0) {
@@ -61,7 +61,7 @@ Page({
   tapview(e) {
     var content = e.currentTarget.dataset.content;
     wx.setClipboardData({
-      data: content.longtitude + " " + content.latitude,
+      data: content.latitude + " " + content.longtitude,
       success(res) {
         wx.getClipboardData({
           success(res) {
@@ -270,5 +270,8 @@ Page({
   sendMessage: function (e, t) {
     var a = this;
     socket.sendMessage(e);
+  },
+  onShareAppMessage() {
+
   }
 });

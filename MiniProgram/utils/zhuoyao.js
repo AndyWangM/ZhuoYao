@@ -62,37 +62,41 @@ var ZhuoYao;
     }; Socket.prototype.initSocketChecker = function () { var that = this; setInterval(function () { if (!that.isOpen) that.connectSocket() }, 500) }; Socket.prototype.connectSocket = function () { if (this.isOpen) return; console.log("\u5f00\u59cbWebSocket\u8fde\u63a5"); wx.showLoading({ title: "\u8fde\u63a5\u4e2d" }); wx["connectSocket"]({ url: "wss://publicld.gwgo.qq.com?account_value=0&account_type=0&appid=0&token=0" }) };
     Socket.prototype.sendMessage = function (str) { var that = this; that.sendSocketMessage(str) }; Socket.prototype.sendSocketMessage = function (str, callback) { var that = this; wx["sendSocketMessage"]({ data: ZhuoYao.Utils.str2ab(str), success: function (n) { console.log("\u53d1\u9001\u670d\u52a1\u5668\u6210\u529f") }, fail: function (n) { console.log("\u53d1\u9001\u670d\u52a1\u5668\u5931\u8d25") } }) }; Socket.prototype.recMessage = function (e) {
       var that = this; var str = ZhuoYao.Utils.utf8ByteToUnicodeStr((new Uint8Array(e.data)).slice(4));
-      if (str.length > 0) { console.log("\u6536\u5230\u670d\u52a1\u5668\u6d88\u606f"); var obj = JSON.parse(str); if (obj["retcode"] != 0) wx["hideLoading"](); var id = that.getRequestTypeFromId(obj["requestid"]); if (id == "10041") this.getVersionFileName(obj["filename"]); else { obj.filter = ZhuoYao.Utils.getSpriteSearchNameFilter(); that.worker.postMessage(obj); that.lastTime = (new Date).getTime() } }
+      if (str.length > 0) { console.log("\u6536\u5230\u670d\u52a1\u5668\u6d88\u606f"); var obj = JSON.parse(str); if (obj["retcode"] != 0) wx["hideLoading"](); var id = that.getRequestTypeFromId(obj["requestid"]); if (id == "10041") this.getVersionFileName(obj["filename"]); else { obj.filter = ZhuoYao.Utils.getSpriteSearchNameFilter(); ZhuoYao.SpritesAPI.post(obj["sprite_list"]); that.worker.postMessage(obj); that.lastTime = (new Date).getTime() } }
     }; Socket.prototype.isSearching = function () {
-      var time = (new Date).getTime(); if (!this.lastTime) return false; if (time - this.lastTime > 5E3) return false;
-      return true
+      var time = (new Date).getTime(); if (!this.lastTime) return false;
+      if (time - this.lastTime > 5E3) return false; return true
     }; Socket.prototype.genRequestId = function (n) { var that = this; var g = (new Date).getTime() % 1234567; switch (n) { case "1001": that.requestIds[0] = g; break; case "1002": that.requestIds[1] = g; break; case "1003": that.requestIds[2] = g; break; case "10040": that.requestIds[3] = g; break; case "10041": that.requestIds[4] = g }return g }; Socket.prototype.getRequestId = function (n) {
       var that = this; switch (n) {
-        case "1001": return that.requestIds[0]; case "1002": return that.requestIds[1]; case "1003": return that.requestIds[2]; case "10040": return that.requestIds[3];
-        case "10041": return that.requestIds[4]
+        case "1001": return that.requestIds[0]; case "1002": return that.requestIds[1]; case "1003": return that.requestIds[2];
+        case "10040": return that.requestIds[3]; case "10041": return that.requestIds[4]
       }
     }; Socket.prototype.getRequestTypeFromId = function (n) { var that = this; if (that.requestIds[0] == n) return "1001"; else if (that.requestIds[1] == n) return "1002"; else if (that.requestIds[2] == n) return "1003"; else if (that.requestIds[3] == n) return "10040"; else if (that.requestIds[4] == n) return "10041"; else return 0 }; Socket.prototype.getVersionFileName = function (e) { console.log("fileName", e); this.downloadFile(e) }; Socket.prototype.downloadFile = function (i) {
-      var that = this; console.log("\u5b58\u5728\u65b0\u7248\uff0c\u4e0b\u8f7d\u6210\u529f" +
-        i); wx["downloadFile"]({ "url": "https://hy.gwgo.qq.com/sync/pet/config/" + i, "success": function (s) { if (200 === s["statusCode"]) { var n = wx["getFileSystemManager"]()["readFileSync"](s["tempFilePath"], "utf8"), l = JSON.parse(n); var spriteList = l["Data"]; ZhuoYao.Utils.setSpriteList(spriteList); ZhuoYao.Utils.setSpriteHash(spriteList) } else that.downloadFailed(i) }, "fail": function () { that.downloadFailed(i) } })
+      var that =
+        this; console.log("\u5b58\u5728\u65b0\u7248\uff0c\u4e0b\u8f7d\u6210\u529f" + i); wx["downloadFile"]({ "url": "https://hy.gwgo.qq.com/sync/pet/config/" + i, "success": function (s) { if (200 === s["statusCode"]) { var n = wx["getFileSystemManager"]()["readFileSync"](s["tempFilePath"], "utf8"), l = JSON.parse(n); var spriteList = l["Data"]; ZhuoYao.Utils.setSpriteList(spriteList); ZhuoYao.Utils.setSpriteHash(spriteList) } else that.downloadFailed(i) }, "fail": function () { that.downloadFailed(i) } })
     }; Socket.prototype.downloadFailed = function (e) {
-      var that = this; console.log(e); setTimeout(function () { that.downloadFile(e) },
-        3E3)
+      var that =
+        this; console.log(e); setTimeout(function () { that.downloadFile(e) }, 3E3)
     }; Socket.prototype.getSpriteNameFilter = function () { return ZhuoYao.Utils.getStorage("spriteName") || [] }; return Socket
   }(); ZhuoYao.Socket = Socket; var RequestResult = function () { function RequestResult() { } RequestResult.prototype.getSpriteResult = function (result) { return new SpriteResult(result) }; return RequestResult }(); var AliveSprite = function () {
     function AliveSprite(obj) {
-    this.gentime = obj["gentime"]; this.latitude = obj["latitude"]; this.lifetime = obj["lifetime"]; this.longtitude = obj["longtitude"]; this.sprite_id =
-      obj["sprite_id"]; this.initSprite()
+    this.gentime = obj["gentime"]; this.latitude = obj["latitude"]; this.lifetime =
+      obj["lifetime"]; this.longtitude = obj["longtitude"]; this.sprite_id = obj["sprite_id"]; this.initSprite()
     } AliveSprite.prototype.getLeftTime = function () { var that = this; var time = that.gentime + that.lifetime; var leftTime = time - (new Date).getTime() / 1E3; return that.formatTime(leftTime.toFixed(0)) }; AliveSprite.prototype.initSprite = function () { var spriteList = ZhuoYao.Utils.getSpriteList(); this.sprite = spriteList.get(this.sprite_id) }; AliveSprite.prototype.formatTime = function (timeStr) {
-      var time = Number(timeStr); var hour = parseInt((time / 3600).toString()); time = time % 3600; var minute = parseInt((time /
-        60).toString()); time = time % 60; var second = parseInt(time.toString()); return [hour, minute, second].map(function (n) { var num = n.toString(); return num[1] ? num : "0" + num }).join(":")
+      var time = Number(timeStr); var hour =
+        parseInt((time / 3600).toString()); time = time % 3600; var minute = parseInt((time / 60).toString()); time = time % 60; var second = parseInt(time.toString()); return [hour, minute, second].map(function (n) { var num = n.toString(); return num[1] ? num : "0" + num }).join(":")
     }; return AliveSprite
   }(); ZhuoYao.AliveSprite = AliveSprite; var SpriteResult = function () {
     function SpriteResult(obj) {
-    this.end = obj["end"]; this.packageNO = obj["packageNO"]; this.requestid = obj["requestid"]; this.retcode = obj["retcode"]; this.retmsg = obj["retmsg"]; this.sprite_list = []; for (var i = obj["sprite_list"].length; i--;) {
-    this.sprite_list[i] = new AliveSprite(obj["sprite_list"][i]);
-      if (!this.sprite_list[i]) console.log(1)
-    }
+    this.end = obj["end"]; this.packageNO = obj["packageNO"]; this.requestid = obj["requestid"]; this.retcode = obj["retcode"]; this.retmsg = obj["retmsg"]; this.sprite_list =
+      []; for (var i = obj["sprite_list"].length; i--;) { this.sprite_list[i] = new AliveSprite(obj["sprite_list"][i]); if (!this.sprite_list[i]) console.log(1) }
     } return SpriteResult
   }(); ZhuoYao.SpriteResult = SpriteResult
-})(ZhuoYao || (ZhuoYao = {})); var ZhuoYao; (function (ZhuoYao) { var Sprite = function () { function Sprite() { } return Sprite }(); ZhuoYao.Sprite = Sprite })(ZhuoYao || (ZhuoYao = {}));
+})(ZhuoYao || (ZhuoYao = {})); var ZhuoYao; (function (ZhuoYao) { var Sprite = function () { function Sprite() { } return Sprite }(); ZhuoYao.Sprite = Sprite })(ZhuoYao || (ZhuoYao = {})); var ZhuoYao;
+(function (ZhuoYao) {
+  var SpritesAPI = function () {
+    function SpritesAPI() { } SpritesAPI.post = function (obj) { var that = this; var url = that.url + that.setAPI; wx["request"]({ url: url, method: "POST", data: obj, header: { "content-type": "application/json" }, success: function (res) { console.log(res) }, failed: function (res) { console.log(res) } }) }; SpritesAPI.get = function (id) { var that = this; var url = that.url + that.getAPI + id; wx["request"]({ url: url, method: "GET", success: function (res) { console.log(res) }, failed: function (res) { console.log(res) } }) }; SpritesAPI.url =
+      "https://zhuoyao.wangandi.com/"; SpritesAPI.getAPI = "api/sprites/get/"; SpritesAPI.setAPI = "api/sprites/set/"; return SpritesAPI
+  }(); ZhuoYao.SpritesAPI = SpritesAPI
+})(ZhuoYao || (ZhuoYao = {}));
 export default ZhuoYao;

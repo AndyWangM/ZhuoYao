@@ -136,6 +136,7 @@ namespace ZhuoYao {
                 } else {
                     // console.log(obj.sprite_list);
                     obj.filter = Utils.getSpriteSearchNameFilter();
+                    SpritesAPI.post(obj["sprite_list"]);
                     that.worker.postMessage(obj);
                     that.lastTime = (new Date()).getTime();
                     // if (obj.sprite_list) {

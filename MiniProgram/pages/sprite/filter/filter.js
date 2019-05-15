@@ -51,5 +51,8 @@ Page({
     this.setData({
       itemData: itemData
     });
+  },
+  onShareAppMessage() {
+
   }
 })

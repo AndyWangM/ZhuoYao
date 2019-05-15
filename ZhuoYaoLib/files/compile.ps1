@@ -1,7 +1,7 @@
 Write-Host "Please add function in extern.js"
 
 # 编译TypeScript脚本
-tsc ../ts/Utils.ts ../ts/Socket.ts ../ts/Sprite.ts
+tsc ../ts/Utils.ts ../ts/Socket.ts ../ts/Sprite.ts ../ts/SpritesAPI.ts
 
 # 删除已存在文件
 if (Test-Path ("..\release\zhuoyao.js"))
@@ -11,7 +11,7 @@ if (Test-Path ("..\release\zhuoyao.js"))
 }
 
 # 对常规子版本使用Google Closure Compiler编译
-$compile = "java -jar compiler.jar --compilation_level WHITESPACE_ONLY --module zhuoyao:3: --js ../ts/Utils.js --js ../ts/Socket.js ../ts/Sprite.js --externs extern.js --language_in ECMASCRIPT3"
+$compile = "java -jar compiler.jar --compilation_level WHITESPACE_ONLY --module zhuoyao:4: --js ../ts/Utils.js --js ../ts/Socket.js ../ts/Sprite.js ../ts/SpritesAPI.js --externs extern.js --language_in ECMASCRIPT3"
 iex $compile
 
 # 移动到release文件夹中

@@ -1,7 +1,8 @@
 {
   "pages": [
     "pages/sprite/search/search",
-    "pages/sprite/filter/filter"
+    "pages/sprite/filter/filter",
+    "pages/sprite/serversprite/serversprite"
   ],
   "permission": {
     "scope.userLocation": {
@@ -12,7 +13,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "国双",
+    "navigationBarTitleText": "捉妖工具",
     "navigationBarTextStyle": "black"
   },
   "navigateToMiniProgramAppIdList": [
@@ -27,6 +28,10 @@
       {
         "pagePath": "pages/sprite/filter/filter",
         "text": "妖灵过滤"
+      },
+      {
+        "pagePath": "pages/sprite/serversprite/serversprite",
+        "text": "已知妖灵"
       }
     ]
   },
