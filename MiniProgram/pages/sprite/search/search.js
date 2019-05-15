@@ -32,7 +32,9 @@ Page({
     spriteName: null,
     result: [],
     xIndex: 2,
-    yIndex: 2
+    yIndex: 2,
+    polygons: [],
+    allPoints: []
   },
   onLoad() {
     var that = this;
@@ -49,11 +51,11 @@ Page({
       that.setData({
         result: ZhuoYao.Utils.getTempResults().values() || []
       })
-    }, 1000)
+    }, 1000);
+    socket = new ZhuoYao.Socket(worker);
   },
   onShow() {
     var that = this;
-    socket = new ZhuoYao.Socket(worker);
     socket.initSocket();
   },
   tapview(e) {
@@ -76,11 +78,17 @@ Page({
     this.setData({
       "xIndex": e.detail.value
     })
+    if (e.detail.value) {
+      this.getPoints()
+    }
   },
   bindYInput(e) {
     this.setData({
       "yIndex": e.detail.value
     })
+    if (e.detail.value) {
+      this.getPoints()
+    }
   },
   selectLocation() {
     var that = this;
@@ -96,7 +104,7 @@ Page({
           that.setData({
             mapInfo: mapInfo
           });
-          console.log(mapInfo)
+          that.getPoints()
         }
       })
     );
@@ -166,44 +174,84 @@ Page({
     };
     that.sendMessage(e, "10040")
   },
-  getYaojingInfo: function () {
+  getPoints() {
     var that = this;
     var mapInfo = that.data.mapInfo;
     var latStep = 0.017860;
     var longStep = 0.015182;
-    var a = [];
+    var allPoints = [];
     var aindex = this.data.xIndex;
     var bindex = this.data.yIndex;
+    var l1, l2, r1, r2;
     for (var i = 0; i < aindex; i++) {
       var lat = mapInfo.latitude + i * latStep;
       var b = [];
       for (var j = 0; j < bindex; j++) {
         var lon = mapInfo.longitude + j * longStep;
-        b[j] = [lat.toFixed(6), lon.toFixed(6)];
+        var obj = {
+          latitude: Number(lat.toFixed(6)),
+          longitude: Number(lon.toFixed(6))
+        };
+        if (i == 0) {
+          if (j == 0) {
+            l1 = obj;
+          }
+          if (j == bindex - 1) {
+            r1 = obj
+          }
+        }
+        if (i == aindex - 1) {
+          if (j == 0) {
+            l2 = obj
+          }
+          if (j == bindex - 1) {
+            r2 = obj
+          }
+        }
+        allPoints.push(obj);
       }
-      a[i] = b;
     }
+    var points = [];
+    points.push(l1);
+    points.push(r1);
+    points.push(r2);
+    points.push(l2);
+    this.setData({
+      polygons: [{
+        points: points,
+        fillColor: "#FF0000AA",
+        strokeColor: "#000000DD",
+        strokeWidth: 1
+      }],
+      allPoints: allPoints
+    })
+  },
+  getYaojingInfo: function () {
+    var that = this;
     // console.log(a);
     var count = 0;
-    for (var m = 0; m < aindex; m++) {
-      for (var n = 0; n < bindex; n++) {
-        (function (a, m, n, count) {
-          setTimeout(function () {
-            var e = {
-              request_type: "1001",
-              longtitude: ZhuoYao.Utils.convertLocation(Number(a[m][n][1])),
-              latitude: ZhuoYao.Utils.convertLocation(Number(a[m][n][0])),
-              requestid: socket.genRequestId("1001"),
-              platform: 0
-            };
-            that.sendMessage(e, "1001")
-          }, 3000 * (count));
-          console.log(count)
-        })(a, m, n, count)
-        count++;
+    var count2 = 0;
+    var points = that.data.allPoints;
+    for (var m = 0; m < points.length; m++) {
+      (function (a, m, count) {
+        var timeout = 1000;
+        setTimeout(function () {
+          var e = {
+            request_type: "1001",
+            longtitude: ZhuoYao.Utils.convertLocation(Number(a[m]["longitude"])),
+            latitude: ZhuoYao.Utils.convertLocation(Number(a[m]["latitude"])),
+            requestid: socket.genRequestId("1001"),
+            platform: 0
+          };
+          that.sendMessage(e, "1001")
+        }, 2000 * count + 3000 * count2);
+        console.log(2 * count + 1 * count2)
+      })(points, m, count)
+      count++;
+      if (count != 0 && count % 3 == 0) {
+        count2++;
       }
     }
-
   },
   getLeitaiInfo: function () {
     var that = this;

@@ -2,11 +2,6 @@ import Touches from './utils/Touches.js'
 
 const updateManager = wx.getUpdateManager()
 
-updateManager.onCheckForUpdate(function (res) {
-  // 请求完新版本信息的回调
-  console.log(res.hasUpdate)
-})
-
 updateManager.onUpdateReady(function () {
   wx.showModal({
     title: '更新提示',
@@ -20,9 +15,6 @@ updateManager.onUpdateReady(function () {
   })
 })
 
-updateManager.onUpdateFailed(function () {
-  // 新版本下载失败
-})
 
 App({
   onLaunch: function () {

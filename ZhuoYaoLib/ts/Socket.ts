@@ -10,6 +10,7 @@ namespace ZhuoYao {
         requestResult: RequestResult;
         worker: any;
         isOpen: boolean = false;
+        isConnecting: boolean = false;
         messageQueue: Object[] = [];
         lastTime: number;
 
@@ -20,37 +21,60 @@ namespace ZhuoYao {
 
         public initSocket(): void {
             var that: Socket = this;
+            this.initSocketChecker();
             that.connectSocket();
             wx["onSocketOpen"](function (t) {
-                that.socketConnectedCallback(t)
+                console.log("WebSocket连接已打开！");
+                that.isOpen = true;
+                // that.isConnecting = false;
+                wx["hideLoading"]();
+                // that.socketConnectedCallback(t)
             });
             wx["onSocketError"](function (e) {
                 console.log("WebSocket连接打开失败，请检查！")
-                setTimeout(function () {
-                    that.connectSocket()
-                }, 1000);
+                that.isOpen = false;
+                // wx["hideLoading"]();
+                // that.isConnecting = false;
+                // setTimeout(function () {
+                //     that.connectSocket()
+                // }, 500);
             });
             wx["onSocketClose"](function (e) {
-                console.log("WebSocket 已关闭！");
-                setTimeout(function () {
-                    that.connectSocket()
-                }, 500);
+                console.log("WebSocket 已关闭！");;
+                that.isOpen = false;
+                // that.isConnecting = false;
+                // setTimeout(function () {
+                //     that.connectSocket()
+                // }, 1000);
             });
             wx["onSocketMessage"](function (t) {
                 that.recMessage(t)
             });
         }
 
+        initSocketChecker() {
+            var that = this;
+            setInterval(function(){ 
+                if (!that.isOpen) {
+                    that.connectSocket()
+                }
+            }, 500);
+        }
         private connectSocket() {
+            if (this.isOpen) return;
+            // this.isConnecting = true;
+            console.log("开始WebSocket连接");
+            wx.showLoading({
+                title: '连接中',
+            });
             wx["connectSocket"]({
                 url: 'wss://publicld.gwgo.qq.com?account_value=0&account_type=0&appid=0&token=0'
             })
         }
 
-        private socketConnectedCallback(t) {
-            console.log("WebSocket连接已打开！");
-            this.isOpen = true;
-        }
+        // private socketConnectedCallback(t) {
+        //     this.isOpen = true;
+        // }
 
         public sendMessage(str) {
             var that = this;
@@ -188,7 +212,7 @@ namespace ZhuoYao {
             }
             if (time - this.lastTime > 5000) {
                 return false;
-            } 
+            }
             return true;
         }
 
