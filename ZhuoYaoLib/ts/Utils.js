@@ -313,6 +313,7 @@ var ZhuoYao;
             this.spriteNameHash = new HashMap();
             for (var i = spriteList.length; i--;) {
                 var spriteInfo = spriteList[i];
+                spriteInfo.HeadImage = this.getHeadImagePath(spriteInfo);
                 // for (const spriteInfo of spriteList) {
                 this.spriteHash.put(spriteInfo.Id, spriteInfo);
                 this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
@@ -325,6 +326,9 @@ var ZhuoYao;
                 var spriteList = Utils.getStorage("SpriteList");
                 for (var i = spriteList.length; i--;) {
                     var spriteInfo = spriteList[i];
+                    if (!spriteInfo.HeadImage) {
+                        spriteInfo.HeadImage = this.getHeadImagePath(spriteInfo);
+                    }
                     // for (const spriteInfo of spriteList) {
                     this.spriteHash.put(spriteInfo.Id, spriteInfo);
                     this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
@@ -404,9 +408,39 @@ var ZhuoYao;
             var leftTime = time - (new Date).getTime() / 1000;
             return this.formatTime(leftTime.toFixed(0));
         };
+        Utils.setFileName = function (filename) {
+            this.setStorage("filename", filename);
+        };
+        Utils.getFileName = function () {
+            return this.getStorage("filename");
+        };
+        // public static getSpriteMarker(id) {
+        //     var index = this.getSpriteList().containsKey(id);
+        //     if (index == -1) {
+        //         return null;
+        //     } else {
+        //         return this.spriteImage[index];
+        //     }
+        // }
+        Utils.getHeadImagePath = function (sprite) {
+            if (sprite) {
+                return this.petUrl + sprite.SmallImgPath;
+            }
+            else {
+                return "/image/default-head.png";
+            }
+        };
+        Utils.getMarkerInfo = function (e) {
+            var kv1 = e.split(":");
+            var id = kv1[0];
+            var location = kv1[1];
+            return location;
+        };
         Utils.tempResults = new HashMap();
         Utils.I64BIT_TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
         Utils.spriteIdFilter = [];
+        Utils.petUrl = "https://hy.gwgo.qq.com/sync/pet/";
+        Utils.spriteImage = [];
         return Utils;
     }());
     ZhuoYao.Utils = Utils;

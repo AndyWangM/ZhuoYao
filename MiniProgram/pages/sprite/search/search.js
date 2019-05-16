@@ -13,12 +13,16 @@ worker.onMessage(function (res) {
       var aliveSprite = res[i];
       var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id);
       var latitude = aliveSprite.latitude.toString().substr(0, 2) + "." + aliveSprite.latitude.toString().substr(2)
-      var longtitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
+      var longitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
       var resultObj = {
         "name": sprite.Name,
-        "latitude": latitude,
-        "longtitude": longtitude,
-        "lefttime": ZhuoYao.Utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime)
+        "latitude": Number(latitude),
+        "longitude": Number(longitude),
+        "lefttime": ZhuoYao.Utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
+        "iconPath": sprite.HeadImage,
+        "id": sprite.Id + ":" + latitude + " " + longitude,
+        "width": 40,
+        "height": 40
       };
       var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
       var hashValue = ZhuoYao.Utils.hash(hashStr);
@@ -58,10 +62,23 @@ Page({
     var that = this;
     socket.initSocket();
   },
+  markertap(e) {
+    var markerId = e.markerId;
+    wx.setClipboardData({
+      data: ZhuoYao.Utils.getMarkerInfo(markerId),
+      success(res) {
+        wx.getClipboardData({
+          success(res) {
+            console.log(res.data) // data
+          }
+        })
+      }
+    })
+  },
   tapview(e) {
     var content = e.currentTarget.dataset.content;
     wx.setClipboardData({
-      data: content.latitude + " " + content.longtitude,
+      data: content.latitude + " " + content.longitude,
       success(res) {
         wx.getClipboardData({
           success(res) {
@@ -177,8 +194,8 @@ Page({
   getPoints() {
     var that = this;
     var mapInfo = that.data.mapInfo;
-    var latStep = 0.017860;
-    var longStep = 0.015182;
+    var latStep = 0.016;
+    var longStep = 0.019;
     var allPoints = [];
     var aindex = this.data.xIndex;
     var bindex = this.data.yIndex;
@@ -194,18 +211,26 @@ Page({
         };
         if (i == 0) {
           if (j == 0) {
-            l1 = obj;
+            var l1 = {}
+            l1.latitude = obj.latitude - latStep;
+            l1.longitude = obj.longitude - longStep;
           }
           if (j == bindex - 1) {
-            r1 = obj
+            var r1 = {}
+            r1.latitude = obj.latitude - latStep;
+            r1.longitude = obj.longitude + longStep;
           }
         }
         if (i == aindex - 1) {
           if (j == 0) {
-            l2 = obj
+            var l2 = {}
+            l2.latitude = obj.latitude + latStep;
+            l2.longitude = obj.longitude - longStep;
           }
           if (j == bindex - 1) {
-            r2 = obj
+            var r2 = {}
+            r2.latitude = obj.latitude + latStep;
+            r2.longitude = obj.longitude + longStep;
           }
         }
         allPoints.push(obj);
@@ -216,6 +241,8 @@ Page({
     points.push(r1);
     points.push(r2);
     points.push(l2);
+    // console.log(points)
+
     this.setData({
       polygons: [{
         points: points,

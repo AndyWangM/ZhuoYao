@@ -219,6 +219,8 @@ namespace ZhuoYao {
         public static I64BIT_TABLE: string[] =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
         public static spriteIdFilter: number[] = []; 
+        public static petUrl: string = "https://hy.gwgo.qq.com/sync/pet/";
+        public static spriteImage: string[] = [];
 
        public static hash(input){
         var hash = 5381;
@@ -346,6 +348,7 @@ namespace ZhuoYao {
             this.spriteNameHash = new HashMap<Sprite>()
             for (var i = spriteList.length; i--;) {
                 var spriteInfo = spriteList[i];
+                spriteInfo.HeadImage = this.getHeadImagePath(spriteInfo);
             // for (const spriteInfo of spriteList) {
                 this.spriteHash.put(spriteInfo.Id, spriteInfo);
                 this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
@@ -359,6 +362,9 @@ namespace ZhuoYao {
                 var spriteList: Sprite[] = Utils.getStorage("SpriteList");
                 for (var i = spriteList.length; i--;) {
                     var spriteInfo = spriteList[i];
+                    if (!spriteInfo.HeadImage) {
+                        spriteInfo.HeadImage = this.getHeadImagePath(spriteInfo);
+                    }
                 // for (const spriteInfo of spriteList) {
                     this.spriteHash.put(spriteInfo.Id, spriteInfo);
                     this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
@@ -446,6 +452,34 @@ namespace ZhuoYao {
             var time = gentime + lifetime;
             var leftTime = time - (new Date).getTime() / 1000;
             return this.formatTime(leftTime.toFixed(0));
+        }
+        public static setFileName(filename) {
+            this.setStorage("filename", filename);
+        }
+        public static getFileName() {
+            return this.getStorage("filename");
+        }
+        // public static getSpriteMarker(id) {
+        //     var index = this.getSpriteList().containsKey(id);
+        //     if (index == -1) {
+        //         return null;
+        //     } else {
+        //         return this.spriteImage[index];
+        //     }
+        // }
+        public static getHeadImagePath(sprite: Sprite) {
+            if (sprite) {
+                return this.petUrl + sprite.SmallImgPath;
+            } else {
+                return "/image/default-head.png";
+            }
+        }
+
+        public static getMarkerInfo(e) {
+            var kv1 = e.split(":");
+            var id = kv1[0];
+            var location = kv1[1];
+            return location;
         }
     }
 

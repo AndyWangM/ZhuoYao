@@ -35,27 +35,36 @@ var ZhuoYao;
       var uint16array = Utils.str2abUint16Array(JSON.stringify(str)); var arrayLength = uint16array.length; var buf = new ArrayBuffer(4);
       (new DataView(buf)).setUint32(0, arrayLength); var uint8array = new Uint8Array(4 + arrayLength); uint8array.set(new Uint8Array(buf), 0); uint8array.set(uint16array, 4); return uint8array.buffer
     }; Utils.convertLocation = function (num) { var numStr = num.toFixed(6); return Number(numStr) * 1E6 }; Utils.setStorage = function (key, value) { wx["setStorage"]({ key: key, data: value }) }; Utils.getStorage = function (key) { return wx["getStorageSync"](key) }; Utils.setSpriteList = function (spriteList) { Utils.setStorage("SpriteList", spriteList) }; Utils.setSpriteHash =
-      function (spriteList) { this.spriteHash = new HashMap; this.spriteNameHash = new HashMap; for (var i = spriteList.length; i--;) { var spriteInfo = spriteList[i]; this.spriteHash.put(spriteInfo.Id, spriteInfo); this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id) } }; Utils.getSpriteList = function () {
+      function (spriteList) { this.spriteHash = new HashMap; this.spriteNameHash = new HashMap; for (var i = spriteList.length; i--;) { var spriteInfo = spriteList[i]; spriteInfo.HeadImage = this.getHeadImagePath(spriteInfo); this.spriteHash.put(spriteInfo.Id, spriteInfo); this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id) } }; Utils.getSpriteList = function () {
+        if (!this.spriteHash || !this.spriteNameHash) {
+        this.spriteHash = new HashMap; this.spriteNameHash = new HashMap; var spriteList = Utils.getStorage("SpriteList"); for (var i = spriteList.length; i--;) {
+          var spriteInfo =
+            spriteList[i]; if (!spriteInfo.HeadImage) spriteInfo.HeadImage = this.getHeadImagePath(spriteInfo); this.spriteHash.put(spriteInfo.Id, spriteInfo); this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id)
+        }
+        } return this.spriteHash
+      }; Utils.getSpriteNameHash = function () {
         if (!this.spriteHash || !this.spriteNameHash) {
         this.spriteHash = new HashMap; this.spriteNameHash = new HashMap; var spriteList = Utils.getStorage("SpriteList"); for (var i = spriteList.length; i--;) {
           var spriteInfo = spriteList[i]; this.spriteHash.put(spriteInfo.Id,
             spriteInfo); this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id)
         }
-        } return this.spriteHash
-      }; Utils.getSpriteNameHash = function () { if (!this.spriteHash || !this.spriteNameHash) { this.spriteHash = new HashMap; this.spriteNameHash = new HashMap; var spriteList = Utils.getStorage("SpriteList"); for (var i = spriteList.length; i--;) { var spriteInfo = spriteList[i]; this.spriteHash.put(spriteInfo.Id, spriteInfo); this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id) } } return this.spriteNameHash }; Utils.getSpriteByName = function (name) {
-        var sprite =
-          Utils.getStorage("SpriteList") || []; var itemData = []; if (sprite.length > 0) for (var i = 0; i < sprite.length; i++)if (name) { if (sprite[i].Name.indexOf(name) != -1) itemData.push(sprite[i]) } else itemData.push(sprite[i]); return itemData
-      }; Utils.setSpriteSearchFilter = function (name) { this.setStorage("spriteNameFilter", name) }; Utils.getSpriteSearchFilter = function () { return this.getStorage("spriteNameFilter") }; Utils.getSpriteSearchNameFilter = function () {
-        var arr = []; var spriteList = Utils.getStorage("SpriteList"); for (var i = spriteList.length; i--;)if (spriteList[i].Checked) arr.push(spriteList[i].Id);
-        return arr
-      }; Utils.getTempResults = function () { return this.tempResults }; Utils.formatTime = function (timeStr) { var time = Number(timeStr); var hour = parseInt((time / 3600).toString()); time = time % 3600; var minute = parseInt((time / 60).toString()); time = time % 60; var second = parseInt(time.toString()); return [hour, minute, second].map(function (n) { var num = n.toString(); return num[1] ? num : "0" + num }).join(":") }; Utils.getLeftTime = function (gentime, lifetime) { var time = gentime + lifetime; var leftTime = time - (new Date).getTime() / 1E3; return this.formatTime(leftTime.toFixed(0)) };
-    Utils.tempResults = new HashMap; Utils.I64BIT_TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-".split(""); Utils.spriteIdFilter = []; return Utils
+        } return this.spriteNameHash
+      }; Utils.getSpriteByName = function (name) { var sprite = Utils.getStorage("SpriteList") || []; var itemData = []; if (sprite.length > 0) for (var i = 0; i < sprite.length; i++)if (name) { if (sprite[i].Name.indexOf(name) != -1) itemData.push(sprite[i]) } else itemData.push(sprite[i]); return itemData }; Utils.setSpriteSearchFilter = function (name) { this.setStorage("spriteNameFilter", name) }; Utils.getSpriteSearchFilter = function () { return this.getStorage("spriteNameFilter") };
+    Utils.getSpriteSearchNameFilter = function () { var arr = []; var spriteList = Utils.getStorage("SpriteList"); for (var i = spriteList.length; i--;)if (spriteList[i].Checked) arr.push(spriteList[i].Id); return arr }; Utils.getTempResults = function () { return this.tempResults }; Utils.formatTime = function (timeStr) {
+      var time = Number(timeStr); var hour = parseInt((time / 3600).toString()); time = time % 3600; var minute = parseInt((time / 60).toString()); time = time % 60; var second = parseInt(time.toString()); return [hour, minute, second].map(function (n) {
+        var num =
+          n.toString(); return num[1] ? num : "0" + num
+      }).join(":")
+    }; Utils.getLeftTime = function (gentime, lifetime) { var time = gentime + lifetime; var leftTime = time - (new Date).getTime() / 1E3; return this.formatTime(leftTime.toFixed(0)) }; Utils.setFileName = function (filename) { this.setStorage("filename", filename) }; Utils.getFileName = function () { return this.getStorage("filename") }; Utils.getHeadImagePath = function (sprite) { if (sprite) return this.petUrl + sprite.SmallImgPath; else return "/image/default-head.png" }; Utils.getMarkerInfo = function (e) {
+      var kv1 =
+        e.split(":"); var id = kv1[0]; var location = kv1[1]; return location
+    }; Utils.tempResults = new HashMap; Utils.I64BIT_TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-".split(""); Utils.spriteIdFilter = []; Utils.petUrl = "https://hy.gwgo.qq.com/sync/pet/"; Utils.spriteImage = []; return Utils
   }(); ZhuoYao.Utils = Utils
 })(ZhuoYao || (ZhuoYao = {})); var ZhuoYao;
 (function (ZhuoYao) {
   var Socket = function () {
     function Socket(worker) { this.requestIds = []; this.isOpen = false; this.isConnecting = false; this.messageQueue = []; this.requestResult = new RequestResult; this.worker = worker } Socket.prototype.initSocket = function () {
-      var that = this; this.initSocketChecker(); that.connectSocket(); wx["onSocketOpen"](function (t) { console.log("WebSocket\u8fde\u63a5\u5df2\u6253\u5f00\uff01"); that.isOpen = true; wx["hideLoading"]() }); wx["onSocketError"](function (e) {
+      var that = this; this.initSocketChecker(); that.connectSocket(); wx["onSocketOpen"](function (t) { console.log("WebSocket\u8fde\u63a5\u5df2\u6253\u5f00\uff01"); that.isOpen = true; that.getSettingFileName(); wx["hideLoading"]() }); wx["onSocketError"](function (e) {
         console.log("WebSocket\u8fde\u63a5\u6253\u5f00\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\uff01"); that.isOpen =
           false
       }); wx["onSocketClose"](function (e) { console.log("WebSocket \u5df2\u5173\u95ed\uff01"); that.isOpen = false }); wx["onSocketMessage"](function (t) { that.recMessage(t) })
@@ -71,27 +80,29 @@ var ZhuoYao;
         case "1001": return that.requestIds[0]; case "1002": return that.requestIds[1]; case "1003": return that.requestIds[2];
         case "10040": return that.requestIds[3]; case "10041": return that.requestIds[4]
       }
-    }; Socket.prototype.getRequestTypeFromId = function (n) { var that = this; if (that.requestIds[0] == n) return "1001"; else if (that.requestIds[1] == n) return "1002"; else if (that.requestIds[2] == n) return "1003"; else if (that.requestIds[3] == n) return "10040"; else if (that.requestIds[4] == n) return "10041"; else return 0 }; Socket.prototype.getVersionFileName = function (e) { console.log("fileName", e); this.downloadFile(e) }; Socket.prototype.downloadFile = function (i) {
-      var that =
-        this; console.log("\u5b58\u5728\u65b0\u7248\uff0c\u4e0b\u8f7d\u6210\u529f" + i); wx["downloadFile"]({ "url": "https://hy.gwgo.qq.com/sync/pet/config/" + i, "success": function (s) { if (200 === s["statusCode"]) { var n = wx["getFileSystemManager"]()["readFileSync"](s["tempFilePath"], "utf8"), l = JSON.parse(n); var spriteList = l["Data"]; ZhuoYao.Utils.setSpriteList(spriteList); ZhuoYao.Utils.setSpriteHash(spriteList) } else that.downloadFailed(i) }, "fail": function () { that.downloadFailed(i) } })
-    }; Socket.prototype.downloadFailed = function (e) {
-      var that =
-        this; console.log(e); setTimeout(function () { that.downloadFile(e) }, 3E3)
-    }; Socket.prototype.getSpriteNameFilter = function () { return ZhuoYao.Utils.getStorage("spriteName") || [] }; return Socket
-  }(); ZhuoYao.Socket = Socket; var RequestResult = function () { function RequestResult() { } RequestResult.prototype.getSpriteResult = function (result) { return new SpriteResult(result) }; return RequestResult }(); var AliveSprite = function () {
-    function AliveSprite(obj) {
-    this.gentime = obj["gentime"]; this.latitude = obj["latitude"]; this.lifetime =
-      obj["lifetime"]; this.longtitude = obj["longtitude"]; this.sprite_id = obj["sprite_id"]; this.initSprite()
-    } AliveSprite.prototype.getLeftTime = function () { var that = this; var time = that.gentime + that.lifetime; var leftTime = time - (new Date).getTime() / 1E3; return that.formatTime(leftTime.toFixed(0)) }; AliveSprite.prototype.initSprite = function () { var spriteList = ZhuoYao.Utils.getSpriteList(); this.sprite = spriteList.get(this.sprite_id) }; AliveSprite.prototype.formatTime = function (timeStr) {
-      var time = Number(timeStr); var hour =
-        parseInt((time / 3600).toString()); time = time % 3600; var minute = parseInt((time / 60).toString()); time = time % 60; var second = parseInt(time.toString()); return [hour, minute, second].map(function (n) { var num = n.toString(); return num[1] ? num : "0" + num }).join(":")
-    }; return AliveSprite
-  }(); ZhuoYao.AliveSprite = AliveSprite; var SpriteResult = function () {
-    function SpriteResult(obj) {
-    this.end = obj["end"]; this.packageNO = obj["packageNO"]; this.requestid = obj["requestid"]; this.retcode = obj["retcode"]; this.retmsg = obj["retmsg"]; this.sprite_list =
-      []; for (var i = obj["sprite_list"].length; i--;) { this.sprite_list[i] = new AliveSprite(obj["sprite_list"][i]); if (!this.sprite_list[i]) console.log(1) }
-    } return SpriteResult
-  }(); ZhuoYao.SpriteResult = SpriteResult
+    }; Socket.prototype.getRequestTypeFromId = function (n) { var that = this; if (that.requestIds[0] == n) return "1001"; else if (that.requestIds[1] == n) return "1002"; else if (that.requestIds[2] == n) return "1003"; else if (that.requestIds[3] == n) return "10040"; else if (that.requestIds[4] == n) return "10041"; else return 0 }; Socket.prototype.getSettingFileName = function () {
+      var that = this; var e = {
+        request_type: "1004", cfg_type: 1, requestid: that.genRequestId("10041"),
+        platform: 0
+      }; that.sendMessage(e)
+    }; Socket.prototype.getVersionFileName = function (e) { console.log("fileName", e); if (ZhuoYao.Utils.getFileName() != e) { console.log("\u5b58\u5728\u65b0\u7248\uff0c\u5f00\u59cb\u4e0b\u8f7d"); this.downloadFile(e) } }; Socket.prototype.downloadFile = function (i) {
+      var that = this; wx["downloadFile"]({
+        "url": "https://hy.gwgo.qq.com/sync/pet/config/" + i, "success": function (s) {
+          if (200 === s["statusCode"]) {
+            console.log("\u4e0b\u8f7d\u6210\u529f" + i); var n = wx["getFileSystemManager"]()["readFileSync"](s["tempFilePath"],
+              "utf8"), l = JSON.parse(n); var spriteList = l["Data"]; ZhuoYao.Utils.setSpriteList(spriteList); ZhuoYao.Utils.setSpriteHash(spriteList); ZhuoYao.Utils.setFileName(i)
+          } else that.downloadFailed(i)
+        }, "fail": function () { that.downloadFailed(i) }
+      })
+    }; Socket.prototype.downloadFailed = function (e) { var that = this; console.log(e); setTimeout(function () { that.downloadFile(e) }, 3E3) }; Socket.prototype.getSpriteNameFilter = function () { return ZhuoYao.Utils.getStorage("spriteName") || [] }; return Socket
+  }(); ZhuoYao.Socket = Socket; var RequestResult =
+    function () { function RequestResult() { } RequestResult.prototype.getSpriteResult = function (result) { return new SpriteResult(result) }; return RequestResult }(); var AliveSprite = function () {
+      function AliveSprite(obj) { this.gentime = obj["gentime"]; this.latitude = obj["latitude"]; this.lifetime = obj["lifetime"]; this.longtitude = obj["longtitude"]; this.sprite_id = obj["sprite_id"]; this.initSprite() } AliveSprite.prototype.getLeftTime = function () {
+        var that = this; var time = that.gentime + that.lifetime; var leftTime = time - (new Date).getTime() /
+          1E3; return that.formatTime(leftTime.toFixed(0))
+      }; AliveSprite.prototype.initSprite = function () { var spriteList = ZhuoYao.Utils.getSpriteList(); this.sprite = spriteList.get(this.sprite_id) }; AliveSprite.prototype.formatTime = function (timeStr) { var time = Number(timeStr); var hour = parseInt((time / 3600).toString()); time = time % 3600; var minute = parseInt((time / 60).toString()); time = time % 60; var second = parseInt(time.toString()); return [hour, minute, second].map(function (n) { var num = n.toString(); return num[1] ? num : "0" + num }).join(":") };
+      return AliveSprite
+    }(); ZhuoYao.AliveSprite = AliveSprite; var SpriteResult = function () { function SpriteResult(obj) { this.end = obj["end"]; this.packageNO = obj["packageNO"]; this.requestid = obj["requestid"]; this.retcode = obj["retcode"]; this.retmsg = obj["retmsg"]; this.sprite_list = []; for (var i = obj["sprite_list"].length; i--;) { this.sprite_list[i] = new AliveSprite(obj["sprite_list"][i]); if (!this.sprite_list[i]) console.log(1) } } return SpriteResult }(); ZhuoYao.SpriteResult = SpriteResult
 })(ZhuoYao || (ZhuoYao = {})); var ZhuoYao; (function (ZhuoYao) { var Sprite = function () { function Sprite() { } return Sprite }(); ZhuoYao.Sprite = Sprite })(ZhuoYao || (ZhuoYao = {})); var ZhuoYao;
 (function (ZhuoYao) {
   var SpritesAPI = function () {

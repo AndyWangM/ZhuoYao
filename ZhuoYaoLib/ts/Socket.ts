@@ -1,4 +1,5 @@
 /// <reference path="./Utils.ts" />
+/// <reference path="./SpritesAPI.ts" />
 
 namespace ZhuoYao {
 
@@ -26,6 +27,7 @@ namespace ZhuoYao {
             wx["onSocketOpen"](function (t) {
                 console.log("WebSocket连接已打开！");
                 that.isOpen = true;
+                that.getSettingFileName();
                 // that.isConnecting = false;
                 wx["hideLoading"]();
                 // that.socketConnectedCallback(t)
@@ -272,18 +274,32 @@ namespace ZhuoYao {
             }
         }
 
+        private getSettingFileName () {
+            var that = this;
+            var e = {
+              request_type: "1004",
+              cfg_type: 1,
+              requestid: that.genRequestId("10041"),
+              platform: 0
+            };
+            that.sendMessage(e);
+        }
+
         private getVersionFileName(e) {
             console.log("fileName", e);
-            this.downloadFile(e);
+            if (Utils.getFileName() != e) {
+                console.log("存在新版，开始下载");
+                this.downloadFile(e);
+            }
         }
 
         private downloadFile(i) {
             var that = this;
-            console.log("存在新版，下载成功" + i);
             wx["downloadFile"]({
                 "url": "https://hy.gwgo.qq.com/sync/pet/config/" + i,
                 "success": function (s) {
                     if (200 === s["statusCode"]) {
+                        console.log("下载成功" + i);
                         var n = wx["getFileSystemManager"]()["readFileSync"](s["tempFilePath"], "utf8"),
                             l = JSON.parse(n);
                         var spriteList: Sprite[] = l["Data"];
@@ -291,6 +307,7 @@ namespace ZhuoYao {
                         // e.globalData.iconList = l.Switch,
                         Utils.setSpriteList(spriteList);
                         Utils.setSpriteHash(spriteList);
+                        Utils.setFileName(i);
                         // t.changeSetting("iconList", e.globalData.iconList)
                         // a.saveVersion(i)
                     } else that.downloadFailed(i)

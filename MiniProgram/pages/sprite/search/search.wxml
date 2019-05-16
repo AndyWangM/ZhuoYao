@@ -1,5 +1,5 @@
 <view>
-  <button bindtap='getConfig'>获取配置</button>
+  <!-- <button bindtap='getConfig'>获取配置</button> -->
 
   <button bindtap='selectLocation'>选择地理位置</button>
   <view wx:if="{{mapInfo.longitude}}">
@@ -7,7 +7,8 @@
     <!-- <button bindtap='searchLeitai'>擂台搜索</button> -->
     <input type="text" bindinput='bindXInput' placeholder='经度范围'></input>
     <input type="text" bindinput='bindYInput' placeholder='纬度范围'></input>
-    <map  style="width: 100%; height: 100px;"longitude="{{mapInfo.longitude}}" scale = "11"latitude="{{mapInfo.latitude}}" polygons="{{polygons}}" enable-overlooking="true" enable-rotate="true" enable-zoom="true" enable-scroll="true"></map>
+    <map style="width: 100%; height: 200px;" longitude="{{mapInfo.longitude}}" scale="11" latitude="{{mapInfo.latitude}}" markers='{{result}}' bindmarkertap="markertap" polygons="{{polygons}}" enable-overlooking="true" enable-rotate="true" enable-zoom="true"
+      enable-scroll="true" show-location></map>
     <button bindtap='searchYaojing'>妖灵搜索</button>
 
     <!-- <text wx:if="{{isSearching}}">搜索中</text> -->
@@ -25,7 +26,7 @@
           <view class="time">{{item.lefttime}}</view>
         </view>
         <!-- <view class="info-content">{{item.info}}</view> -->
-        <view class="info-content">{{item.latitude + ", " + item.longtitude}}</view>
+        <view class="info-content">{{item.latitude + ", " + item.longitude}}</view>
       </view>
     </view>
   </view>

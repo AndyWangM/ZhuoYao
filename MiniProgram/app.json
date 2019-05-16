@@ -2,7 +2,8 @@
   "pages": [
     "pages/sprite/search/search",
     "pages/sprite/filter/filter",
-    "pages/sprite/serversprite/serversprite"
+    "pages/sprite/serversprite/serversprite",
+    "pages/user/user"
   ],
   "permission": {
     "scope.userLocation": {
@@ -32,6 +33,10 @@
       {
         "pagePath": "pages/sprite/serversprite/serversprite",
         "text": "已知妖灵"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的"
       }
     ]
   },

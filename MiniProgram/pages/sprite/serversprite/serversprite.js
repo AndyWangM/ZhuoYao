@@ -10,7 +10,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    result: []
+    result: [],
+    inputVal: ""
   },
 
   /**
@@ -25,7 +26,7 @@ Page({
   tapview(e) {
     var content = e.currentTarget.dataset.content;
     wx.setClipboardData({
-      data: content.latitude + " " + content.longtitude,
+      data: content.latitude + " " + content.longitude,
       success(res) {
         wx.getClipboardData({
           success(res) {
@@ -48,18 +49,23 @@ Page({
             var aliveSprite = data[i];
             var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id);
             var latitude = aliveSprite.latitude.toString().substr(0, 2) + "." + aliveSprite.latitude.toString().substr(2)
-            var longtitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
+            var longitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
             var resultObj = {
               "name": sprite.Name,
-              "latitude": latitude,
-              "longtitude": longtitude,
-              "lefttime": ZhuoYao.Utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime)
+              "latitude": Number(latitude),
+              "longitude": Number(longitude),
+              "lefttime": ZhuoYao.Utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
+              "iconPath": sprite.HeadImage,
+              "id": sprite.Id + ":" + latitude + " " + longitude,
+              "width": 40,
+              "height": 40
             };
             result.push(resultObj);
           }
           that.setData({
             result: result
           })
+          // console.log(result)
         }
       },
       failed(res) {
@@ -67,11 +73,24 @@ Page({
       }
     })
   },
+  markertap(e) {
+    var markerId = e.markerId;
+    wx.setClipboardData({
+      data: ZhuoYao.Utils.getMarkerInfo(markerId),
+      success(res) {
+        wx.getClipboardData({
+          success(res) {
+            console.log(res.data) // data
+          }
+        })
+      }
+    })
+  },
   bindInput: function (e) {
     e && this.setData({
       inputVal: e.detail.value
     })
-    this.bindGoSearch();
+    // this.bindGoSearch();
   },
   bindGoSearch: function (e) {
     let itemData = ZhuoYao.Utils.getSpriteByName(this.data.inputVal);
