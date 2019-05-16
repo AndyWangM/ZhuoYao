@@ -46,7 +46,7 @@ namespace WebApplicationAPI.Controllers
         [HttpPost("set")]
         public IActionResult SetSprite([FromBody]AliveSprite[] sprites)
         {
-            var filter = new int[] { 2000238, 2000265, 2000106, 2000313, 2000268 };
+            var filter = new int[] { 2000238, 2000265, 2000106, 2000313, 2000268, 2000327 };
             sprites = sprites.Where(x => filter.Contains(x.SpriteId)).ToArray();
             foreach (var sprite in sprites)
             {

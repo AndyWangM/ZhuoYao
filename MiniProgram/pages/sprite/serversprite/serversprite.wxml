@@ -3,17 +3,11 @@
     <!-- <view class="head_search">
       <input class="text_search colorGray" type='text' confirm-type="search" placeholder="请输入关键词" bindinput="bindInput" bindconfirm="bindGoSearch" value="{{inputVal}}"></input>
     </view> -->
-      <button bindtap='getLatestSprite'>获取最新妖灵</button>
+    <button bindtap='getLatestSprite'>获取最新妖灵</button>
   </view>
-<map wx:if="{{result.length}}"
-  id="map"
-  scale="5"
-  markers="{{result}}"
-  bindmarkertap="markertap"
-  show-location
-  style="width: 100%; height: 200px;"
-></map>
+  <map wx:if="{{result.length}}" id="map" scale="5" markers="{{result}}" bindmarkertap="markertap" show-location style="width: 100%; height: 200px;"></map>
 </view>
+
 <scroll-view scroll-y class="item-wrapper">
   <view class="item-list" wx:for="{{result}}" wx:for-item="item" wx:for-index="index" wx:key="that">
     <view class="item-info" style="left:{{item.left + 'rpx'}}" bindtap="tapview" data-content="{{item}}">
@@ -28,3 +22,4 @@
     </view>
   </view>
 </scroll-view>
+<ad unit-id="adunit-02b396f2eb8bcbff"></ad>
