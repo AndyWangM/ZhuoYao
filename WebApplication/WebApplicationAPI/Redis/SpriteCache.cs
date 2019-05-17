@@ -49,6 +49,7 @@ namespace WebApplicationAPI.Redis
                     }
                 }
             }
+            result.Sort();
             return result;
         }
 

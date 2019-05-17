@@ -1,23 +1,34 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace WebApplicationAPI.Models
 {
-    public class AliveSprite
+    public class AliveSprite : IComparable<AliveSprite>
     {
         [JsonProperty("sprite_id")]
         public int SpriteId { get; set; }
         [JsonProperty("gentime")]
-        public long GenTime {get;set;}
+        public long GenTime { get; set; }
         [JsonProperty("lifetime")]
         public int LifeTime { get; set; }
         [JsonProperty("latitude")]
         public double Latitude { get; set; }
         [JsonProperty("longtitude")]
         public double Longitude { get; set; }
+
+        public int CompareTo(AliveSprite other)
+        {
+            if (other == null)
+            {
+                return 1;
+            }
+            int ret = SpriteId.CompareTo(other.SpriteId);
+            if (ret == 0)
+            {
+                return other.GetExpiredTime().CompareTo(GetExpiredTime());
+            }
+            return ret;
+        }
 
         public long GetExpiredTime()
         {
