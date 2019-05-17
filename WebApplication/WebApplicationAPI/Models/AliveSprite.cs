@@ -15,9 +15,9 @@ namespace WebApplicationAPI.Models
         [JsonProperty("lifetime")]
         public int LifeTime { get; set; }
         [JsonProperty("latitude")]
-        public int Latitude { get; set; }
+        public double Latitude { get; set; }
         [JsonProperty("longtitude")]
-        public int Longitude { get; set; }
+        public double Longitude { get; set; }
 
         public long GetExpiredTime()
         {

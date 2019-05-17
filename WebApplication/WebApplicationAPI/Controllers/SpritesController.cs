@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using WebApplicationAPI.Models;
 using WebApplicationAPI.Redis;
 
@@ -10,67 +13,64 @@ namespace WebApplicationAPI.Controllers
     [Route("api/[controller]")]
     public class SpritesController : Controller
     {
-        //DistributedCache _distributedCache;
-        SpriteCache _distributedCache;
+        private readonly SpriteCache _distributedCache;
 
         public SpritesController(IConfiguration config)
         {
-            //_distributedCache = new DistributedCache(distributedCache);
             RedisClient _redisClient = RedisClientSingleton.GetInstance(config);
             _distributedCache = new SpriteCache(_redisClient);
         }
 
-
         [HttpGet()]
         public IActionResult GetEmpty()
         {
-            return new OkObjectResult("Empty");
+            return new OkObjectResult("Welcome");
         }
 
-        // GET api/values/5
         [HttpGet("get/{key}")]
-        public IActionResult Get([FromRoute]string key)
+        public async Task<IActionResult> Get([FromRoute]string key)
         {
-            //var value = _distributedCache.Get(key).ToString();
-            var value = _distributedCache.Get(key);
+            var isValid = CheckValid();
+            var value = await _distributedCache.Get(key, isValid);
             return new OkObjectResult(value);
         }
 
-        //[HttpGet("set/{key}/{value}")]
-        //public void Set([FromRoute]string key, [FromRoute]string value)
-        //{
-        //    //_distributedCache.Add(key, value);
-        //    _distributedCache.SetString(key, value);
-        //}
-
-        [HttpPost("set")]
-        public IActionResult SetSprite([FromBody]AliveSprite[] sprites)
+        [HttpGet("getall")]
+        public async Task<IActionResult> GetAll()
         {
-            var filter = new int[] { 2000238, 2000265, 2000106, 2000313, 2000268, 2000327 };
-            sprites = sprites.Where(x => filter.Contains(x.SpriteId)).ToArray();
-            foreach (var sprite in sprites)
-            {
-                _distributedCache.Add(sprite);
-            }
-            return new OkObjectResult("200");
+            var isValid = CheckValid();
+            var value = await _distributedCache.Get("*", isValid);
+            return new OkObjectResult(value);
         }
 
-        //// POST api/values
-        //[HttpPost]
-        //public void Post([FromBody]string value)
-        //{
-        //}
+        [HttpPost("set")]
+        public async Task<IActionResult> SetSprite([FromBody]AliveSprite[] sprites)
+        {
+            var isValid = CheckValid();
+            if (isValid)
+            {
+                var filter = new int[] { 2000238, 2000265, 2000106, 2000313, 2000268, 2000327 };
+                sprites = sprites.Where(x => filter.Contains(x.SpriteId)).ToArray();
+                foreach (var sprite in sprites)
+                {
+                    await _distributedCache.Add(sprite);
+                }
+            }
+            return new OkObjectResult("ok");
+        }
 
-        //// PUT api/values/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-
-        //// DELETE api/values/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        public bool CheckValid()
+        {
+            var userAgent = HttpContext.Request.Headers[HeaderNames.UserAgent].FirstOrDefault().ToLower();
+            var regex = new Regex("micromessenger");
+            if (regex.Match(userAgent).Success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

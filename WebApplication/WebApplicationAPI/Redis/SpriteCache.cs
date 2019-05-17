@@ -3,37 +3,47 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using WebApplicationAPI.Models;
 
 namespace WebApplicationAPI.Redis
 {
     public class SpriteCache
     {
-        RedisClient _redisClient;
-        IDatabase _redisDatabase;
-        IServer _redisServer;
+        //private readonly RedisClient _redisClient;
+        private readonly IDatabase _redisDatabase;
+        //private readonly IServer _redisServer;
 
         public SpriteCache(RedisClient redisClient)
         {
-            _redisClient = redisClient;
             _redisDatabase = redisClient.GetDatabase("Redis_Sprite");
-            _redisServer = redisClient.GetServer("Redis_Sprite");
+            //_redisServer = redisClient.GetServer("Redis_Sprite");
         }
 
-        public List<AliveSprite> Get(string key)
+        public async Task<List<AliveSprite>> Get(string key, bool isValid)
         {
             List<AliveSprite> result = new List<AliveSprite>();
             if (!string.IsNullOrEmpty(key))
             {
-                var resultValues = GetKeys(key + "_*");
+                var resultValues = await GetKeys(key + "_*");
                 if (resultValues.Length > 0)
                 {
-                    foreach(var resultValue in resultValues)
+                    foreach (var resultValue in resultValues)
                     {
                         var value = _redisDatabase.StringGet(resultValue.ToString()).ToString();
                         if (!string.IsNullOrEmpty(value))
                         {
+                            var random = new Random().Next(1, 100);
+                            if (random <= 10)
+                            {
+                                continue;
+                            }
                             var aliveSprite = JsonConvert.DeserializeObject<AliveSprite>(value);
+                            if (!isValid)
+                            {
+                                aliveSprite.Latitude = aliveSprite.Latitude + (new Random().Next(100, 1000)) * 1000;
+                                aliveSprite.Longitude = aliveSprite.Longitude + (new Random().Next(100, 1000)) * 1000;
+                            }
                             result.Add(aliveSprite);
                         }
                     }
@@ -42,27 +52,7 @@ namespace WebApplicationAPI.Redis
             return result;
         }
 
-        //public List<AliveSprite> GetAll()
-        //{
-        //    List<AliveSprite> result = new List<AliveSprite>();
-        //    _redisDatabase.ge
-        //        var resultValues = GetKeys(key + "_*");
-        //        if (resultValues.Length > 0)
-        //        {
-        //            foreach (var resultValue in resultValues)
-        //            {
-        //                var value = _redisDatabase.StringGet(resultValue.ToString()).ToString();
-        //                if (!string.IsNullOrEmpty(value))
-        //                {
-        //                    var aliveSprite = JsonConvert.DeserializeObject<AliveSprite>(value);
-        //                    result.Add(aliveSprite);
-        //                }
-        //            }
-        //        }
-        //    return result;
-        //}
-
-        public void Add(AliveSprite sprite)
+        public async Task Add(AliveSprite sprite)
         {
             byte[] value = null;
             var str = JsonConvert.SerializeObject(sprite);
@@ -77,7 +67,7 @@ namespace WebApplicationAPI.Redis
                 //options.AbsoluteExpiration = DateTime.Now.AddMinutes(60);
                 //options.SlidingExpiration = TimeSpan.FromSeconds(expiredTime);
                 var key = sprite.GetKey();
-                _redisDatabase.StringSet(key, value, TimeSpan.FromSeconds(expiredTime));
+                await _redisDatabase.StringSetAsync(key, value, TimeSpan.FromSeconds(expiredTime));
                 //_database.refre(key);
             }
 
@@ -107,11 +97,10 @@ namespace WebApplicationAPI.Redis
         //}
 
         //使用Keys *模糊匹配Key
-        public RedisValue[] GetKeys(string key)
+        public async Task<RedisValue[]> GetKeys(string key)
         {
-            var result = _redisDatabase.ScriptEvaluateAsync(LuaScript.Prepare("return redis.call('KEYS',@keypattern)"), new { keypattern = key });
-            result.Wait();
-            return (RedisValue[])result.Result;
+            var result = await _redisDatabase.ScriptEvaluateAsync(LuaScript.Prepare("return redis.call('KEYS',@keypattern)"), new { keypattern = key });
+            return (RedisValue[])result;
         }
 
         ////使用SCAN模糊匹配Key
