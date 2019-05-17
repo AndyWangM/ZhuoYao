@@ -434,7 +434,56 @@ var ZhuoYao;
             var kv1 = e.split(":");
             var id = kv1[0];
             var location = kv1[1];
-            return location;
+            return location.split(" ");
+        };
+        Utils.setCoordinate = function (coordinate) {
+            this.coordinate = coordinate;
+            Utils.setStorage("coordinate", coordinate);
+        };
+        Utils.getLocation = function (lng, lat) {
+            var that = this;
+            if (!that.coordinate) {
+                that.coordinate = Utils.getStorage("coordinate") || "GCJ02";
+            }
+            switch (that.coordinate) {
+                case "GCJ02":
+                    return [lng, lat];
+                case "BD09":
+                    return ZhuoYao.LocationTrans.gcj02tobd09(lng, lat);
+                case "WGS84":
+                    return ZhuoYao.LocationTrans.gcj02towgs84(lng, lat);
+            }
+        };
+        Utils.setSplitSign = function (sign) {
+            var that = this;
+            if (sign == "spacesplit") {
+                that.splitSign = " ";
+            }
+            else {
+                that.splitSign = ",";
+            }
+            that.splitSign = sign;
+            Utils.setStorage("splitsign", sign);
+        };
+        Utils.getSplitSign = function () {
+            var that = this, sign = Utils.getStorage("splitsign") || "spacesplit";
+            if (sign == "spacesplit") {
+                that.splitSign = " ";
+            }
+            else {
+                that.splitSign = ",";
+            }
+            return that.splitSign;
+        };
+        Utils.setLonfront = function (bool) {
+            var that = this;
+            that.lonfront = bool;
+            Utils.setStorage("lonfront", bool);
+        };
+        Utils.getLonfront = function () {
+            var that = this;
+            that.lonfront = Utils.getStorage("lonfront");
+            return that.lonfront;
         };
         Utils.tempResults = new HashMap();
         Utils.I64BIT_TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');

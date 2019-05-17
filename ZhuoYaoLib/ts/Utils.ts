@@ -217,33 +217,36 @@ namespace ZhuoYao {
         public static spriteNameHash: HashMap<Object>;
         public static tempResults: HashMap<Object> = new HashMap<Object>();
         public static I64BIT_TABLE: string[] =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
-        public static spriteIdFilter: number[] = []; 
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
+        public static spriteIdFilter: number[] = [];
         public static petUrl: string = "https://hy.gwgo.qq.com/sync/pet/";
         public static spriteImage: string[] = [];
+        static coordinate: string;
+        static splitSign: string;
+        static lonfront: boolean;
 
-       public static hash(input){
-        var hash = 5381;
-        var i = input.length - 1;
-         
-        if(typeof input == 'string'){
-         for (; i > -1; i--)
-          hash += (hash << 5) + input.charCodeAt(i);
+        public static hash(input) {
+            var hash = 5381;
+            var i = input.length - 1;
+
+            if (typeof input == 'string') {
+                for (; i > -1; i--)
+                    hash += (hash << 5) + input.charCodeAt(i);
+            }
+            else {
+                for (; i > -1; i--)
+                    hash += (hash << 5) + input[i];
+            }
+            var value = hash & 0x7FFFFFFF;
+
+            var retValue = '';
+            do {
+                retValue += this.I64BIT_TABLE[value & 0x3F];
+            }
+            while (value >>= 6);
+
+            return retValue;
         }
-        else{
-         for (; i > -1; i--)
-          hash += (hash << 5) + input[i];
-        }
-        var value = hash & 0x7FFFFFFF;
-         
-        var retValue = '';
-        do{
-         retValue += this.I64BIT_TABLE[value & 0x3F];
-        }
-        while(value >>= 6);
-         
-        return retValue;
-       }
         public static utf8ByteToUnicodeStr(utf8Bytes) {
             var unicodeStr = "";
             for (var pos = 0; pos < utf8Bytes.length;) {
@@ -349,7 +352,7 @@ namespace ZhuoYao {
             for (var i = spriteList.length; i--;) {
                 var spriteInfo = spriteList[i];
                 spriteInfo.HeadImage = this.getHeadImagePath(spriteInfo);
-            // for (const spriteInfo of spriteList) {
+                // for (const spriteInfo of spriteList) {
                 this.spriteHash.put(spriteInfo.Id, spriteInfo);
                 this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
             }
@@ -365,7 +368,7 @@ namespace ZhuoYao {
                     if (!spriteInfo.HeadImage) {
                         spriteInfo.HeadImage = this.getHeadImagePath(spriteInfo);
                     }
-                // for (const spriteInfo of spriteList) {
+                    // for (const spriteInfo of spriteList) {
                     this.spriteHash.put(spriteInfo.Id, spriteInfo);
                     this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
                 }
@@ -380,7 +383,7 @@ namespace ZhuoYao {
                 var spriteList: Sprite[] = Utils.getStorage("SpriteList")
                 for (var i = spriteList.length; i--;) {
                     var spriteInfo = spriteList[i];
-                // for (const spriteInfo of spriteList) {
+                    // for (const spriteInfo of spriteList) {
                     this.spriteHash.put(spriteInfo.Id, spriteInfo);
                     this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
                 }
@@ -389,20 +392,20 @@ namespace ZhuoYao {
         }
 
         public static getSpriteByName(name) {
-            var sprite: Sprite[] = Utils.getStorage("SpriteList")||[];
+            var sprite: Sprite[] = Utils.getStorage("SpriteList") || [];
             var itemData = [];
             if (sprite.length > 0) {
                 // for (var i = sprite.length; i--;) {
 
-              for (var i = 0; i < sprite.length; i++) {
-                if (name) {
-                  if (sprite[i].Name.indexOf(name) != -1) {
-                    itemData.push(sprite[i]);
-                  }
-                } else {
-                  itemData.push(sprite[i]);
+                for (var i = 0; i < sprite.length; i++) {
+                    if (name) {
+                        if (sprite[i].Name.indexOf(name) != -1) {
+                            itemData.push(sprite[i]);
+                        }
+                    } else {
+                        itemData.push(sprite[i]);
+                    }
                 }
-              }
             }
             return itemData;
         }
@@ -417,14 +420,14 @@ namespace ZhuoYao {
 
         public static getSpriteSearchNameFilter() {
             // if (!this.spriteIdFilter) {
-                var arr: number[] = [];
-                var spriteList: Sprite[] = Utils.getStorage("SpriteList");
-                for (var i = spriteList.length; i--;) {
+            var arr: number[] = [];
+            var spriteList: Sprite[] = Utils.getStorage("SpriteList");
+            for (var i = spriteList.length; i--;) {
                 // for (var i = 0; i< spriteList.length; i++) {
-                    if (spriteList[i].Checked) {
-                        arr.push(spriteList[i].Id);
-                    }
+                if (spriteList[i].Checked) {
+                    arr.push(spriteList[i].Id);
                 }
+            }
             //     this.spriteIdFilter = arr;
             // }
             return arr;
@@ -479,7 +482,55 @@ namespace ZhuoYao {
             var kv1 = e.split(":");
             var id = kv1[0];
             var location = kv1[1];
-            return location;
+            return location.split(" ");
+        }
+
+        public static setCoordinate(coordinate) {
+            this.coordinate = coordinate;
+            Utils.setStorage("coordinate", coordinate);
+        }
+        public static getLocation(lng, lat) {
+            var that = this;
+            if (!that.coordinate) {
+                that.coordinate = Utils.getStorage("coordinate") || "GCJ02";
+            }
+            switch (that.coordinate) {
+                case "GCJ02":
+                    return [lng, lat];
+                case "BD09":
+                    return LocationTrans.gcj02tobd09(lng, lat);
+                case "WGS84":
+                    return LocationTrans.gcj02towgs84(lng, lat);
+            }
+        }
+        public static setSplitSign(sign) {
+            var that = this;
+            if (sign == "spacesplit") {
+                that.splitSign = " ";
+            } else {
+                that.splitSign = ",";
+            }
+            that.splitSign = sign;
+            Utils.setStorage("splitsign", sign);
+        }
+        public static getSplitSign() {
+            var that = this, sign = Utils.getStorage("splitsign") || "spacesplit";
+            if (sign == "spacesplit") {
+                that.splitSign = " ";
+            } else {
+                that.splitSign = ",";
+            }
+            return that.splitSign;
+        }
+        public static setLonfront(bool) {
+            var that = this;
+            that.lonfront = bool;
+            Utils.setStorage("lonfront", bool);
+        }
+        public static getLonfront() {
+            var that = this;
+            that.lonfront = Utils.getStorage("lonfront");
+            return that.lonfront;
         }
     }
 

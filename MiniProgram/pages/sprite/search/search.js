@@ -14,10 +14,11 @@ worker.onMessage(function (res) {
       var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id);
       var latitude = aliveSprite.latitude.toString().substr(0, 2) + "." + aliveSprite.latitude.toString().substr(2)
       var longitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
+      var location = ZhuoYao.Utils.getLocation(longitude, latitude);
       var resultObj = {
         "name": sprite.Name,
-        "latitude": Number(latitude),
-        "longitude": Number(longitude),
+        "latitude": location[1],
+        "longitude": location[0],
         "lefttime": ZhuoYao.Utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
         "iconPath": sprite.HeadImage,
         "id": sprite.Id + ":" + latitude + " " + longitude,
@@ -64,8 +65,17 @@ Page({
   },
   markertap(e) {
     var markerId = e.markerId;
+    var loc = ZhuoYao.Utils.getMarkerInfo(markerId);
+    var splitSign = ZhuoYao.Utils.getSplitSign();
+    var lonfront = ZhuoYao.Utils.getLonfront();
+    var data;
+    if (lonfront) {
+      data = loc[1] + splitSign + loc[0]
+    } else {
+      data = loc[0] + splitSign + loc[1]
+    }
     wx.setClipboardData({
-      data: ZhuoYao.Utils.getMarkerInfo(markerId),
+      data: data,
       success(res) {
         wx.getClipboardData({
           success(res) {
@@ -77,8 +87,16 @@ Page({
   },
   tapview(e) {
     var content = e.currentTarget.dataset.content;
+    var splitSign = ZhuoYao.Utils.getSplitSign();
+    var lonfront = ZhuoYao.Utils.getLonfront();
+    var data;
+    if (lonfront) {
+      data = content.longitude + splitSign + content.latitude
+    } else {
+      data = content.latitude + splitSign + content.longitude
+    }
     wx.setClipboardData({
-      data: content.latitude + " " + content.longitude,
+      data: data,
       success(res) {
         wx.getClipboardData({
           success(res) {

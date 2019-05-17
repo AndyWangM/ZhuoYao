@@ -57,8 +57,12 @@ var ZhuoYao;
       }).join(":")
     }; Utils.getLeftTime = function (gentime, lifetime) { var time = gentime + lifetime; var leftTime = time - (new Date).getTime() / 1E3; return this.formatTime(leftTime.toFixed(0)) }; Utils.setFileName = function (filename) { this.setStorage("filename", filename) }; Utils.getFileName = function () { return this.getStorage("filename") }; Utils.getHeadImagePath = function (sprite) { if (sprite) return this.petUrl + sprite.SmallImgPath; else return "/image/default-head.png" }; Utils.getMarkerInfo = function (e) {
       var kv1 =
-        e.split(":"); var id = kv1[0]; var location = kv1[1]; return location
-    }; Utils.tempResults = new HashMap; Utils.I64BIT_TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-".split(""); Utils.spriteIdFilter = []; Utils.petUrl = "https://hy.gwgo.qq.com/sync/pet/"; Utils.spriteImage = []; return Utils
+        e.split(":"); var id = kv1[0]; var location = kv1[1]; return location.split(" ")
+    }; Utils.setCoordinate = function (coordinate) { this.coordinate = coordinate; Utils.setStorage("coordinate", coordinate) }; Utils.getLocation = function (lng, lat) { var that = this; if (!that.coordinate) that.coordinate = Utils.getStorage("coordinate") || "GCJ02"; switch (that.coordinate) { case "GCJ02": return [lng, lat]; case "BD09": return ZhuoYao.LocationTrans.gcj02tobd09(lng, lat); case "WGS84": return ZhuoYao.LocationTrans.gcj02towgs84(lng, lat) } }; Utils.setSplitSign =
+      function (sign) { var that = this; if (sign == "spacesplit") that.splitSign = " "; else that.splitSign = ","; that.splitSign = sign; Utils.setStorage("splitsign", sign) }; Utils.getSplitSign = function () { var that = this, sign = Utils.getStorage("splitsign") || "spacesplit"; if (sign == "spacesplit") that.splitSign = " "; else that.splitSign = ","; return that.splitSign }; Utils.setLonfront = function (bool) { var that = this; that.lonfront = bool; Utils.setStorage("lonfront", bool) }; Utils.getLonfront = function () {
+        var that = this; that.lonfront = Utils.getStorage("lonfront");
+        return that.lonfront
+      }; Utils.tempResults = new HashMap; Utils.I64BIT_TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-".split(""); Utils.spriteIdFilter = []; Utils.petUrl = "https://hy.gwgo.qq.com/sync/pet/"; Utils.spriteImage = []; return Utils
   }(); ZhuoYao.Utils = Utils
 })(ZhuoYao || (ZhuoYao = {})); var ZhuoYao;
 (function (ZhuoYao) {
@@ -109,5 +113,21 @@ var ZhuoYao;
     function SpritesAPI() { } SpritesAPI.post = function (obj) { var that = this; var url = that.url + that.setAPI; wx["request"]({ url: url, method: "POST", data: obj, header: { "content-type": "application/json" }, success: function (res) { console.log(res) }, failed: function (res) { console.log(res) } }) }; SpritesAPI.get = function (id) { var that = this; var url = that.url + that.getAPI + id; wx["request"]({ url: url, method: "GET", success: function (res) { console.log(res) }, failed: function (res) { console.log(res) } }) }; SpritesAPI.url =
       "https://zhuoyao.wangandi.com/"; SpritesAPI.getAPI = "api/sprites/get/"; SpritesAPI.setAPI = "api/sprites/set/"; return SpritesAPI
   }(); ZhuoYao.SpritesAPI = SpritesAPI
+})(ZhuoYao || (ZhuoYao = {})); var ZhuoYao;
+(function (ZhuoYao) {
+  var LocationTrans = function () {
+    function LocationTrans() { } LocationTrans.gcj02tobd09 = function (lng, lat) { var z = Math.sqrt(lng * lng + lat * lat) + 2E-5 * Math.sin(lat * this.x_PI); var theta = Math.atan2(lat, lng) + 3E-6 * Math.cos(lng * this.x_PI); var bd_lng = z * Math.cos(theta) + .0065; var bd_lat = z * Math.sin(theta) + .006; return [bd_lng.toFixed(6), bd_lat.toFixed(6)] }; LocationTrans.gcj02towgs84 = function (lng, lat) {
+      if (this.out_of_china(lng, lat)) return [lng, lat]; else {
+        var dlat = this.transformlat(lng - 105, lat - 35); var dlng =
+          this.transformlng(lng - 105, lat - 35); var radlat = lat / 180 * this.PI; var magic = Math.sin(radlat); magic = 1 - this.ee * magic * magic; var sqrtmagic = Math.sqrt(magic); dlat = dlat * 180 / (this.a * (1 - this.ee) / (magic * sqrtmagic) * this.PI); dlng = dlng * 180 / (this.a / sqrtmagic * Math.cos(radlat) * this.PI); var mglat = Number(lat) + dlat; var mglng = Number(lng) + dlng; return [(lng * 2 - mglng).toFixed(6), (lat * 2 - mglat).toFixed(6)]
+      }
+    }; LocationTrans.transformlat = function (lng, lat) {
+      var ret = -100 + 2 * lng + 3 * lat + .2 * lat * lat + .1 * lng * lat + .2 * Math.sqrt(Math.abs(lng)); ret +=
+        (20 * Math.sin(6 * lng * this.PI) + 20 * Math.sin(2 * lng * this.PI)) * 2 / 3; ret += (20 * Math.sin(lat * this.PI) + 40 * Math.sin(lat / 3 * this.PI)) * 2 / 3; ret += (160 * Math.sin(lat / 12 * this.PI) + 320 * Math.sin(lat * this.PI / 30)) * 2 / 3; return ret
+    }; LocationTrans.transformlng = function (lng, lat) {
+      var ret = 300 + lng + 2 * lat + .1 * lng * lng + .1 * lng * lat + .1 * Math.sqrt(Math.abs(lng)); ret += (20 * Math.sin(6 * lng * this.PI) + 20 * Math.sin(2 * lng * this.PI)) * 2 / 3; ret += (20 * Math.sin(lng * this.PI) + 40 * Math.sin(lng / 3 * this.PI)) * 2 / 3; ret += (150 * Math.sin(lng / 12 * this.PI) + 300 * Math.sin(lng /
+        30 * this.PI)) * 2 / 3; return ret
+    }; LocationTrans.out_of_china = function (lng, lat) { return lng < 72.004 || lng > 137.8347 || (lat < .8293 || lat > 55.8271 || false) }; LocationTrans.x_PI = 3.141592653589793 * 3E3 / 180; LocationTrans.PI = 3.141592653589793; LocationTrans.a = 6378245; LocationTrans.ee = .006693421622965943; LocationTrans.coordinate = "GCJ02"; return LocationTrans
+  }(); ZhuoYao.LocationTrans = LocationTrans
 })(ZhuoYao || (ZhuoYao = {}));
 export default ZhuoYao;
