@@ -1,7 +1,10 @@
 import ZhuoYao from '../../../utils/zhuoyao.js'
 
+// const url = "http://127.0.0.1:3585/";
+// const url = "http://192.168.3.25:3585/";
 const url = "https://zhuoyao.wangandi.com/";
 const getAPI = "api/sprites/get/";
+const getAllAPI = "api/sprites/getall/";
 const setAPI = "api/sprites/set/";
 
 Page({
@@ -11,7 +14,11 @@ Page({
    */
   data: {
     result: [],
-    inputVal: ""
+    inputVal: "",
+    currentPage: 0,
+    totalPage:-1,
+    geturl: null,
+    hasNextPage: true
   },
 
   /**
@@ -21,7 +28,28 @@ Page({
 
   },
   getLatestSprite() {
-    this.get("*");
+    this.setData({
+      currentPage: 0,
+      totalPage:-1,
+      hasNextPage:true
+    });
+    var spriteId = ZhuoYao.Utils.getSpriteNameHash().get(this.data.inputVal);
+    var getUrl;
+    if (spriteId) {
+      getUrl = url + getAPI + spriteId;
+    } else if (!this.data.inputVal) {
+      getUrl = url + getAllAPI;
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '没有该妖灵，请重新输入',
+      })
+      return;
+    }
+    this.setData({
+      getUrl: getUrl
+    })
+    this.getSprites();
   },
   tapview(e) {
     var content = e.currentTarget.dataset.content;
@@ -44,20 +72,46 @@ Page({
       }
     })
   },
-  get(id) {
+  getSprites() {
     var that = this;
+    var getUrl = this.data.getUrl;
     wx["request"]({
-      url: url + getAPI + id,
+      url: getUrl,
+      data: {
+        currentPage: that.data.currentPage,
+        pageSize: ZhuoYao.Utils.getPageSize()
+      },
       method: "GET",
       success(res) {
-        var data = res.data;
-        if (data.length > 0) {
+        var request = res.data;
+        var data;
+        if (request.error_code != undefined) {
+          if (request.error_code != 0) {
+            wx.showModal({
+              title: "提示",
+              content: request.data.info
+            })
+            return;
+          } else {
+            data = request.data.sprites;
+            var totalPage = request.data.total_page;
+            if(totalPage <= 1) {
+              that.setData({
+                hasNextPage: false
+              })
+            }
+            that.setData({
+              totalPage: totalPage
+            })
+          }
+        }
+        if (data && data.length > 0) {
           var result = [];
           for (var i = data.length; i--;) {
             var aliveSprite = data[i];
             var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id);
-            var latitude = aliveSprite.latitude.toString().substr(0, 2) + "." + aliveSprite.latitude.toString().substr(2);
-            var longitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3);
+            var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
+            var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
             var location = ZhuoYao.Utils.getLocation(longitude, latitude);
             var resultObj = {
               "name": sprite.Name,
@@ -110,11 +164,29 @@ Page({
     })
     // this.bindGoSearch();
   },
-  bindGoSearch: function (e) {
-    let itemData = ZhuoYao.Utils.getSpriteByName(this.data.inputVal);
+  nextPage() {
+    var currentPage = this.data.currentPage + 1;
+    if (this.data.totalPage != -1 && currentPage >= this.data.totalPage-1) {
+      currentPage = this.data.totalPage-1;
+      this.setData({hasNextPage:false});
+    }
     this.setData({
-      itemData: itemData
+      currentPage: currentPage
     });
+    this.getSprites();
+  },
+  frontPage() {
+    var currentPage = this.data.currentPage - 1;
+    if (this.data.totalPage != -1 && currentPage < this.data.totalPage-1) {
+      this.setData({ hasNextPage: true });
+    }
+    if (currentPage < 0) {
+      currentPage = 0;
+    }
+    this.setData({
+      currentPage: currentPage
+    });
+    this.getSprites();
   },
   onShareAppMessage() {
 

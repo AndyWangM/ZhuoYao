@@ -1,11 +1,15 @@
 <view scroll-y style="height:{{height}}px;" class="item-wrapper">
   <view class="search">
-    <!-- <view class="head_search">
-      <input class="text_search colorGray" type='text' confirm-type="search" placeholder="请输入关键词" bindinput="bindInput" bindconfirm="bindGoSearch" value="{{inputVal}}"></input>
-    </view> -->
-    <button bindtap='getLatestSprite'>获取最新妖灵</button>
+    <view class="head_search">
+      <input class="text_search colorGray" type='text' confirm-type="search" placeholder="请输入妖灵全名(默认全部)" bindinput="bindInput" bindconfirm="bindGoSearch" value="{{inputVal}}"></input>
+      <button class="icon_search" bindtap='getLatestSprite'>搜索</button>
+    </view>
   </view>
-  <map wx:if="{{result.length}}" id="map" scale="5" markers="{{result}}" bindmarkertap="markertap" show-location style="width: 100%; height: 200px;"></map>
+  <view wx:if="{{result.length}}">
+    <map id="map" scale="5" markers="{{result}}" bindmarkertap="markertap" show-location style="width: 100%; height: 200px;"></map>
+    <button wx:if="{{currentPage}}" class="icon_search" bindtap='frontPage'>上一页</button>
+    <button wx:if="{{hasNextPage}}" class="icon_search" bindtap='nextPage'>下一页</button>
+  </view>
 </view>
 
 <scroll-view scroll-y class="item-wrapper">

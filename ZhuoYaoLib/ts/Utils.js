@@ -485,6 +485,14 @@ var ZhuoYao;
             that.lonfront = Utils.getStorage("lonfront");
             return that.lonfront;
         };
+        Utils.setPageSize = function (size) {
+            Utils.setStorage("pagesize", size || 20);
+        };
+        Utils.getPageSize = function () {
+            var that = this;
+            that.pageSize = Utils.getStorage("pagesize") || 20;
+            return that.pageSize;
+        };
         Utils.tempResults = new HashMap();
         Utils.I64BIT_TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');
         Utils.spriteIdFilter = [];

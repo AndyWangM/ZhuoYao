@@ -11,9 +11,9 @@ worker.onMessage(function (res) {
   if (res.length > 0) {
     for (var i = res.length; i--;) {
       var aliveSprite = res[i];
-      var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id);
-      var latitude = aliveSprite.latitude.toString().substr(0, 2) + "." + aliveSprite.latitude.toString().substr(2)
-      var longitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
+      var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id); 
+      var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
+      var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
       var location = ZhuoYao.Utils.getLocation(longitude, latitude);
       var resultObj = {
         "name": sprite.Name,

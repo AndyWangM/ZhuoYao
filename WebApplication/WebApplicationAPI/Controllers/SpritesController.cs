@@ -55,14 +55,14 @@ namespace WebApplicationAPI.Controllers
                     }
                     else
                     {
-                        return new OkObjectResult(new RequestResult() { ErrorCode = 1, Data = new CommonData() { Info = "Can't find the key." } });
+                        return new OkObjectResult(new RequestResult() { ErrorCode = 1, Data = new CommonData() { Info = "当前暂无妖灵或该妖灵未入库" } });
                     }
                 }
-                return new OkObjectResult(new RequestResult() { ErrorCode = 2, Data = new CommonData() { Info = "Key is empty" } });
+                return new OkObjectResult(new RequestResult() { ErrorCode = 1, Data = new CommonData() { Info = "请输入妖灵名称" } });
             }
             catch (Exception ex)
             {
-                return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "Server error." } });
+                return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
             }
         }
 
@@ -86,12 +86,12 @@ namespace WebApplicationAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new RequestResult() { ErrorCode = 1, Data = new CommonData() { Info = "Can't find the key." } });
+                    return new OkObjectResult(new RequestResult() { ErrorCode = 1, Data = new CommonData() { Info = "当前暂无妖灵" } });
                 }
             }
             catch (Exception ex)
             {
-                return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "Server error." } });
+                return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
             }
         }
 
@@ -110,11 +110,11 @@ namespace WebApplicationAPI.Controllers
                         await _distributedCache.Add(sprite);
                     }
                 }
-                return new OkObjectResult(new RequestResult() { ErrorCode = 0, Data = new CommonData() { Info = "Insert Sucess." } });
+                return new OkObjectResult(new RequestResult() { ErrorCode = 0, Data = new CommonData() { Info = "插入成功" } });
             }
             catch (Exception ex)
             {
-                return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "Server error." } });
+                return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
             }
         }
 

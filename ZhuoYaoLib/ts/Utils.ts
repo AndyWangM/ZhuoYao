@@ -224,6 +224,7 @@ namespace ZhuoYao {
         static coordinate: string;
         static splitSign: string;
         static lonfront: boolean;
+        static pageSize: number;
 
         public static hash(input) {
             var hash = 5381;
@@ -531,6 +532,14 @@ namespace ZhuoYao {
             var that = this;
             that.lonfront = Utils.getStorage("lonfront");
             return that.lonfront;
+        }
+        public static setPageSize(size){
+            Utils.setStorage("pagesize", size || 20);
+        }
+        public static getPageSize() {
+            var that = this;
+            that.pageSize = Utils.getStorage("pagesize") || 20;
+            return that.pageSize;
         }
     }
 
