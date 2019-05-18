@@ -2,35 +2,35 @@ import ZhuoYao from '../../../utils/zhuoyao.js'
 
 const app = getApp();
 var socket;
-const worker = wx.createWorker('workers/request/index.js') // 文件名指定 worker 的入口文件路径，绝对路径
-// worker.postMessage({
-//   msg: 'hello worker'
+// const worker = wx.createWorker('workers/request/index.js') // 文件名指定 worker 的入口文件路径，绝对路径
+// // worker.postMessage({
+// //   msg: 'hello worker'
+// // })
+// worker.onMessage(function (res) {
+//   console.log(res)
+//   // if (res.length > 0) {
+//   //   for (var i = res.length; i--;) {
+//   //     var aliveSprite = res[i];
+//   //     var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id);
+//   //     var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
+//   //     var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
+//   //     var location = ZhuoYao.Utils.getLocation(longitude, latitude);
+//   //     var resultObj = {
+//   //       "name": sprite.Name,
+//   //       "latitude": location[1],
+//   //       "longitude": location[0],
+//   //       "lefttime": ZhuoYao.Utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
+//   //       "iconPath": sprite.HeadImage,
+//   //       "id": sprite.Id + ":" + latitude + " " + longitude,
+//   //       "width": 40,
+//   //       "height": 40
+//   //     };
+//   //     var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
+//   //     var hashValue = ZhuoYao.Utils.hash(hashStr);
+//   //     ZhuoYao.Utils.getTempResults().put(hashStr, resultObj);
+//   //   }
+//   // }
 // })
-worker.onMessage(function (res) {
-  // console.log(res)
-  if (res.length > 0) {
-    for (var i = res.length; i--;) {
-      var aliveSprite = res[i];
-      var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id);
-      var latitude = aliveSprite.latitude.toString().substr(0, 2) + "." + aliveSprite.latitude.toString().substr(2)
-      var longitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
-      var location = ZhuoYao.Utils.getLocation(longitude, latitude);
-      var resultObj = {
-        "name": sprite.Name,
-        "latitude": location[1],
-        "longitude": location[0],
-        "lefttime": ZhuoYao.Utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
-        "iconPath": sprite.HeadImage,
-        "id": sprite.Id + ":" + latitude + " " + longitude,
-        "width": 40,
-        "height": 40
-      };
-      var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
-      var hashValue = ZhuoYao.Utils.hash(hashStr);
-      ZhuoYao.Utils.getTempResults().put(hashStr, resultObj);
-    }
-  }
-})
 Page({
   data: {
     mapInfo: {},
@@ -43,21 +43,24 @@ Page({
   },
   onLoad() {
     var that = this;
-    setInterval(function () {
-      if (socket.isSearching()) {
-        that.setData({
-          isSearching: true
-        })
-      } else {
-        that.setData({
-          isSearching: false
-        })
-      }
-      that.setData({
-        result: ZhuoYao.Utils.getTempResults().values() || []
-      })
-    }, 1000);
-    socket = new ZhuoYao.Socket(worker);
+    // setInterval(function () {
+    //   if (socket.isSearching()) {
+    //     that.setData({
+    //       isSearching: true
+    //     })
+    //   } else {
+    //     that.setData({
+    //       isSearching: false
+    //     })
+    //   }
+    //   that.setData({
+    //     result: ZhuoYao.Utils.getTempResults().values() || []
+    //   })
+    // }, 1000);
+    app.globalData.worker.postMessage({
+      msg: 'hello worker'
+    })
+    socket = new ZhuoYao.Socket(app);
   },
   onShow() {
     var that = this;

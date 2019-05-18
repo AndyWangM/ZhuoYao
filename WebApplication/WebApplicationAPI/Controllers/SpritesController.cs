@@ -28,18 +28,18 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet("get/{key}")]
-        public async Task<IActionResult> Get([FromRoute]string key)
+        public async Task<IActionResult> Get([FromRoute]string key, [FromQuery] int currentPage, [FromQuery] int pageSize)
         {
             var isValid = CheckValid();
-            var value = await _distributedCache.Get(key, isValid);
+            var value = await _distributedCache.Get(key, isValid, currentPage, pageSize);
             return new OkObjectResult(value);
         }
 
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] int currentPage =0, [FromQuery] int pageSize = 200)
         {
             var isValid = CheckValid();
-            var value = await _distributedCache.Get("*", isValid);
+            var value = await _distributedCache.Get("*", isValid, currentPage, pageSize);
             return new OkObjectResult(value);
         }
 

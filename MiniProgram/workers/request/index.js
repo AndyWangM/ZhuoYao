@@ -2,7 +2,7 @@ import ZhuoYao from './zhuoyao.js'
 
 // 在 Worker 线程执行上下文会全局暴露一个 worker 对象，直接调用 worker.onMeesage/postMessage 即可
 worker.onMessage(function (obj) {
-  // console.log(obj);
+  console.log(obj);
   var arr = []
   if (obj.sprite_list) {
     for (var i = obj.sprite_list.length; i--;) {

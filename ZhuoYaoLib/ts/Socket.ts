@@ -9,15 +9,15 @@ namespace ZhuoYao {
 
         requestIds: number[] = [];
         requestResult: RequestResult;
-        worker: any;
+        app: any;
         isOpen: boolean = false;
         isConnecting: boolean = false;
         messageQueue: Object[] = [];
         lastTime: number;
 
-        constructor(worker) {
+        constructor(app) {
             this.requestResult = new RequestResult();
-            this.worker = worker;
+            this.app = app;
         }
 
         public initSocket(): void {
@@ -139,7 +139,7 @@ namespace ZhuoYao {
                     // console.log(obj.sprite_list);
                     obj.filter = Utils.getSpriteSearchNameFilter();
                     SpritesAPI.post(obj["sprite_list"]);
-                    that.worker.postMessage(obj);
+                    that.app.globalData.postMessage(obj);
                     that.lastTime = (new Date()).getTime();
                     // if (obj.sprite_list) {
                     //     for (var i = obj.sprite_list.length; i--;) {

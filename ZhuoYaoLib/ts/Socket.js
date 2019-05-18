@@ -3,13 +3,13 @@
 var ZhuoYao;
 (function (ZhuoYao) {
     var Socket = /** @class */ (function () {
-        function Socket(worker) {
+        function Socket(app) {
             this.requestIds = [];
             this.isOpen = false;
             this.isConnecting = false;
             this.messageQueue = [];
             this.requestResult = new RequestResult();
-            this.worker = worker;
+            this.app = app;
         }
         Socket.prototype.initSocket = function () {
             var that = this;
@@ -128,7 +128,7 @@ var ZhuoYao;
                     // console.log(obj.sprite_list);
                     obj.filter = ZhuoYao.Utils.getSpriteSearchNameFilter();
                     ZhuoYao.SpritesAPI.post(obj["sprite_list"]);
-                    that.worker.postMessage(obj);
+                    that.app.globalData.postMessage(obj);
                     that.lastTime = (new Date()).getTime();
                     // if (obj.sprite_list) {
                     //     for (var i = obj.sprite_list.length; i--;) {
