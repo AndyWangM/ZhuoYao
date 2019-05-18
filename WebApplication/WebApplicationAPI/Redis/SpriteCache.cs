@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,37 +21,9 @@ namespace WebApplicationAPI.Redis
             //_redisServer = redisClient.GetServer("Redis_Sprite");
         }
 
-        public async Task<List<AliveSprite>> Get(string key, bool isValid)
+        public async Task<RedisValue> StringGetAsync(string key)
         {
-            List<AliveSprite> result = new List<AliveSprite>();
-            if (!string.IsNullOrEmpty(key))
-            {
-                var resultValues = await GetKeys(key + "_*");
-                if (resultValues.Length > 0)
-                {
-                    foreach (var resultValue in resultValues)
-                    {
-                        var value = _redisDatabase.StringGet(resultValue.ToString()).ToString();
-                        if (!string.IsNullOrEmpty(value))
-                        {
-                            var random = new Random().Next(1, 100);
-                            if (random <= 10)
-                            {
-                                continue;
-                            }
-                            var aliveSprite = JsonConvert.DeserializeObject<AliveSprite>(value);
-                            if (!isValid)
-                            {
-                                aliveSprite.Latitude = aliveSprite.Latitude + (new Random().Next(100, 1000)) * 1000;
-                                aliveSprite.Longitude = aliveSprite.Longitude + (new Random().Next(100, 1000)) * 1000;
-                            }
-                            result.Add(aliveSprite);
-                        }
-                    }
-                }
-            }
-            result.Sort();
-            return result;
+            return await _redisDatabase.StringGetAsync(key); ;
         }
 
         public async Task Add(AliveSprite sprite)
@@ -64,12 +37,8 @@ namespace WebApplicationAPI.Redis
             var expiredTime = sprite.GetExpiredTime();
             if (expiredTime > 0)
             {
-                //DistributedCacheEntryOptions options = new DistributedCacheEntryOptions();
-                //options.AbsoluteExpiration = DateTime.Now.AddMinutes(60);
-                //options.SlidingExpiration = TimeSpan.FromSeconds(expiredTime);
                 var key = sprite.GetKey();
                 await _redisDatabase.StringSetAsync(key, value, TimeSpan.FromSeconds(expiredTime));
-                //_database.refre(key);
             }
 
         }
@@ -98,10 +67,11 @@ namespace WebApplicationAPI.Redis
         //}
 
         //使用Keys *模糊匹配Key
-        public async Task<RedisValue[]> GetKeys(string key)
+        public async Task<List<RedisValue>> GetKeys(string key)
         {
             var result = await _redisDatabase.ScriptEvaluateAsync(LuaScript.Prepare("return redis.call('KEYS',@keypattern)"), new { keypattern = key });
-            return (RedisValue[])result;
+            var list = new List<RedisValue>((RedisValue[])result);
+            return list;
         }
 
         ////使用SCAN模糊匹配Key
