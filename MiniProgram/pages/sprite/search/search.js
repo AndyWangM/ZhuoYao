@@ -301,7 +301,7 @@ Page({
         // console.log(that.data.speed * count)
       })(points, m, count)
       count++;
-      if (count != 0 && count % 2 == 0) {
+      if (count != 0 && count % 3 == 0) {
         count2++;
       }
     }
