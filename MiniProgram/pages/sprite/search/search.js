@@ -38,7 +38,7 @@ Page({
     result: [],
     xIndex: 2,
     yIndex: 2,
-    speed: 6,
+    speed: 0,
     polygons: [],
     allPoints: []
   },
@@ -285,7 +285,12 @@ Page({
     var points = that.data.allPoints;
     for (var m = 0; m < points.length; m++) {
       (function (a, m, count) {
-        var timeout = 1000;
+        var timeout;
+        if (that.data.speed) {
+          timeout = that.data.speed * 1000 * count;
+        } else {
+          timeout = 2000 * count + 1000 * count2;
+        }
         setTimeout(function () {
           var e = {
             request_type: "1001",
@@ -295,9 +300,9 @@ Page({
             platform: 0
           };
           that.sendMessage(e, "1001")
-          }, 2000 * count + 1000 * count2);
+          }, timeout);
         // }, that.data.speed * 1000 * count);
-        console.log(2 * count + 1 * count2)
+        console.log(timeout / 1000)
         // console.log(that.data.speed * count)
       })(points, m, count)
       count++;

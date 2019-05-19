@@ -5,9 +5,9 @@
   <view wx:if="{{mapInfo.longitude}}">
     <text>{{mapInfo.address}}</text>
     <!-- <button bindtap='searchLeitai'>擂台搜索</button> -->
-    <input type="number" bindinput='bindXInput' placeholder='经度范围'></input>
-    <input type="number" bindinput='bindYInput' placeholder='纬度范围'></input>
-    <!-- <input type="number" bindinput='bindSpeed' placeholder='速度(太快会遗漏部分区域，默认为6秒)'></input> -->
+    <input type="number" bindinput='bindXInput' placeholder='经度范围(见全局设置使用说明)'></input>
+    <input type="number" bindinput='bindYInput' placeholder='纬度范围(见全局设置使用说明)'></input>
+    <input type="number" bindinput='bindSpeed' placeholder='单区域搜索时间(见全局设置使用说明)'></input>
     <map style="width: 100%; height: 200px;" longitude="{{mapInfo.longitude}}" scale="11" latitude="{{mapInfo.latitude}}" markers='{{result}}' bindmarkertap="markertap" polygons="{{polygons}}" enable-overlooking="true" enable-rotate="true" enable-zoom="true"
       enable-scroll="true" show-location></map>
     <button bindtap='searchYaojing'>妖灵搜索</button>
