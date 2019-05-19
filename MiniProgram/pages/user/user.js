@@ -19,13 +19,18 @@ Page({
     },
     {
       icon: 'images/setting.png',
-      text: '坐标系选择',
+      text: '坐标系设置',
       type: 'location'
     },
     {
       icon: 'images/setting.png',
-      text: '复制结果格式选择',
+      text: '复制结果格式设置',
       type: 'copyformatter'
+    },
+    {
+      icon: 'images/setting.png',
+      text: '分页数量设置',
+      type: 'page'
     },
     {
       icon: 'images/tel.png',
@@ -149,6 +154,35 @@ Page({
       }
     })
   },
+  setPageSize(size) {
+    ZhuoYao.Utils.setPageSize(size);
+  },
+  setPage: function () {
+    var that = this;
+    wx.showActionSheet({
+      itemList: ['每页20个', '每页50个', '每页100个'],
+      success(res) {
+        switch (res.tapIndex) {
+          case 0:
+            that.showInfo('每页20个', '点击确定后切换', that.setPageSize, 20);
+            break;
+          case 1:
+            that.showInfo('每页50个', '点击确定后切换', that.setPageSize, 50);
+            break;
+          case 2:
+            that.showInfo('每页100个', '点击确定后切换', that.setPageSize, 100);
+            break;
+          case 3:
+            that.showInfo('每页200个', '点击确定后切换', that.setPageSize, 200);
+            break;
+        }
+        console.log(res.tapIndex)
+      },
+      fail(res) {
+        console.log(res.errMsg)
+      }
+    })
+  },
   setFormatter(type) {
     switch (type) {
       case "spacesplit":
@@ -220,6 +254,9 @@ Page({
           break;
         case "copyformatter":
           that.setCopyFormatter();
+          break;
+        case "page":
+          that.setPage();
           break;
         case "none":
           break;

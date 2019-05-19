@@ -94,7 +94,7 @@
 .text_search {
   box-sizing: border-box;
   padding-left: 42rpx;
-  width: 100%;
+  width: 80%;
   height: 67rpx;
   font-size: 24rpx;
   background-color: #fff;

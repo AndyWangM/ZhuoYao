@@ -343,6 +343,9 @@ var ZhuoYao;
                 var spriteList = Utils.getStorage("SpriteList");
                 for (var i = spriteList.length; i--;) {
                     var spriteInfo = spriteList[i];
+                    if (!spriteInfo.HeadImage) {
+                        spriteInfo.HeadImage = this.getHeadImagePath(spriteInfo);
+                    }
                     // for (const spriteInfo of spriteList) {
                     this.spriteHash.put(spriteInfo.Id, spriteInfo);
                     this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
@@ -484,6 +487,14 @@ var ZhuoYao;
             var that = this;
             that.lonfront = Utils.getStorage("lonfront");
             return that.lonfront;
+        };
+        Utils.setPageSize = function (size) {
+            Utils.setStorage("pagesize", size || 20);
+        };
+        Utils.getPageSize = function () {
+            var that = this;
+            that.pageSize = Utils.getStorage("pagesize") || 20;
+            return that.pageSize;
         };
         Utils.tempResults = new HashMap();
         Utils.I64BIT_TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('');

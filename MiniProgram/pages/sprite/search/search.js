@@ -12,8 +12,8 @@ worker.onMessage(function (res) {
     for (var i = res.length; i--;) {
       var aliveSprite = res[i];
       var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id);
-      var latitude = aliveSprite.latitude.toString().substr(0, 2) + "." + aliveSprite.latitude.toString().substr(2)
-      var longitude = aliveSprite.longtitude.toString().substr(0, 3) + "." + aliveSprite.longtitude.toString().substr(3)
+      var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
+      var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
       var location = ZhuoYao.Utils.getLocation(longitude, latitude);
       var resultObj = {
         "name": sprite.Name,
@@ -38,6 +38,7 @@ Page({
     result: [],
     xIndex: 2,
     yIndex: 2,
+    speed: 6,
     polygons: [],
     allPoints: []
   },
@@ -124,6 +125,11 @@ Page({
     if (e.detail.value) {
       this.getPoints()
     }
+  },
+  bindSpeed(e) {
+    this.setData({
+      speed: e.detail.value
+    })
   },
   selectLocation() {
     var that = this;
@@ -289,8 +295,10 @@ Page({
             platform: 0
           };
           that.sendMessage(e, "1001")
-        }, 2000 * count + 3000 * count2);
+          }, 2000 * count + 1000 * count2);
+        // }, that.data.speed * 1000 * count);
         console.log(2 * count + 1 * count2)
+        // console.log(that.data.speed * count)
       })(points, m, count)
       count++;
       if (count != 0 && count % 3 == 0) {

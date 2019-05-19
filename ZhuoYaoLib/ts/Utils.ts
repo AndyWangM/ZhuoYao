@@ -224,6 +224,7 @@ namespace ZhuoYao {
         static coordinate: string;
         static splitSign: string;
         static lonfront: boolean;
+        static pageSize: number;
 
         public static hash(input) {
             var hash = 5381;
@@ -383,6 +384,9 @@ namespace ZhuoYao {
                 var spriteList: Sprite[] = Utils.getStorage("SpriteList")
                 for (var i = spriteList.length; i--;) {
                     var spriteInfo = spriteList[i];
+                    if (!spriteInfo.HeadImage) {
+                        spriteInfo.HeadImage = this.getHeadImagePath(spriteInfo);
+                    }
                     // for (const spriteInfo of spriteList) {
                     this.spriteHash.put(spriteInfo.Id, spriteInfo);
                     this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id);
@@ -531,6 +535,14 @@ namespace ZhuoYao {
             var that = this;
             that.lonfront = Utils.getStorage("lonfront");
             return that.lonfront;
+        }
+        public static setPageSize(size) {
+            Utils.setStorage("pagesize", size || 20);
+        }
+        public static getPageSize() {
+            var that = this;
+            that.pageSize = Utils.getStorage("pagesize") || 20;
+            return that.pageSize;
         }
     }
 

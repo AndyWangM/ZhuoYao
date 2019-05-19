@@ -8,8 +8,13 @@ var ZhuoYao;
             this.isOpen = false;
             this.isConnecting = false;
             this.messageQueue = [];
+            this.isIOS = false;
             this.requestResult = new RequestResult();
             this.worker = worker;
+            var info = wx.getSystemInfoSync();
+            if (info.brand.toLocaleLowerCase().indexOf("iphone") != -1) {
+                this.isIOS = true;
+            }
         }
         Socket.prototype.initSocket = function () {
             var that = this;
@@ -128,7 +133,40 @@ var ZhuoYao;
                     // console.log(obj.sprite_list);
                     obj.filter = ZhuoYao.Utils.getSpriteSearchNameFilter();
                     ZhuoYao.SpritesAPI.post(obj["sprite_list"]);
-                    that.worker.postMessage(obj);
+                    if (that.isIOS) {
+                        if (obj.sprite_list) {
+                            for (var i = obj.sprite_list.length; i--;) {
+                                var aliveSprite = obj.sprite_list[i];
+                                // for (const aliveSprite of obj.sprite_list) {
+                                // if (sprite) {
+                                var spriteNameFilter = obj.filter;
+                                if (spriteNameFilter.length > 0) {
+                                    if (spriteNameFilter.indexOf(aliveSprite.sprite_id) != -1) {
+                                        var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id);
+                                        var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
+                                        var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
+                                        var location = ZhuoYao.Utils.getLocation(longitude, latitude);
+                                        var resultObj = {
+                                            "name": sprite.Name,
+                                            "latitude": location[1],
+                                            "longitude": location[0],
+                                            "lefttime": ZhuoYao.Utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
+                                            "iconPath": sprite.HeadImage,
+                                            "id": sprite.Id + ":" + latitude + " " + longitude,
+                                            "width": 40,
+                                            "height": 40
+                                        };
+                                        var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
+                                        var hashValue = ZhuoYao.Utils.hash(hashStr);
+                                        ZhuoYao.Utils.getTempResults().put(hashStr, resultObj);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        that.worker.postMessage(obj);
+                    }
                     that.lastTime = (new Date()).getTime();
                     // if (obj.sprite_list) {
                     //     for (var i = obj.sprite_list.length; i--;) {
