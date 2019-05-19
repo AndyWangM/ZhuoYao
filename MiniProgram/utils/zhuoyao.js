@@ -45,24 +45,29 @@ var ZhuoYao;
       }; Utils.getSpriteNameHash = function () {
         if (!this.spriteHash || !this.spriteNameHash) {
         this.spriteHash = new HashMap; this.spriteNameHash = new HashMap; var spriteList = Utils.getStorage("SpriteList"); for (var i = spriteList.length; i--;) {
-          var spriteInfo = spriteList[i]; this.spriteHash.put(spriteInfo.Id,
-            spriteInfo); this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id)
+          var spriteInfo = spriteList[i]; if (!spriteInfo.HeadImage) spriteInfo.HeadImage =
+            this.getHeadImagePath(spriteInfo); this.spriteHash.put(spriteInfo.Id, spriteInfo); this.spriteNameHash.put(spriteInfo.Name, spriteInfo.Id)
         }
         } return this.spriteNameHash
-      }; Utils.getSpriteByName = function (name) { var sprite = Utils.getStorage("SpriteList") || []; var itemData = []; if (sprite.length > 0) for (var i = 0; i < sprite.length; i++)if (name) { if (sprite[i].Name.indexOf(name) != -1) itemData.push(sprite[i]) } else itemData.push(sprite[i]); return itemData }; Utils.setSpriteSearchFilter = function (name) { this.setStorage("spriteNameFilter", name) }; Utils.getSpriteSearchFilter = function () { return this.getStorage("spriteNameFilter") };
-    Utils.getSpriteSearchNameFilter = function () { var arr = []; var spriteList = Utils.getStorage("SpriteList"); for (var i = spriteList.length; i--;)if (spriteList[i].Checked) arr.push(spriteList[i].Id); return arr }; Utils.getTempResults = function () { return this.tempResults }; Utils.formatTime = function (timeStr) {
-      var time = Number(timeStr); var hour = parseInt((time / 3600).toString()); time = time % 3600; var minute = parseInt((time / 60).toString()); time = time % 60; var second = parseInt(time.toString()); return [hour, minute, second].map(function (n) {
-        var num =
-          n.toString(); return num[1] ? num : "0" + num
-      }).join(":")
-    }; Utils.getLeftTime = function (gentime, lifetime) { var time = gentime + lifetime; var leftTime = time - (new Date).getTime() / 1E3; return this.formatTime(leftTime.toFixed(0)) }; Utils.setFileName = function (filename) { this.setStorage("filename", filename) }; Utils.getFileName = function () { return this.getStorage("filename") }; Utils.getHeadImagePath = function (sprite) { if (sprite) return this.petUrl + sprite.SmallImgPath; else return "/image/default-head.png" }; Utils.getMarkerInfo = function (e) {
-      var kv1 =
-        e.split(":"); var id = kv1[0]; var location = kv1[1]; return location.split(" ")
-    }; Utils.setCoordinate = function (coordinate) { this.coordinate = coordinate; Utils.setStorage("coordinate", coordinate) }; Utils.getLocation = function (lng, lat) { var that = this; if (!that.coordinate) that.coordinate = Utils.getStorage("coordinate") || "GCJ02"; switch (that.coordinate) { case "GCJ02": return [lng, lat]; case "BD09": return ZhuoYao.LocationTrans.gcj02tobd09(lng, lat); case "WGS84": return ZhuoYao.LocationTrans.gcj02towgs84(lng, lat) } }; Utils.setSplitSign =
-      function (sign) { var that = this; if (sign == "spacesplit") that.splitSign = " "; else that.splitSign = ","; that.splitSign = sign; Utils.setStorage("splitsign", sign) }; Utils.getSplitSign = function () { var that = this, sign = Utils.getStorage("splitsign") || "spacesplit"; if (sign == "spacesplit") that.splitSign = " "; else that.splitSign = ","; return that.splitSign }; Utils.setLonfront = function (bool) { var that = this; that.lonfront = bool; Utils.setStorage("lonfront", bool) }; Utils.getLonfront = function () {
-        var that = this; that.lonfront = Utils.getStorage("lonfront");
-        return that.lonfront
-      }; Utils.setPageSize = function (size) { Utils.setStorage("pagesize", size || 20) }; Utils.getPageSize = function () { var that = this; that.pageSize = Utils.getStorage("pagesize") || 20; return that.pageSize }; Utils.tempResults = new HashMap; Utils.I64BIT_TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-".split(""); Utils.spriteIdFilter = []; Utils.petUrl = "https://hy.gwgo.qq.com/sync/pet/"; Utils.spriteImage = []; return Utils
+      }; Utils.getSpriteByName = function (name) { var sprite = Utils.getStorage("SpriteList") || []; var itemData = []; if (sprite.length > 0) for (var i = 0; i < sprite.length; i++)if (name) { if (sprite[i].Name.indexOf(name) != -1) itemData.push(sprite[i]) } else itemData.push(sprite[i]); return itemData }; Utils.setSpriteSearchFilter = function (name) {
+        this.setStorage("spriteNameFilter",
+          name)
+      }; Utils.getSpriteSearchFilter = function () { return this.getStorage("spriteNameFilter") }; Utils.getSpriteSearchNameFilter = function () { var arr = []; var spriteList = Utils.getStorage("SpriteList"); for (var i = spriteList.length; i--;)if (spriteList[i].Checked) arr.push(spriteList[i].Id); return arr }; Utils.getTempResults = function () { return this.tempResults }; Utils.formatTime = function (timeStr) {
+        var time = Number(timeStr); var hour = parseInt((time / 3600).toString()); time = time % 3600; var minute = parseInt((time / 60).toString());
+        time = time % 60; var second = parseInt(time.toString()); return [hour, minute, second].map(function (n) { var num = n.toString(); return num[1] ? num : "0" + num }).join(":")
+      }; Utils.getLeftTime = function (gentime, lifetime) { var time = gentime + lifetime; var leftTime = time - (new Date).getTime() / 1E3; return this.formatTime(leftTime.toFixed(0)) }; Utils.setFileName = function (filename) { this.setStorage("filename", filename) }; Utils.getFileName = function () { return this.getStorage("filename") }; Utils.getHeadImagePath = function (sprite) {
+        if (sprite) return this.petUrl +
+          sprite.SmallImgPath; else return "/image/default-head.png"
+      }; Utils.getMarkerInfo = function (e) { var kv1 = e.split(":"); var id = kv1[0]; var location = kv1[1]; return location.split(" ") }; Utils.setCoordinate = function (coordinate) { this.coordinate = coordinate; Utils.setStorage("coordinate", coordinate) }; Utils.getLocation = function (lng, lat) {
+        var that = this; if (!that.coordinate) that.coordinate = Utils.getStorage("coordinate") || "GCJ02"; switch (that.coordinate) {
+          case "GCJ02": return [lng, lat]; case "BD09": return ZhuoYao.LocationTrans.gcj02tobd09(lng,
+            lat); case "WGS84": return ZhuoYao.LocationTrans.gcj02towgs84(lng, lat)
+        }
+      }; Utils.setSplitSign = function (sign) { var that = this; if (sign == "spacesplit") that.splitSign = " "; else that.splitSign = ","; that.splitSign = sign; Utils.setStorage("splitsign", sign) }; Utils.getSplitSign = function () { var that = this, sign = Utils.getStorage("splitsign") || "spacesplit"; if (sign == "spacesplit") that.splitSign = " "; else that.splitSign = ","; return that.splitSign }; Utils.setLonfront = function (bool) {
+        var that = this; that.lonfront = bool; Utils.setStorage("lonfront",
+          bool)
+      }; Utils.getLonfront = function () { var that = this; that.lonfront = Utils.getStorage("lonfront"); return that.lonfront }; Utils.setPageSize = function (size) { Utils.setStorage("pagesize", size || 20) }; Utils.getPageSize = function () { var that = this; that.pageSize = Utils.getStorage("pagesize") || 20; return that.pageSize }; Utils.tempResults = new HashMap; Utils.I64BIT_TABLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-".split(""); Utils.spriteIdFilter = []; Utils.petUrl = "https://hy.gwgo.qq.com/sync/pet/"; Utils.spriteImage =
+        []; return Utils
   }(); ZhuoYao.Utils = Utils
 })(ZhuoYao || (ZhuoYao = {})); var ZhuoYao;
 (function (ZhuoYao) {
