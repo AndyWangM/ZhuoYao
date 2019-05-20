@@ -129,7 +129,7 @@ Page({
     })
   },
   setCoordinate: function (coordinate) {
-    ZhuoYao.Utils.setCoordinate(coordinate)
+    app.globalData.zhuoyao.utils.setCoordinate(coordinate)
   },
   setLocation: function () {
     var that = this;
@@ -155,7 +155,7 @@ Page({
     })
   },
   setPageSize(size) {
-    ZhuoYao.Utils.setPageSize(size);
+    app.globalData.zhuoyao.utils.setPageSize(size);
   },
   setPage: function () {
     var that = this;
@@ -186,16 +186,16 @@ Page({
   setFormatter(type) {
     switch (type) {
       case "spacesplit":
-        ZhuoYao.Utils.setSplitSign("spacesplit");
+        app.globalData.zhuoyao.utils.setSplitSign("spacesplit");
         break;
       case "commasplit":
-        ZhuoYao.Utils.setSplitSign("commasplit");
+        app.globalData.zhuoyao.utils.setSplitSign("commasplit");
         break;
       case "lonfront":
-        ZhuoYao.Utils.setLonfront(true);
+        app.globalData.zhuoyao.utils.setLonfront(true);
         break;
       case "latfront":
-        ZhuoYao.Utils.setLonfront(false);
+        app.globalData.zhuoyao.utils.setLonfront(false);
         break;
     }
   },

@@ -1,4 +1,5 @@
 import Touches from './utils/Touches.js'
+import ZhuoYao from './utils/zhuoyao.js'
 
 const updateManager = wx.getUpdateManager()
 
@@ -37,7 +38,8 @@ App({
     }
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    zhuoyao: new ZhuoYao.Socket()
   },
   Touches: new Touches()
 })

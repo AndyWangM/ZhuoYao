@@ -10,7 +10,7 @@ namespace ZhuoYao {
         public BigImgPath: string;
         public SmallImgPath: string;
         public Level: number;
-        public Checked: boolean;z
+        public Checked: boolean;
     }
 
 }

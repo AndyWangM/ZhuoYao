@@ -11,23 +11,23 @@ worker.onMessage(function (res) {
   if (res.length > 0) {
     for (var i = res.length; i--;) {
       var aliveSprite = res[i];
-      var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id);
+      var sprite = app.globalData.zhuoyao.utils.getSpriteList().get(aliveSprite.sprite_id);
       var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
       var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
-      var location = ZhuoYao.Utils.getLocation(longitude, latitude);
+      var location = app.globalData.zhuoyao.utils.getLocation(longitude, latitude);
       var resultObj = {
         "name": sprite.Name,
         "latitude": location[1],
         "longitude": location[0],
-        "lefttime": ZhuoYao.Utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
+        "lefttime": app.globalData.zhuoyao.utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
         "iconPath": sprite.HeadImage,
         "id": sprite.Id + ":" + latitude + " " + longitude,
         "width": 40,
         "height": 40
       };
       var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
-      var hashValue = ZhuoYao.Utils.hash(hashStr);
-      ZhuoYao.Utils.getTempResults().put(hashStr, resultObj);
+      var hashValue = app.globalData.zhuoyao.utils.hash(hashStr);
+      app.globalData.zhuoyao.utils.getTempResults().put(hashStr, resultObj);
     }
   }
 })
@@ -55,7 +55,7 @@ Page({
         })
       }
       that.setData({
-        result: ZhuoYao.Utils.getTempResults().values() || []
+        result: app.globalData.zhuoyao.utils.getTempResults().values() || []
       })
     }, 1000);
     socket = new ZhuoYao.Socket(worker);
@@ -66,9 +66,9 @@ Page({
   },
   markertap(e) {
     var markerId = e.markerId;
-    var loc = ZhuoYao.Utils.getMarkerInfo(markerId);
-    var splitSign = ZhuoYao.Utils.getSplitSign();
-    var lonfront = ZhuoYao.Utils.getLonfront();
+    var loc = app.globalData.zhuoyao.utils.getMarkerInfo(markerId);
+    var splitSign = app.globalData.zhuoyao.utils.getSplitSign();
+    var lonfront = app.globalData.zhuoyao.utils.getLonfront();
     var data;
     if (lonfront) {
       data = loc[1] + splitSign + loc[0]
@@ -88,8 +88,8 @@ Page({
   },
   tapview(e) {
     var content = e.currentTarget.dataset.content;
-    var splitSign = ZhuoYao.Utils.getSplitSign();
-    var lonfront = ZhuoYao.Utils.getLonfront();
+    var splitSign = app.globalData.zhuoyao.utils.getSplitSign();
+    var lonfront = app.globalData.zhuoyao.utils.getLonfront();
     var data;
     if (lonfront) {
       data = content.longitude + splitSign + content.latitude
@@ -188,7 +188,7 @@ Page({
       return parseInt(1e6 * numStr);
     }
     var mapInfo = that.data.mapInfo;
-    ZhuoYao.Utils.getTempResults().clear();
+    app.globalData.zhuoyao.utils.getTempResults().clear();
     this.data.result = [];
     // that.setData({
     //   isSearching: false
@@ -294,8 +294,8 @@ Page({
         setTimeout(function () {
           var e = {
             request_type: "1001",
-            longtitude: ZhuoYao.Utils.convertLocation(Number(a[m]["longitude"])),
-            latitude: ZhuoYao.Utils.convertLocation(Number(a[m]["latitude"])),
+            longtitude: app.globalData.zhuoyao.utils.convertLocation(Number(a[m]["longitude"])),
+            latitude: app.globalData.zhuoyao.utils.convertLocation(Number(a[m]["latitude"])),
             requestid: socket.genRequestId("1001"),
             platform: 0
           };
@@ -314,12 +314,12 @@ Page({
   getLeitaiInfo: function () {
     var that = this;
     var mapInfo = that.data.mapInfo;
-    // console.log(ZhuoYao.Utils.convertLocation(mapInfo.longitude));
-    // console.log(ZhuoYao.Utils.convertLocation(mapInfo.latitude));
+    // console.log(app.globalData.zhuoyao.utils.convertLocation(mapInfo.longitude));
+    // console.log(app.globalData.zhuoyao.utils.convertLocation(mapInfo.latitude));
     var e = {
       request_type: "1002",
-      longtitude: ZhuoYao.Utils.convertLocation(mapInfo.longitude),
-      latitude: ZhuoYao.Utils.convertLocation(mapInfo.latitude),
+      longtitude: app.globalData.zhuoyao.utils.convertLocation(mapInfo.longitude),
+      latitude: app.globalData.zhuoyao.utils.convertLocation(mapInfo.latitude),
       requestid: socket.genRequestId("1002"),
       platform: 0
     };

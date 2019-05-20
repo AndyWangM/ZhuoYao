@@ -7,6 +7,8 @@ const getAPI = "api/sprites/get/";
 const getAllAPI = "api/sprites/getall/";
 const setAPI = "api/sprites/set/";
 
+var app = getApp();
+
 Page({
 
   /**
@@ -33,7 +35,7 @@ Page({
       totalPage:-1,
       hasNextPage:true
     });
-    var spriteId = ZhuoYao.Utils.getSpriteNameHash().get(this.data.inputVal);
+    var spriteId = app.globalData.zhuoyao.utils.getSpriteNameHash().get(this.data.inputVal);
     var getUrl;
     if (spriteId) {
       getUrl = url + getAPI + spriteId;
@@ -53,8 +55,8 @@ Page({
   },
   tapview(e) {
     var content = e.currentTarget.dataset.content;
-    var splitSign = ZhuoYao.Utils.getSplitSign();
-    var lonfront = ZhuoYao.Utils.getLonfront();
+    var splitSign = app.globalData.zhuoyao.utils.getSplitSign();
+    var lonfront = app.globalData.zhuoyao.utils.getLonfront();
     var data;
     if (lonfront) {
       data = content.longitude + splitSign + content.latitude
@@ -79,7 +81,7 @@ Page({
       url: getUrl,
       data: {
         currentPage: that.data.currentPage,
-        pageSize: ZhuoYao.Utils.getPageSize()
+        pageSize: app.globalData.zhuoyao.utils.getPageSize()
       },
       method: "GET",
       success(res) {
@@ -109,15 +111,15 @@ Page({
           var result = [];
           for (var i = data.length; i--;) {
             var aliveSprite = data[i];
-            var sprite = ZhuoYao.Utils.getSpriteList().get(aliveSprite.sprite_id);
+            var sprite = app.globalData.zhuoyao.utils.getSpriteList().get(aliveSprite.sprite_id);
             var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
             var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
-            var location = ZhuoYao.Utils.getLocation(longitude, latitude);
+            var location = app.globalData.zhuoyao.utils.getLocation(longitude, latitude);
             var resultObj = {
               "name": sprite.Name,
               "latitude": location[1],
               "longitude": location[0],
-              "lefttime": ZhuoYao.Utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
+              "lefttime": app.globalData.zhuoyao.utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
               "iconPath": sprite.HeadImage,
               "id": sprite.Id + ":" + latitude + " " + longitude,
               "width": 40,
@@ -138,9 +140,9 @@ Page({
   },
   markertap(e) {
     var markerId = e.markerId;
-    var loc = ZhuoYao.Utils.getMarkerInfo(markerId);
-    var splitSign = ZhuoYao.Utils.getSplitSign();
-    var lonfront = ZhuoYao.Utils.getLonfront();
+    var loc = app.globalData.zhuoyao.utils.getMarkerInfo(markerId);
+    var splitSign = app.globalData.zhuoyao.utils.getSplitSign();
+    var lonfront = app.globalData.zhuoyao.utils.getLonfront();
     var data;
     if (lonfront) {
       data = loc[1] + splitSign + loc[0]
