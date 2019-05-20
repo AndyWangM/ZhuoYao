@@ -4,15 +4,16 @@ namespace ZhuoYao {
 
     export class HttpUtils {
 
-        public get(url: string, data?: Object) {
+        public get(url: string, data?: Object, callback?, params?) {
             wx["request"]({
-                url: url,
-                data: data,
-                method: "GET",
-                success(res) {
-                    console.log(res)
+                "url": url,
+                "data": data,
+                "method": "GET",
+                "success"(res) {
+                    callback(res, params);
+                    // console.log(res)
                 },
-                failed(res) {
+                "failed"(res) {
                     console.log(res)
                 }
             })
@@ -20,16 +21,16 @@ namespace ZhuoYao {
 
         public post(url: string, data: Object) {
             wx["request"]({
-                url: url,
-                method: "POST",
-                data: data,
-                header: {
+                "url": url,
+                "method": "POST",
+                "data": data,
+                "header": {
                     'content-type': 'application/json' // 默认值
                 },
-                success(res) {
-                    console.log(res)
+                "success"(res) {
+                    // console.log(res)
                 },
-                failed(res) {
+                "failed"(res) {
                     console.log(res)
                 }
             })

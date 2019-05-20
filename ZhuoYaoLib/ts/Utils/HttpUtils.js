@@ -3,31 +3,32 @@ var ZhuoYao;
     var HttpUtils = /** @class */ (function () {
         function HttpUtils() {
         }
-        HttpUtils.prototype.get = function (url, data) {
+        HttpUtils.prototype.get = function (url, data, callback, params) {
             wx["request"]({
-                url: url,
-                data: data,
-                method: "GET",
-                success: function (res) {
-                    console.log(res);
+                "url": url,
+                "data": data,
+                "method": "GET",
+                "success": function (res) {
+                    callback(res, params);
+                    // console.log(res)
                 },
-                failed: function (res) {
+                "failed": function (res) {
                     console.log(res);
                 }
             });
         };
         HttpUtils.prototype.post = function (url, data) {
             wx["request"]({
-                url: url,
-                method: "POST",
-                data: data,
-                header: {
+                "url": url,
+                "method": "POST",
+                "data": data,
+                "header": {
                     'content-type': 'application/json' // 默认值
                 },
-                success: function (res) {
-                    console.log(res);
+                "success": function (res) {
+                    // console.log(res)
                 },
-                failed: function (res) {
+                "failed": function (res) {
                     console.log(res);
                 }
             });

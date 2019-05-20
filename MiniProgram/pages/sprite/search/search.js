@@ -126,11 +126,11 @@ Page({
       this.getPoints()
     }
   },
-  bindSpeed(e) {
-    this.setData({
-      speed: e.detail.value
-    })
-  },
+  // bindSpeed(e) {
+  //   this.setData({
+  //     speed: e.detail.value
+  //   })
+  // },
   selectLocation() {
     var that = this;
     this.confim('scope.userLocation',
@@ -189,6 +189,7 @@ Page({
     }
     var mapInfo = that.data.mapInfo;
     app.globalData.zhuoyao.utils.getTempResults().clear();
+    socket.clearMessageQueue();
     this.data.result = [];
     // that.setData({
     //   isSearching: false
@@ -259,6 +260,7 @@ Page({
         }
         allPoints.push(obj);
       }
+      // console.log(allPoints)
     }
     var points = [];
     points.push(l1);
@@ -284,31 +286,31 @@ Page({
     var count2 = 0;
     var points = that.data.allPoints;
     for (var m = 0; m < points.length; m++) {
-      (function (a, m, count) {
-        var timeout;
-        if (that.data.speed) {
-          timeout = that.data.speed * 1000 * count;
-        } else {
-          timeout = 2000 * count + 1000 * count2;
-        }
-        setTimeout(function () {
-          var e = {
-            request_type: "1001",
-            longtitude: app.globalData.zhuoyao.utils.convertLocation(Number(a[m]["longitude"])),
-            latitude: app.globalData.zhuoyao.utils.convertLocation(Number(a[m]["latitude"])),
-            requestid: socket.genRequestId("1001"),
-            platform: 0
-          };
-          that.sendMessage(e, "1001")
-          }, timeout);
-        // }, that.data.speed * 1000 * count);
-        console.log(timeout / 1000)
-        // console.log(that.data.speed * count)
-      })(points, m, count)
-      count++;
-      if (count != 0 && count % 3 == 0) {
-        count2++;
-      }
+      // (function (a, m, count) {
+      //   var timeout;
+      //   if (that.data.speed) {
+      //     timeout = that.data.speed * 1000 * count;
+      //   } else {
+      //     timeout = 2000 * count + 1000 * count2;
+      //   }
+      // setTimeout(function () {
+      var e = {
+        request_type: "1001",
+        longtitude: app.globalData.zhuoyao.utils.convertLocation(Number(points[m]["longitude"])),
+        latitude: app.globalData.zhuoyao.utils.convertLocation(Number(points[m]["latitude"])),
+        requestid: socket.genRequestId("1001"),
+        platform: 0
+      };
+      that.sendMessage(e, "1001")
+      // }, timeout);
+      // }, that.data.speed * 1000 * count);
+      // console.log(timeout / 1000)
+      // console.log(that.data.speed * count)
+      // })(points, m, count)
+      // count++;
+      // if (count != 0 && count % 3 == 0) {
+      //   count2++;
+      // }
     }
   },
   getLeitaiInfo: function () {
@@ -329,7 +331,10 @@ Page({
     var a = this;
     socket.sendMessage(e);
   },
-  onShareAppMessage() {
-
+  onShareAppMessage(res) {
+    return {
+      title: '捉妖工具',
+      path: '/pages/sprite/search/search'
+    }
   }
 });

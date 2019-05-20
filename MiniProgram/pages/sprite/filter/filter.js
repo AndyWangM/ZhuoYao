@@ -14,7 +14,7 @@ Page({
         data[i].Checked = !data[i].Checked;
       }
     }
-    app.globalData.zhuoyao.utils.setSpriteList(data);
+    app.globalData.zhuoyao.utils.setSpriteConfig(data);
   },
   touchS: function (e) { // touchstart
     let startX = app.Touches.getClientX(e)
@@ -52,7 +52,10 @@ Page({
       itemData: itemData
     });
   },
-  onShareAppMessage() {
-
+  onShareAppMessage(res) {
+    return {
+      title: '捉妖工具',
+      path: '/pages/sprite/search/search'
+    }
   }
 })

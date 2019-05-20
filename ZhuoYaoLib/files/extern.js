@@ -1,7 +1,7 @@
 var ZhuoYao, Socket, utils;
-var initSocket, sendSocketMessage, isSearching;
+var initSocket, sendSocketMessage, isSearching, clearMessageQueue;
 var genRequestId;
-var convertLocation, getLeftTime, getSpriteList, setSpriteList, getSpriteByName, getSpriteNameHash, setCoordinate, getLocation, hash, getTempResults, getMarkerInfo,
+var convertLocation, getLeftTime, getSpriteList, setSpriteConfig, getSpriteByName, getSpriteNameHash, setCoordinate, getLocation, hash, getTempResults, getMarkerInfo,
     getSplitSign, setSplitSign, setLonfront, getLonfront, getPageSize, setPageSize;
 
 var get, put, clear;

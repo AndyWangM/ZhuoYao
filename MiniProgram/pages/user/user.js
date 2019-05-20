@@ -95,25 +95,22 @@ Page({
   getHelp: function () {
     var that = this;
     wx.showActionSheet({
-      itemList: ['注意事项', '妖灵搜索', '已知妖灵', '经纬度坐标系', '范围和时间', '这是广告'],
+      itemList: ['注意事项', '妖灵搜索', '已知妖灵', '经纬度坐标系', '这是广告'],
       success(res) {
         switch (res.tapIndex) {
           case 0:
             that.showInfo('注意事项', '1. 首次使用出现连接中的弹窗时，妖灵过滤中列表为空，请耐心等待弹窗消失再选择过滤\r\n2. 出现连接中的弹窗时，妖灵搜索没有结果，请耐心等待弹窗消失后再搜索\r\n3. 处于连接中时，已知妖灵功能仍可使用\r\n4. 有任何问题请加QQ群');
             break;
           case 1:
-            that.showInfo('妖灵搜索', '1. 注意勾选需要搜索的妖灵，若不选中则搜索结果为空\r\n2. 在地理位置选择目标位置\r\n3. 输入搜索的经纬度范围，若不输入则默认都为2，具体范围会在地图中展示\r\n4. 上述操作完毕后，点击妖灵搜索，范围越大搜索时间越长，若切到后台则停止搜索\r\n5. 搜索结果会在地图和列表中同时展示，点击列表中的单项或地图标注可以复制经纬度')
+            that.showInfo('妖灵搜索', '1. 注意勾选需要搜索的妖灵，若不选中则搜索结果为空\r\n2. 在地理位置选择目标位置\r\n3. 输入搜索的经纬度范围，若不输入则默认都为2，具体范围会在地图中展示\r\n4. 上述操作完毕后，点击妖灵搜索，范围越大搜索时间越长，若切到后台则停止搜索\r\n5. 搜索结果会在地图和列表中同时展示，点击列表中的单项或地图标注可以复制经纬度\r\n6. 范围为纬度*经度，默认为2*2')
             break;
           case 2:
-            that.showInfo('已知妖灵', '1. 已知妖灵与妖灵过滤无关，妖灵过滤不会对已知妖灵起效\r\n2. 2. 处于连接中时，已知妖灵功能仍可使用\r\n3. 点击获取最新妖灵可以获取已知妖灵\r\n4. 结果会在地图和列表中同时展示，点击列表中的单项或地图标注可以复制经纬度')
+            that.showInfo('已知妖灵', '1. 已知妖灵与妖灵过滤无关，妖灵过滤不会对已知妖灵起效\r\n2. 处于连接中时，已知妖灵功能仍可使用\r\n3. 点击获取最新妖灵可以获取已知妖灵\r\n4. 结果会在地图和列表中同时展示，点击列表中的单项或地图标注可以复制经纬度')
             break;
           case 3:
             that.showInfo('经纬度坐标系', '1. 默认是火星坐标系，如需使用其他坐标系，请在坐标系中切换，然后重新搜索和获取已知妖灵')
             break;
           case 4:
-            that.showInfo('搜索范围和时间', '1. 范围为纬度*经度，默认为2*2，多个区域合并为一个范围\r\n2. 搜索时间默认为纬度*经度*2+纬度*经度/3，若部分区域搜索无结果，可以根据实际情况手动调整单区域搜索时间')
-            break;
-          case 5:
             if (interstitialAd) {
               interstitialAd.show().catch((err) => {
                 console.error(err)
@@ -138,13 +135,13 @@ Page({
       success(res) {
         switch (res.tapIndex) {
           case 0:
-            that.showInfo('火星坐标系', 'GCJ02坐标系，WGS84坐标系加密后的坐标系，如Google国内地图、高德、腾讯地图，点击确定后切换', that.setCoordinate, "GCJ02");
+            that.showInfo('火星坐标系', 'GCJ02坐标系，WGS84坐标系加密后的坐标系，如Google国内地图、高德、腾讯地图，点击确定后切换，重新搜索后生效', that.setCoordinate, "GCJ02");
             break;
           case 1:
-            that.showInfo('百度坐标系', 'BD09坐标系，GCJ02坐标系加密后的坐标系，点击确定后切换', that.setCoordinate, "BD09")
+            that.showInfo('百度坐标系', 'BD09坐标系，GCJ02坐标系加密后的坐标系，点击确定后切换，重新搜索后生效', that.setCoordinate, "BD09")
             break;
           case 2:
-            that.showInfo('地球坐标系', 'WGS84坐标系，国际通用坐标系，点击确定后切换', that.setCoordinate, "WGS84")
+            that.showInfo('地球坐标系', 'WGS84坐标系，国际通用坐标系，点击确定后切换，重新搜索后生效', that.setCoordinate, "WGS84")
             break;
         }
         console.log(res.tapIndex)
@@ -268,6 +265,12 @@ Page({
           url
         });
       }
+    }
+  },
+  onShareAppMessage(res) {
+    return {
+      title: '捉妖工具',
+      path: '/pages/sprite/search/search'
     }
   }
 });

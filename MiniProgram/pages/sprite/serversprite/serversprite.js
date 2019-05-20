@@ -5,7 +5,7 @@ import ZhuoYao from '../../../utils/zhuoyao.js'
 const url = "https://zhuoyao.wangandi.com/";
 const getAPI = "api/sprites/get/";
 const getAllAPI = "api/sprites/getall/";
-const setAPI = "api/sprites/set/";
+// const setAPI = "api/sprites/set/";
 
 var app = getApp();
 
@@ -190,7 +190,10 @@ Page({
     });
     this.getSprites();
   },
-  onShareAppMessage() {
-
+  onShareAppMessage(res) {
+    return {
+      title: '捉妖工具',
+      path: '/pages/sprite/search/search'
+    }
   }
 })

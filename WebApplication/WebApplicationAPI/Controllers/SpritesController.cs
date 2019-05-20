@@ -6,11 +6,11 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WebApplicationAPI.Models;
 using WebApplicationAPI.Redis;
-using static WebApplicationAPI.Models.RequestResult;
 
 namespace WebApplicationAPI.Controllers
 {
@@ -23,7 +23,7 @@ namespace WebApplicationAPI.Controllers
         public SpritesController(IConfiguration config)
         {
             RedisClient _redisClient = RedisClientSingleton.GetInstance(config);
-            _distributedCache = new SpriteCache(_redisClient);
+            _distributedCache = new SpriteCache(_redisClient, "Redis_Sprite");
         }
 
         [HttpGet()]
@@ -107,7 +107,18 @@ namespace WebApplicationAPI.Controllers
                     sprites = sprites.Where(x => filter.Contains(x.SpriteId)).ToArray();
                     foreach (var sprite in sprites)
                     {
-                        await _distributedCache.Add(sprite);
+                        byte[] value = null;
+                        var str = JsonConvert.SerializeObject(sprite);
+                        if (str != "")
+                        {
+                            value = Encoding.UTF8.GetBytes(str);
+                        }
+                        var expiredTime = sprite.GetExpiredTime();
+                        if (expiredTime > 0)
+                        {
+                            var key = sprite.GetKey();
+                            await _distributedCache.Add(key, value, expiredTime);
+                        }
                     }
                 }
                 return new OkObjectResult(new RequestResult() { ErrorCode = 0, Data = new CommonData() { Info = "插入成功" } });
