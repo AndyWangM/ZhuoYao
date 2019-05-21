@@ -141,13 +141,14 @@ Page({
   markertap(e) {
     var markerId = e.markerId;
     var loc = app.globalData.zhuoyao.utils.getMarkerInfo(markerId);
+    var location = app.globalData.zhuoyao.utils.getLocation(loc[1], loc[0]);
     var splitSign = app.globalData.zhuoyao.utils.getSplitSign();
     var lonfront = app.globalData.zhuoyao.utils.getLonfront();
     var data;
     if (lonfront) {
-      data = loc[1] + splitSign + loc[0]
+      data = location[0] + splitSign + location[1]
     } else {
-      data = loc[0] + splitSign + loc[1]
+      data = location[1] + splitSign + location[0]
     }
     wx.setClipboardData({
       data: data,

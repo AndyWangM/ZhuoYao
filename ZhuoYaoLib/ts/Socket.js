@@ -9,7 +9,6 @@ var ZhuoYao;
             this.isOpen = false;
             this.isConnecting = false;
             this.messageQueue = [];
-            this.failedMessageQueue = [];
             this.isIOS = false;
             this.backendMessageQueue = [];
             this.utils = new ZhuoYao.Utils();
@@ -154,22 +153,26 @@ var ZhuoYao;
             var str = that.utils.utf8ByteToUnicodeStr(new Uint8Array(e.data).slice(4));
             if (str.length > 0) {
                 if (that.messageQueue.length > 0) {
-                    that.messageQueue.shift();
                     console.log("收到服务器消息", new Date());
-                    // console.log("收到服务器消息", str.substring(0, 100));
                     var obj = JSON.parse(str);
+                    // console.log(obj)
                     if (obj["retcode"] != 0) {
                         wx["hideLoading"]();
                     }
                     var id = that.getRequestTypeFromId(obj["requestid"]);
                     if (id == "10041") {
                         this.getVersionFileName(obj["filename"]);
+                        that.messageQueue.shift();
                     }
                     else {
+                        if (obj["packageNO"] && obj["packageNO"] == 1) {
+                            that.messageQueue.shift();
+                        }
                         // console.log(obj.sprite_list);
                         obj.filter = that.utils.getSpriteSearchNameFilter();
                         ZhuoYao.SpritesAPI.setSpriteList(obj["sprite_list"]);
                         if (that.isIOS) {
+                            // console.log(obj)
                             if (obj["sprite_list"]) {
                                 var list = obj["sprite_list"];
                                 for (var i = list.length; i--;) {
@@ -192,6 +195,7 @@ var ZhuoYao;
                                                 "width": 40,
                                                 "height": 40
                                             };
+                                            // console.log(resultObj);
                                             var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
                                             var hashValue = that.utils.hash(hashStr);
                                             that.utils.getTempResults().put(hashStr, resultObj);
@@ -201,6 +205,7 @@ var ZhuoYao;
                             }
                         }
                         else {
+                            // console.log("android")
                             that.worker["postMessage"](obj);
                         }
                         that.lastTime = (new Date()).getTime();

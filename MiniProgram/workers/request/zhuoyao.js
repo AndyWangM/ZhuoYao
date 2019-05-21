@@ -1,8 +1,8 @@
 var ZhuoYao;
 (function (e) {
   var f = function () { return function () { } }(); e.xa = f; var b = function () {
-    function a() { this.o = 0; this.c = {}; new f } a.prototype.put = function (a, c) { this.v(a) || (this.o++ , this.c[a] = c) }; a.prototype.get = function (a) { return this.v(a) ? this.c[a] : null }; a.prototype.remove = function (a) { this.v(a) && delete this.c[a] && this.o-- }; a.prototype.v = function (a) { return a in this.c }; a.prototype.values = function () { var a = [], c; for (c in this.c) a.push(this.c[c]); return a }; a.prototype.keys = function () { var a = [], c; for (c in this.c) a.push(c); return a };
-    a.prototype.size = function () { return this.o }; a.prototype.clear = function () { this.o = 0; this.c = {} }; return a
+    function a() { this.o = 0; this.f = {}; new f } a.prototype.put = function (a, c) { this.v(a) || (this.o++ , this.f[a] = c) }; a.prototype.get = function (a) { return this.v(a) ? this.f[a] : null }; a.prototype.remove = function (a) { this.v(a) && delete this.f[a] && this.o-- }; a.prototype.v = function (a) { return a in this.f }; a.prototype.values = function () { var a = [], c; for (c in this.f) a.push(this.f[c]); return a }; a.prototype.keys = function () { var a = [], c; for (c in this.f) a.push(c); return a };
+    a.prototype.size = function () { return this.o }; a.prototype.clear = function () { this.o = 0; this.f = {} }; return a
   }(); e.g = b
 })(ZhuoYao || (ZhuoYao = {})); (function (e) { var f = function () { function b() { } b.prototype.setItem = function (a, d) { wx.setStorage({ key: a, data: d }) }; b.prototype.getItem = function (a) { return wx.getStorageSync(a) }; return b }(); e.Storage = f })(ZhuoYao || (ZhuoYao = {})); (function (e) { var f = function () { function b() { } b.prototype.get = function (a, d, c, b) { wx.request({ url: a, data: d, method: "GET", success: function (a) { c(a, b) }, failed: function (a) { console.log(a) } }) }; b.prototype.ma = function (a, d) { wx.request({ url: a, method: "POST", data: d, header: { "content-type": "application/json" }, success: function () { }, failed: function (a) { console.log(a) } }) }; return b }(); e.U = f })(ZhuoYao || (ZhuoYao = {})); (function (e) {
   var f = function () {
@@ -25,25 +25,25 @@ var ZhuoYao;
   }(); e.W = f
 })(ZhuoYao || (ZhuoYao = {})); (function (e) {
   var f = function () {
-    function b(a) { this.b = []; this.i = !1; this.f = []; this.P = !1; this.h = []; this.utils = new e.W; this.va = a; -1 != wx.getSystemInfoSync().brand.toLocaleLowerCase().indexOf("iphone") && (this.P = !0) } b.prototype.aa = function () { var a = this; e.u.ea(function (d) { if (d = d.data) { d = d.data.sprite_searching_config; for (var c = 0; c < d.length; c++) { var b = a.ba(d[c]); console.log(d[c].region); a.h = b } } }) }; b.prototype.ba = function (a) {
+    function b(a) { this.b = []; this.i = !1; this.c = []; this.P = !1; this.h = []; this.utils = new e.W; this.va = a; -1 != wx.getSystemInfoSync().brand.toLocaleLowerCase().indexOf("iphone") && (this.P = !0) } b.prototype.aa = function () { var a = this; e.u.ea(function (d) { if (d = d.data) { d = d.data.sprite_searching_config; for (var c = 0; c < d.length; c++) { var b = a.ba(d[c]); console.log(d[c].region); a.h = b } } }) }; b.prototype.ba = function (a) {
       for (var d = [], c = a.xIndex, b = a.yIndex, e = 0; e < c; e++)for (var f = a.latitude + 16E3 * e, g = 0; g < b; g++)d.push({
         latitude: f,
         longitude: a.longitude + 19E3 * g
       }); return d
     }; b.prototype.initSocket = function () {
-      var a = this; this.ia(); this.ha(); a.J(); wx.onSocketOpen(function () { console.log("WebSocket\u8fde\u63a5\u5df2\u6253\u5f00\uff01"); a.i = !0; for (var d = 0; d < a.f.length; d++)a.sendSocketMessage(a.f[d]); a.da(); wx.hideLoading() }); wx.onSocketError(function () { console.log("WebSocket\u8fde\u63a5\u6253\u5f00\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\uff01"); a.i = !1 }); wx.onSocketClose(function () { console.log("WebSocket \u5df2\u5173\u95ed\uff01"); a.i = !1 });
+      var a = this; this.ia(); this.ha(); a.J(); wx.onSocketOpen(function () { console.log("WebSocket\u8fde\u63a5\u5df2\u6253\u5f00\uff01"); a.i = !0; for (var d = 0; d < a.c.length; d++)a.sendSocketMessage(a.c[d]); a.da(); wx.hideLoading() }); wx.onSocketError(function () { console.log("WebSocket\u8fde\u63a5\u6253\u5f00\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\uff01"); a.i = !1 }); wx.onSocketClose(function () { console.log("WebSocket \u5df2\u5173\u95ed\uff01"); a.i = !1 });
       wx.onSocketMessage(function (d) { a.na(d) })
-    }; b.prototype.ia = function () { var a = this; setInterval(function () { a.i || a.J() }, 500) }; b.prototype.ha = function () { var a = this; setInterval(function () { if (0 < a.f.length) { var d = a.f[0]; a.sendSocketMessage(d) } else 0 < a.h.length ? (d = a.X(a.h[0]), a.sendSocketMessage(d)) : a.aa() }, 2E3) }; b.prototype.X = function (a) { return { request_type: "1001", longtitude: a.longitude, latitude: a.latitude, requestid: this.genRequestId("1001"), platform: 0 } }; b.prototype.J = function () {
+    }; b.prototype.ia = function () { var a = this; setInterval(function () { a.i || a.J() }, 500) }; b.prototype.ha = function () { var a = this; setInterval(function () { if (0 < a.c.length) { var d = a.c[0]; a.sendSocketMessage(d) } else 0 < a.h.length ? (d = a.X(a.h[0]), a.sendSocketMessage(d)) : a.aa() }, 2E3) }; b.prototype.X = function (a) { return { request_type: "1001", longtitude: a.longitude, latitude: a.latitude, requestid: this.genRequestId("1001"), platform: 0 } }; b.prototype.J = function () {
     this.i || (console.log("\u5f00\u59cbWebSocket\u8fde\u63a5"),
       wx.showLoading({ title: "\u8fde\u63a5\u4e2d" }), wx.connectSocket({ url: "wss://publicld.gwgo.qq.com?account_value=0&account_type=0&appid=0&token=0" }))
-    }; b.prototype.sendMessage = function (a) { this.f.push(a) }; b.prototype.clearMessageQueue = function () { this.f = [] }; b.prototype.sendSocketMessage = function (a) { wx.sendSocketMessage({ data: this.utils.C(a), success: function () { }, fail: function () { console.log("\u53d1\u9001\u670d\u52a1\u5668\u5931\u8d25") } }) }; b.prototype.na = function (a) {
+    }; b.prototype.sendMessage = function (a) { this.c.push(a) }; b.prototype.clearMessageQueue = function () { this.c = [] }; b.prototype.sendSocketMessage = function (a) { wx.sendSocketMessage({ data: this.utils.C(a), success: function () { }, fail: function () { console.log("\u53d1\u9001\u670d\u52a1\u5668\u5931\u8d25") } }) }; b.prototype.na = function (a) {
       a = this.utils.F((new Uint8Array(a.data)).slice(4));
-      if (0 < a.length) if (0 < this.f.length) if (this.f.shift(), console.log("\u6536\u5230\u670d\u52a1\u5668\u6d88\u606f", new Date), a = JSON.parse(a), 0 != a.retcode && wx.hideLoading(), "10041" == this.ca(a.requestid)) this.ga(a.filename); else {
-      a.filter = this.utils.fa(); e.u.s(a.sprite_list); if (this.P) {
+      if (0 < a.length) if (0 < this.c.length) if (console.log("\u6536\u5230\u670d\u52a1\u5668\u6d88\u606f", new Date), a = JSON.parse(a), 0 != a.retcode && wx.hideLoading(), "10041" == this.ca(a.requestid)) this.ga(a.filename), this.c.shift(); else {
+      a.packageNO && 1 == a.packageNO && this.c.shift(); a.filter = this.utils.fa(); e.u.s(a.sprite_list); if (this.P) {
         if (a.sprite_list) for (var d = a.sprite_list, c = d.length; c--;) {
           var b = d[c], f; this.utils.getSpriteList().get(b.sprite_id); f = a.filter; if (0 < f.length && -1 != f.indexOf(b.sprite_id)) {
-            f = this.utils.getSpriteList().get(b.sprite_id); var h = (b.latitude /
-              1E6).toFixed(6), g = (b.longtitude / 1E6).toFixed(6), k = this.utils.getLocation(g, h); f = { name: f.Name, latitude: k[1], longitude: k[0], lefttime: this.utils.getLeftTime(b.gentime, b.lifetime), iconPath: f.HeadImage, id: f.Id + ":" + h + " " + g, width: 40, height: 40 }; b = "" + b.sprite_id + b.latitude + b.longtitude + b.gentime + b.lifetime; this.utils.hash(b); this.utils.getTempResults().put(b, f)
+            f = this.utils.getSpriteList().get(b.sprite_id);
+            var h = (b.latitude / 1E6).toFixed(6), g = (b.longtitude / 1E6).toFixed(6), k = this.utils.getLocation(g, h); f = { name: f.Name, latitude: k[1], longitude: k[0], lefttime: this.utils.getLeftTime(b.gentime, b.lifetime), iconPath: f.HeadImage, id: f.Id + ":" + h + " " + g, width: 40, height: 40 }; b = "" + b.sprite_id + b.latitude + b.longtitude + b.gentime + b.lifetime; this.utils.hash(b); this.utils.getTempResults().put(b, f)
           }
         }
       } else this.va.postMessage(a); this.R = (new Date).getTime()
