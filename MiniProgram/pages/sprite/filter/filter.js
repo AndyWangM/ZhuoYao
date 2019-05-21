@@ -1,6 +1,6 @@
 import ZhuoYao from '../../../utils/zhuoyao.js'
 
-const App = getApp()
+const app = getApp()
 
 Page({
   data: {
@@ -14,10 +14,10 @@ Page({
         data[i].Checked = !data[i].Checked;
       }
     }
-    ZhuoYao.Utils.setSpriteList(data);
+    app.globalData.zhuoyao.utils.setSpriteConfig(data);
   },
   touchS: function (e) { // touchstart
-    let startX = App.Touches.getClientX(e)
+    let startX = app.Touches.getClientX(e)
     startX && this.setData({
       startX
     })
@@ -34,7 +34,7 @@ Page({
   },
   onShow() {
     var that = this;
-    let itemData = ZhuoYao.Utils.getSpriteByName();
+    let itemData = app.globalData.zhuoyao.utils.getSpriteByName();
     that.setData({
       itemData: itemData,
       inputVal: ""
@@ -47,12 +47,15 @@ Page({
     this.bindGoSearch();
   },
   bindGoSearch: function (e) {
-    let itemData = ZhuoYao.Utils.getSpriteByName(this.data.inputVal);
+    let itemData = app.globalData.zhuoyao.utils.getSpriteByName(this.data.inputVal);
     this.setData({
       itemData: itemData
     });
   },
-  onShareAppMessage() {
-
+  onShareAppMessage(res) {
+    return {
+      title: '捉妖工具',
+      path: '/pages/sprite/search/search'
+    }
   }
 })

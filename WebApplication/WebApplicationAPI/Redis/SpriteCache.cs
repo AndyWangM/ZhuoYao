@@ -1,11 +1,7 @@
-﻿using Newtonsoft.Json;
-using StackExchange.Redis;
+﻿using StackExchange.Redis;
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using WebApplicationAPI.Models;
 
 namespace WebApplicationAPI.Redis
 {
@@ -15,32 +11,27 @@ namespace WebApplicationAPI.Redis
         private readonly IDatabase _redisDatabase;
         //private readonly IServer _redisServer;
 
-        public SpriteCache(RedisClient redisClient)
+        public SpriteCache(RedisClient redisClient, string configString)
         {
-            _redisDatabase = redisClient.GetDatabase("Redis_Sprite");
+            _redisDatabase = redisClient.GetDatabase(configString);
             //_redisServer = redisClient.GetServer("Redis_Sprite");
         }
 
         public async Task<RedisValue> StringGetAsync(string key)
         {
-            return await _redisDatabase.StringGetAsync(key); ;
+            return await _redisDatabase.StringGetAsync(key);
         }
 
-        public async Task Add(AliveSprite sprite)
+        public async Task Add(string key, RedisValue value, long expiredTime = 0)
         {
-            byte[] value = null;
-            var str = JsonConvert.SerializeObject(sprite);
-            if (str != "")
-            {
-                value = Encoding.UTF8.GetBytes(str);
-            }
-            var expiredTime = sprite.GetExpiredTime();
             if (expiredTime > 0)
             {
-                var key = sprite.GetKey();
                 await _redisDatabase.StringSetAsync(key, value, TimeSpan.FromSeconds(expiredTime));
             }
-
+            else
+            {
+                await _redisDatabase.StringSetAsync(key, value);
+            }
         }
 
         /// <summary>
