@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "已知妖灵";
+    //Layout = null;
+}
+
+@*<!DOCTYPE html>
+    <html>
+    <head>*@
+@*1、Jquery组件引用*@
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+
+@*2、bootstrap组件引用*@
+<script src="~/Content/bootstrap/bootstrap.js"></script>
+<link href="~/Content/bootstrap/bootstrap.css" rel="stylesheet" />
+
+@*3、bootstrap table组件以及中文包的引用*@
+
+<script src="~/Content/bootstrap-table/bootstrap-table.js"></script>
+<link href="~/Content/bootstrap-table/bootstrap-table.css" rel="stylesheet" />
+<script src="~/Content/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+
+@*</head>
+
+
+    <body>*@
+
+<div>
+    <table id="table" class="table table-hover" data-use-row-attr-func="true" data-reorderable-rows="true"></table>
+</div>
+<script>
+    //var json = @Html.Raw(ViewData["Result"].ToString());
+    var json = [
+        {
+            "名称": "颜如玉",
+            "纬度": 31.208599,
+            "经度": 121.564476
+        }
+    ]
+    var columnsArray = [];
+    //columnsArray.push({ field: "state", checkbox: true });
+    for (var i = 0; i < (Object.keys(json[0])).length; i++) {//Object.keys(obj) 获取key名称
+        var property = (Object.keys(json[0]))[i];//id   username
+        columnsArray.push({
+            "title": property,
+            "field": property,
+            switchable: true,
+            sortable: true
+        });
+    }
+
+    $('#table').bootstrapTable('destroy').bootstrapTable({
+        data: json,
+        singleSelect: true,
+        clickToSelect: true,
+        //sortName: "create_time",
+        //sortOrder: "desc",
+        pageSize: 15,
+        pageNumber: 1,
+        pageList: "[10, 25, 50, 100, All]",
+        //showToggle: true,
+        showRefresh: true,
+        showColumns: true,
+        search: true,
+        pagination: true,
+        columns: columnsArray
+    });
+</script>
+@*</body>
+    </html>*@

@@ -1,4 +1,7 @@
 WebApplicationAPI/bin/*
 WebApplicationAPI/obj/*
 WebApplicationAPI/*.user
+WebApplication/bin/*
+WebApplication/obj/*
+WebApplication/*.user
 .vs/*
