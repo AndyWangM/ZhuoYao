@@ -38,91 +38,91 @@
     {
         "sprite_id": 2000324,
         "sample_count": 1,
-        "sample_total_count": 5,
+        "sample_total_count": 1500,
         "sprite_type": "den"
     },
     {
         "sprite_id": 2000321,
         "sample_count": 1,
-        "sample_total_count": 5,
+        "sample_total_count": 1500,
         "sprite_type": "den"
     },
     {
         "sprite_id": 2000112,
         "sample_count": 1,
-        "sample_total_count": 5,
+        "sample_total_count": 1500,
         "sprite_type": "den"
     },
     {
         "sprite_id": 2004007,
         "sample_count": 1,
-        "sample_total_count": 5,
+        "sample_total_count": 2,
         "sprite_type": "region"
     },
     {
         "sprite_id": 2004004,
         "sample_count": 1,
-        "sample_total_count": 5,
+        "sample_total_count": 2,
         "sprite_type": "region"
     },
     {
         "sprite_id": 2004013,
         "sample_count": 1,
-        "sample_total_count": 5,
+        "sample_total_count": 2,
         "sprite_type": "region"
     },
     {
         "sprite_id": 2000182,
         "sample_count": 1,
-        "sample_total_count": 5,
+        "sample_total_count": 2,
         "sprite_type": "region"
     },
     {
         "sprite_id": 2000206,
         "sample_count": 1,
-        "sample_total_count": 5,
+        "sample_total_count": 2,
         "sprite_type": "region"
     },
     {
         "sprite_id": 2004010,
         "sample_count": 1,
-        "sample_total_count": 5,
+        "sample_total_count": 2,
         "sprite_type": "region"
     },
     {
         "sprite_id": 2000271,
         "sample_count": 1,
-        "sample_total_count": 10,
+        "sample_total_count": 2000,
         "sprite_type": "ghost"
     },
     {
         "sprite_id": 2000272,
         "sample_count": 1,
-        "sample_total_count": 10,
+        "sample_total_count": 2000,
         "sprite_type": "ghost"
     },
     {
         "sprite_id": 2000519,
         "sample_count": 1,
-        "sample_total_count": 10,
+        "sample_total_count": 100,
         "sprite_type": "kun"
     },
     {
         "sprite_id": 2000501,
         "sample_count": 1,
-        "sample_total_count": 10,
+        "sample_total_count": 100,
         "sprite_type": "kun"
     },
     {
         "sprite_id": 2000504,
         "sample_count": 1,
-        "sample_total_count": 10,
+        "sample_total_count": 100,
         "sprite_type": "kun"
     },
     {
         "sprite_id": 2000502,
         "sample_count": 1,
-        "sample_total_count": 10,
+        "sample_total_count": 100,
         "sprite_type": "kun"
     }
 ]
