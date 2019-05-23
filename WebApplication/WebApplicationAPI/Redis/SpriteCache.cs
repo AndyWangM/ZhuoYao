@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace WebApplicationAPI.Redis
 {
@@ -9,12 +10,12 @@ namespace WebApplicationAPI.Redis
     {
         //private readonly RedisClient _redisClient;
         private readonly IDatabase _redisDatabase;
-        //private readonly IServer _redisServer;
+        private readonly IServer _redisServer;
 
         public SpriteCache(RedisClient redisClient, string configString)
         {
             _redisDatabase = redisClient.GetDatabase(configString);
-            //_redisServer = redisClient.GetServer("Redis_Sprite");
+            _redisServer = redisClient.GetServer(configString);
         }
 
         public async Task<RedisValue> StringGetAsync(string key)
@@ -63,6 +64,12 @@ namespace WebApplicationAPI.Redis
             var result = await _redisDatabase.ScriptEvaluateAsync(LuaScript.Prepare("return redis.call('KEYS',@keypattern)"), new { keypattern = key });
             var list = new List<RedisValue>((RedisValue[])result);
             return list;
+        }
+
+        public List<RedisKey> GetScanKeys(string key, int pageSize = 200)
+        {
+            var result = _redisServer.Keys(_redisDatabase.Database, key, pageSize);
+            return result.ToList();
         }
 
         ////使用SCAN模糊匹配Key

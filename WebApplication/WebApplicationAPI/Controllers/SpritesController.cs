@@ -18,12 +18,16 @@ namespace WebApplicationAPI.Controllers
     public class SpritesController : Controller
     {
         private readonly SpriteCache _distributedCache;
+        private readonly SpriteCache _spriteFilterCache;
         private readonly int _maxPageSize = 200;
+        private static Dictionary<int, SpriteFilter> _spriteFilters = new Dictionary<int, SpriteFilter>();
 
         public SpritesController(IConfiguration config)
         {
             RedisClient _redisClient = RedisClientSingleton.GetInstance(config);
             _distributedCache = new SpriteCache(_redisClient, "Redis_Sprite");
+            _spriteFilterCache = new SpriteCache(_redisClient, "Redis_Sprite_Filter");
+            initFilter().Wait();
         }
 
         [HttpGet()]
@@ -33,7 +37,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet("get/{key}")]
-        public async Task<IActionResult> Get([FromRoute]string key, [FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200)
+        public async Task<IActionResult> GetById([FromRoute]string key, [FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200)
         {
             try
             {
@@ -41,7 +45,43 @@ namespace WebApplicationAPI.Controllers
                 List<AliveSprite> result = new List<AliveSprite>();
                 if (!string.IsNullOrEmpty(key))
                 {
-                    var keys = await _distributedCache.GetKeys(key + "_*");
+                    //var keys = await _distributedCache.GetKeys(key + "_*");
+                    var keys = _distributedCache.GetScanKeys("*" + key + "_*");
+                    if (keys.Count > 0)
+                    {
+                        if (pageSize > _maxPageSize)
+                        {
+                            pageSize = _maxPageSize;
+                        }
+                        int totalPage = (keys.Count + pageSize - 1) / pageSize;
+                        keys = keys.Skip(currentPage * pageSize).Take(pageSize).ToList();
+                        result = await GetData(keys, isValid);
+                        return new OkObjectResult(SpriteDTO(totalPage, result));
+                    }
+                    else
+                    {
+                        return new OkObjectResult(new RequestResult() { ErrorCode = 1, Data = new CommonData() { Info = "当前暂无妖灵或该妖灵未入库" } });
+                    }
+                }
+                return new OkObjectResult(new RequestResult() { ErrorCode = 1, Data = new CommonData() { Info = "请输入妖灵名称" } });
+            }
+            catch (Exception ex)
+            {
+                return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
+            }
+        }
+
+        [HttpGet("get/type/{spriteType}")]
+        public async Task<IActionResult> GetByType([FromRoute]SpriteType spriteType, [FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200)
+        {
+            try
+            {
+                var isValid = CheckValid();
+                List<AliveSprite> result = new List<AliveSprite>();
+                if (spriteType != null)
+                {
+                    //var keys = await _distributedCache.GetKeys(key + "_*");
+                    var keys = _distributedCache.GetScanKeys("*" + spriteType + "_*");
                     if (keys.Count > 0)
                     {
                         if (pageSize > _maxPageSize)
@@ -71,8 +111,10 @@ namespace WebApplicationAPI.Controllers
         {
             try
             {
-                var isValid = CheckValid(); List<AliveSprite> result = new List<AliveSprite>();
-                var keys = await _distributedCache.GetKeys("*");
+                var isValid = CheckValid();
+                List<AliveSprite> result = new List<AliveSprite>();
+                //var keys = await _distributedCache.GetKeys("*");
+                var keys = _distributedCache.GetScanKeys("*");
                 if (keys.Count > 0)
                 {
                     if (pageSize > _maxPageSize)
@@ -95,30 +137,75 @@ namespace WebApplicationAPI.Controllers
             }
         }
 
-        [HttpPost("set")]
-        public async Task<IActionResult> SetSprite([FromBody]AliveSprite[] sprites)
+        private async Task initFilter()
+        {
+            var keys = _spriteFilterCache.GetScanKeys("*");
+            _spriteFilters = await GetFilter(keys);
+        }
+
+        [HttpPost("filter/update")]
+        public async Task<IActionResult> UpdateFilter([FromBody]List<SpriteFilter> filters)
         {
             try
             {
                 var isValid = CheckValid();
                 if (isValid)
                 {
-                    var filter = new int[] { 2000238, 2000265, 2000106, 2000313, 2000268, 2000327 };
-                    sprites = sprites.Where(x => filter.Contains(x.SpriteId)).ToArray();
-                    foreach (var sprite in sprites)
+                    foreach (var filter in filters)
                     {
                         byte[] value = null;
-                        var str = JsonConvert.SerializeObject(sprite);
+                        var str = JsonConvert.SerializeObject(filter);
                         if (str != "")
                         {
                             value = Encoding.UTF8.GetBytes(str);
                         }
-                        var expiredTime = sprite.GetExpiredTime();
-                        if (expiredTime > 0)
+                        var key = filter.SpriteId.ToString();
+                        await _spriteFilterCache.Add(key, value);
+                    }
+                    await initFilter();
+                }
+                return new OkObjectResult(new RequestResult() { ErrorCode = 0, Data = new CommonData() { Info = "插入成功" } });
+            }
+            catch (Exception ex)
+            {
+                return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
+            }
+        }
+
+
+        [HttpPost("set")]
+        public async Task<IActionResult> SetSprite([FromBody]List<AliveSprite> sprites)
+        {
+            try
+            {
+                var isValid = CheckValid();
+                if (isValid)
+                {
+                    //var filter = new int[] { 2000238, 2000265, 2000106, 2000313, 2000268, 2000327 };
+                    sprites = sprites.Where(x => _spriteFilters.ContainsKey(x.SpriteId)).ToList();
+                    foreach (var sprite in sprites)
+                    {
+                        if (_spriteFilters.TryGetValue(sprite.SpriteId, out var filter))
                         {
-                            var key = sprite.GetKey();
-                            await _distributedCache.Add(key, value, expiredTime);
+                            var random = new Random().Next(0, filter.SampleTotalCount);
+                            if (random <= filter.SampleCount)
+                            {
+                                byte[] value = null;
+                                var str = JsonConvert.SerializeObject(sprite);
+                                if (str != "")
+                                {
+                                    value = Encoding.UTF8.GetBytes(str);
+                                }
+                                var expiredTime = sprite.GetExpiredTime();
+                                if (expiredTime > 0)
+                                {
+                                    var spriteType = filter.SpriteType.ToString() + "_";
+                                    var key = spriteType + sprite.GetKey();
+                                    await _distributedCache.Add(key, value, expiredTime);
+                                }
+                            }
                         }
+
                     }
                 }
                 return new OkObjectResult(new RequestResult() { ErrorCode = 0, Data = new CommonData() { Info = "插入成功" } });
@@ -158,7 +245,7 @@ namespace WebApplicationAPI.Controllers
             };
         }
 
-        private async Task<List<AliveSprite>> GetData(List<RedisValue> keys, bool isValid)
+        private async Task<List<AliveSprite>> GetData(List<RedisKey> keys, bool isValid)
         {
             List<AliveSprite> result = new List<AliveSprite>();
             foreach (var key in keys)
@@ -182,6 +269,22 @@ namespace WebApplicationAPI.Controllers
                 }
             }
             result.Sort();
+            return result;
+        }
+
+        private async Task<Dictionary<int, SpriteFilter>> GetFilter(List<RedisKey> keys)
+        {
+            Dictionary<int, SpriteFilter> result = new Dictionary<int, SpriteFilter>();
+            foreach (var key in keys)
+            {
+                var value = await _spriteFilterCache.StringGetAsync(key.ToString());
+                if (!string.IsNullOrEmpty(value))
+                {
+                    var str = value.ToString();
+                    var filter = JsonConvert.DeserializeObject<SpriteFilter>(str);
+                    result[filter.SpriteId] = filter;
+                }
+            }
             return result;
         }
     }

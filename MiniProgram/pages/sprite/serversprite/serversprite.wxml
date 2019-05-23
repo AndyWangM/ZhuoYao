@@ -1,8 +1,13 @@
 <view scroll-y style="height:{{height}}px;" class="item-wrapper">
   <view class="search">
-    <view class="head_search">
-      <input class="text_search colorGray" type='text' confirm-type="search" placeholder="请输入妖灵全名(默认全部)" bindinput="bindInput" bindconfirm="bindGoSearch" value="{{inputVal}}"></input>
-      <button class="icon_search" bindtap='getLatestSprite'>搜索</button>
+    <view class="colorGray">
+      <picker class="colorGray" bindchange="bindPickerChange" value="{{spriteTypeIndex}}" range="{{spriteType}}" range-key="{{'displayName'}}">
+        <view class="picker">点此选择类型：{{spriteType[spriteTypeIndex].displayName}}</view>
+      </picker>
+      <view class="head_search">
+        <input class="text_search" type='text' confirm-type="search" placeholder="搜索单个妖灵全名(不输入则根据类型搜索)" bindinput="bindInput" bindconfirm="bindGoSearch" value="{{inputVal}}"></input>
+        <button class="icon_search" bindtap='getLatestSprite'>搜索</button>
+      </view>
     </view>
   </view>
   <view wx:if="{{result.length}}">

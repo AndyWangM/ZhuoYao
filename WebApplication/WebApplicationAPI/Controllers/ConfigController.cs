@@ -62,7 +62,8 @@ namespace WebApplicationAPI.Controllers
                 var isValid = CheckValid();
                 if (isValid)
                 {
-                    var keys = await _distributedCache.GetKeys("search_config_*");
+                    //var keys = await _distributedCache.GetKeys("search_config_*");
+                    var keys = _distributedCache.GetScanKeys("search_config_*");
                     var random = new Random().Next(0, keys.Count);
                     var value = await _distributedCache.StringGetAsync(keys[random].ToString());
                     if (!string.IsNullOrEmpty(value))
@@ -88,7 +89,8 @@ namespace WebApplicationAPI.Controllers
                 var isValid = CheckValid();
                 if (isValid)
                 {
-                    var keys = await _distributedCache.GetKeys("search_config_*");
+                    //var keys = await _distributedCache.GetKeys("search_config_*");
+                    var keys = _distributedCache.GetScanKeys("search_config_*");
                     foreach (var key in keys)
                     {
                         var value = await _distributedCache.StringGetAsync(key.ToString());
