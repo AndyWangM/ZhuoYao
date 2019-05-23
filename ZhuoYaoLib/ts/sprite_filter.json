@@ -104,25 +104,25 @@
     {
         "sprite_id": 2000519,
         "sample_count": 1,
-        "sample_total_count": 70,
+        "sample_total_count": 50,
         "sprite_type": "kun"
     },
     {
         "sprite_id": 2000501,
         "sample_count": 1,
-        "sample_total_count": 70,
+        "sample_total_count": 50,
         "sprite_type": "kun"
     },
     {
         "sprite_id": 2000504,
         "sample_count": 1,
-        "sample_total_count": 70,
+        "sample_total_count": 50,
         "sprite_type": "kun"
     },
     {
         "sprite_id": 2000502,
         "sample_count": 1,
-        "sample_total_count": 70,
+        "sample_total_count": 50,
         "sprite_type": "kun"
     }
 ]
