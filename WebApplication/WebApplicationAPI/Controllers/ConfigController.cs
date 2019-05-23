@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System;
@@ -18,11 +19,14 @@ namespace WebApplicationAPI.Controllers
     public class ConfigController : Controller
     {
         private readonly SpriteCache _distributedCache;
+        private readonly ILogger _logger;
 
-        public ConfigController(IConfiguration config)
+        public ConfigController(IConfiguration config, ILoggerFactory loggerFactory)
         {
             RedisClient _redisClient = RedisClientSingleton.GetInstance(config);
             _distributedCache = new SpriteCache(_redisClient, "Redis_Config");
+            _logger = loggerFactory.CreateLogger<ConfigController>();
+
         }
 
         [HttpPost("setSearchConfig")]
@@ -49,6 +53,7 @@ namespace WebApplicationAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex.Message);
                 return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
             }
         }
@@ -76,6 +81,7 @@ namespace WebApplicationAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex.Message);
                 return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
             }
         }
@@ -105,6 +111,7 @@ namespace WebApplicationAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex.Message);
                 return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
             }
         }

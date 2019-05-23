@@ -66,9 +66,9 @@ namespace WebApplicationAPI.Redis
             return list;
         }
 
-        public List<RedisKey> GetScanKeys(string key, int pageSize = 200)
+        public List<RedisKey> GetScanKeys(string key)
         {
-            var result = _redisServer.Keys(_redisDatabase.Database, key, pageSize);
+            var result = _redisServer.Keys(_redisDatabase.Database, key);
             return result.ToList();
         }
 

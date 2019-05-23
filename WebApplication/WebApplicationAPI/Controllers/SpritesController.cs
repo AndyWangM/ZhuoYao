@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using StackExchange.Redis;
@@ -21,18 +22,21 @@ namespace WebApplicationAPI.Controllers
         private readonly SpriteCache _spriteFilterCache;
         private readonly int _maxPageSize = 200;
         private static Dictionary<int, SpriteFilter> _spriteFilters = new Dictionary<int, SpriteFilter>();
+        private readonly ILogger _logger;
 
-        public SpritesController(IConfiguration config)
+        public SpritesController(IConfiguration config, ILoggerFactory loggerFactory)
         {
             RedisClient _redisClient = RedisClientSingleton.GetInstance(config);
             _distributedCache = new SpriteCache(_redisClient, "Redis_Sprite");
             _spriteFilterCache = new SpriteCache(_redisClient, "Redis_Sprite_Filter");
-            initFilter().Wait();
+            _logger = loggerFactory.CreateLogger<SpritesController>();
+            initFilter().Wait(5000);
         }
 
         [HttpGet()]
         public IActionResult GetEmpty()
         {
+            _logger.Log(LogLevel.Warning, "start");
             return new OkObjectResult("Welcome");
         }
 
@@ -67,6 +71,7 @@ namespace WebApplicationAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex.Message);
                 return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
             }
         }
@@ -102,6 +107,7 @@ namespace WebApplicationAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex.Message);
                 return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
             }
         }
@@ -133,6 +139,7 @@ namespace WebApplicationAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex.Message);
                 return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
             }
         }
@@ -168,6 +175,7 @@ namespace WebApplicationAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex.Message);
                 return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
             }
         }
@@ -212,6 +220,7 @@ namespace WebApplicationAPI.Controllers
             }
             catch (Exception ex)
             {
+                _logger.Log(LogLevel.Error, ex.Message);
                 return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
             }
         }

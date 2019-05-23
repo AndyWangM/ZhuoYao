@@ -20,6 +20,7 @@ namespace WebApplicationAPI
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .ConfigureLogging(builder => builder.AddFile())
                 .Build();
     }
 }
