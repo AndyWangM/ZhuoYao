@@ -4,11 +4,13 @@
 
 <link href="~/Content/bootstrap-table/bootstrap-table.css" rel="stylesheet" />
 <script src="~/Content/bootstrap-table/bootstrap-table.js"></script>
+<script src="~/js/LocationTrans.js"></script>
 <script src="~/Content/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
 <style type="text/css">
     .pagination-info {
         display: none;
     }
+
     #qqmap {
         min-width: 600px;
         min-height: 767px;
@@ -29,16 +31,30 @@
         }
         init();
     }
+    function searchSplit() {
+        //spriteType = mapping[e.options[e.options.selectedIndex].value];
+        //$("#table").bootstrapTable("refresh", {
+        //    url: '/api/sprites/get/type/' + spriteType
+        //})
+    }
 </script>
 
-<div class="dropdown">
-    <select class="form-control" onchange="selectType(this)">
-        <option>稀有</option>
-        <option>巢穴</option>
-        <option>地域</option>
-        <option>锟</option>
-        <option>三魂七魄</option>
-    </select>
+<div id="toolbar" class="row">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <select class="form-control" onchange="selectType(this)">
+            <option>稀有</option>
+            <option>巢穴</option>
+            <option>地域</option>
+            <option>锟</option>
+            <option>三魂七魄</option>
+        </select>
+    </div>
+    @*<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 input-group">
+        <input type="text" class="form-control" placeholder="单个妖灵搜索，默认按类型搜索">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button" onclick="searchSplit">搜索</button>
+        </span>
+    </div>*@
 </div>
 
 <div>
@@ -60,16 +76,7 @@
             url: '/api/sprites/get/type/' + spriteType
         })
     }
-
-    function initTableHeight() {
-        //拿到父窗口的centerTabs高度(这是iframe子页面拿到父窗口元素的方法，需要根据自己项目所使用的框架自行修改元素的id)
-        var panelH = $("#centerTabs", parent.document).height();
-        //拿到顶部工具栏高度
-        var toolBarH = $(".bs-bars.pull-left").height();
-        //计算表格container该设置的高度
-        var height = panelH - toolBarH - 91;
-        var container = $(".fixed-table-container").css({ "height": height });
-    }
+    
     function formatTime(timeStr) {
         var time = Number(timeStr);
 
@@ -85,34 +92,56 @@
         }).join(':');
     }
 
+    function getLocation(coordinates, longitude, latitude) {
+        switch (coordinates) {
+            case "GCJ02":
+                return [longitude, latitude];
+            case "BD09":
+                return LocationTrans.gcj02tobd09(longitude, latitude);
+            case "WGS84":
+                return LocationTrans.gcj02towgs84(longitude, latitude);
+        }
+    }
+
     function copyLocation(e, latitude, longitude) {
-        var text = (latitude / 1000000) + "," + (longitude / 1000000);
+        var latitude = latitude / 1000000;
+        var longitude = longitude / 1000000;
+        var config = Cookies.getJSON("config");
+        var splitsign = ",", frontLat = config.frontLat == "true", coordinates = config.coordinates || "GCJ02";
+        if (config.splitsign == "space") {
+            splitsign = " ";
+        }
+        var location = getLocation(coordinates, longitude, latitude);
+        var text = "";
+        if (frontLat) {
+            text = location[0] + splitsign + location[1];
+        } else {
+            text = location[1] + splitsign + location[0];
+        }
         var clipboard = new ClipboardJS(e, {
             text: function () {
                 return text
             }
         });
         e.click();
-        
+        Toast("复制成功", 500);
     }
-    function getHeadImageUrl(path) {
-        return "https://hy.gwgo.qq.com/sync/pet/" + path;
-    }
+
     var columnsArray = [
         {
             "title": "名称",
-            "field": "sprite_config",
+            "field": "headimage",
             switchable: true,
             sortable: false,
             formatter: function (value, row, index) {   //主要配置在这里
-                var path = "https://hy.gwgo.qq.com/sync/pet/" + value.smallImgPath;
-                var result = "<img style='width: 40px; height: 40px;' src='" + path + "'>" + value.name + "</img>";
+                //var path = "https://hy.gwgo.qq.com/sync/pet/" + value.headimage;
+                var result = "<img style='width: 40px; height: 40px;' src='" + value + "'>" + row.name + "</img>";
                 return result;
             }
         },
         {
-            "title": "经度",
-            "field": "longtitude",
+            "title": "纬度",
+            "field": "latitude",
             switchable: true,
             sortable: false,
             formatter: function (value, row, index) {   //主要配置在这里
@@ -120,8 +149,8 @@
             }
         },
         {
-            "title": "纬度",
-            "field": "latitude",
+            "title": "经度",
+            "field": "longtitude",
             switchable: true,
             sortable: false,
             formatter: function (value, row, index) {   //主要配置在这里
@@ -149,13 +178,10 @@
             align: 'center'
         }];
 
-    // 请求服务器携带参数
     function queryParams(params) {
-        // 表格, 追加参数
         var args = $.param({
             isWeb: true,
             currentPage: params.offset / params.limit,
-            // 每页显示多少条
             pageSize: params.limit
         })
 
@@ -163,7 +189,6 @@
     }
     var markersArray = []
 
-    //清除覆盖层
     function clearOverlays() {
         if (markersArray) {
             for (i in markersArray) {
@@ -172,31 +197,29 @@
         }
     }
     $('#table').bootstrapTable('destroy').bootstrapTable({
-        //data: json,
         url: '/api/sprites/get/type/' + spriteType,
         singleSelect: true,
         clickToSelect: true,
         striped: true,
         sidePagination: 'server',
-        //searchOnEnterKey: true,//回车搜索
-        // 请求服务器携带参数
+        ajaxOptions: {
+            xhrFields: { 
+                withCredentials: true
+            },
+            crossDomain: true
+        },
         queryParams: queryParams,
-        //sortName: "lefttime",
-        //sortOrder: "desc",
         pageSize: 10,
         pageNumber: 1,
         pageList: "[10, 25, 50, 100, 200]",
-        //showToggle: true,
         showRefresh: true,
         showColumns: true,
-        //search: true,
         pagination: true,
         columns: columnsArray,
         responseHandler: function (res) {
             var rows = res.data.sprites;
             clearOverlays();
-            //var center = new qq.maps.LatLng(39.916527, 116.397128);
-            for(var sprite of rows) {
+            for (var sprite of rows) {
                 var lat = sprite.latitude / 1000000;
                 var lon = sprite.longtitude / 1000000;
                 var center = new qq.maps.LatLng(lat, lon);
@@ -208,17 +231,19 @@
                     scaleSize = new qq.maps.Size(40, 40),
                     origin = new qq.maps.Point(0, 0),
                     markerIcon = new qq.maps.MarkerImage(
-                        getHeadImageUrl(sprite.sprite_config.smallImgPath),null,null,null,
+                        sprite.headimage, null, null, null,
                         scaleSize
                     );
                 marker.setIcon(markerIcon);
+                qq.maps.event.addListener(marker, 'click', function (e) {
+                    copyLocation(e.event.target, e.latLng.lat * 1000000, e.latLng.lng * 1000000);
+                });
                 markersArray.push(marker);
             }
-            //创建    
-            
+
             return {
-                "total": res.data.total_page * rows.length,//总页数
-                "rows": rows  //数据
+                "total": res.data.total_page * rows.length,
+                "rows": rows
             };
         }
     });

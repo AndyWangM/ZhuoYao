@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "全局设置";
+}
+<script>
+    function saveConfig() {
+        var data_arr = $("form").serializeArray();
+        console.log(data_arr)
+        var config = {};
+        $.each(data_arr, function (i, val) {
+            if (val.name == "splitsign") {
+                if (val.value == "") {
+                    alert("分隔符不能为空！");
+                    return false;
+                }
+                config["splitsign"] = val.value;
+            }
+
+            if (val.name == "frontLat") {
+                if (val.value == "") {
+                    alert("经纬度顺序不能为空！");
+                    return false;
+                }
+                config["frontLat"] = val.value;
+            }
+
+            if (val.name == "coordinates") {
+                if (val.value == "") {
+                    alert("坐标系不能为空！");
+                    return false;
+                }
+                config["coordinates"] = val.value;
+
+            }
+        });
+        Cookies.set('config', config);
+        Toast("保存成功", 500);
+    }
+</script>
+
+<form id="form" role="form" action="#" onsubmit="return saveConfig()">
+    <h1>复制格式</h1>
+    <label for="name">分隔符</label>
+    <div class="radio">
+        <label>
+            <input type="radio" id="comma" name="splitsign" value="comma" checked>逗号分隔(31.123456,123.123456)
+        </label>
+    </div>
+    <div class="radio">
+        <label>
+            <input type="radio" id="space" name="splitsign" value="space">空格分隔(31.123456 123.123456)
+        </label>
+    </div>
+    <label for="name">经纬度顺序</label>
+    <div class="radio">
+        <label>
+            <input type="radio" id="frontLat" name="frontLat" value="true" checked>经度在前(123.123456,31.123456)
+        </label>
+    </div>
+    <div class="radio">
+        <label>
+            <input type="radio" id="frontLon" name="frontLat" value="false">纬度在前(31.123456,123.123456)
+        </label>
+    </div>
+    <h1>坐标系</h1>
+    <div class="radio">
+        <label>
+            <input type="radio" id="GCJ02" name="coordinates" value="GCJ02" checked>火星坐标
+        </label>
+    </div>
+    <div class="radio">
+        <label>
+            <input type="radio" id="BD09" name="coordinates" value="BD09">百度坐标
+        </label>
+    </div>
+    <div class="radio">
+        <label>
+            <input type="radio" id="WGS84" name="coordinates" value="WGS84">地球坐标
+        </label>
+    </div>
+    <button type="button" class="btn btn-default" onclick="saveConfig()">保存</button>
+</form>
+
+<script>
+    var config = Cookies.getJSON("config");
+    var splitsign = config.splitsign == "comma", frontLat = config.frontLat == "true", coordinates = config.coordinates || "GCJ02";
+    if (!splitsign) {
+        document.querySelector("#comma").removeAttribute("checked");
+        document.querySelector("#space").setAttribute("checked", true);
+    }
+    if (!frontLat) {
+        document.querySelector("#frontLat").removeAttribute("checked");
+        document.querySelector("#frontLon").setAttribute("checked", true);
+    }
+    switch (coordinates) {
+        case "BD09":
+            document.querySelector("#GCJ02").removeAttribute("checked");
+            document.querySelector("#BD09").setAttribute("checked", true);
+            break;
+        case "WSG84":
+            document.querySelector("#GCJ02").removeAttribute("checked");
+            document.querySelector("#WGS84").setAttribute("checked", true);
+            break;
+    }
+</script>

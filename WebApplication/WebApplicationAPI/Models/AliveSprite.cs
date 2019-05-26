@@ -15,8 +15,14 @@ namespace WebApplicationAPI.Models
         public double Latitude { get; set; }
         [JsonProperty("longtitude")]
         public double Longitude { get; set; }
-        [JsonProperty("sprite_config")]
-        public SpriteConfig SpriteConfig { get; set; }
+        [JsonProperty("region")]
+        public string Region { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        [JsonProperty("headimage")]
+        public string HeadImage { get; set; }
+        [JsonProperty("level")]
+        public int Level { get; set; }
 
         public int CompareTo(AliveSprite other)
         {
@@ -38,11 +44,6 @@ namespace WebApplicationAPI.Models
             long timeStamp = (long)(DateTime.Now - startTime).TotalSeconds; // 相差毫秒数
             var dispareTime = GenTime + LifeTime;
             return dispareTime - timeStamp;
-        }
-
-        public long GetExpiredDate()
-        {
-            return GenTime + LifeTime;
         }
 
         public string GetHash()

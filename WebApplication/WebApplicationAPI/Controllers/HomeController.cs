@@ -33,7 +33,7 @@ namespace WebApplicationAPI.Controllers
             return View();
         }
 
-        public IActionResult Search()
+        public IActionResult Setting()
         {
             return View();
         }

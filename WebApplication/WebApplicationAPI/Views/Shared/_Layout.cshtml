@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - 捉妖工具</title>
     <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/js/cookie.min.js"></script>
 
-    @*2、bootstrap组件引用*@
     <script src="~/Content/bootstrap/bootstrap.js"></script>
     <link href="~/Content/bootstrap/bootstrap.css" rel="stylesheet" />
     <script src="~/js/site.js" asp-append-version="true"></script>
     <link rel="stylesheet" href="~/css/site.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <script src="~/js/clipboard.min.js"></script>
 </head>
 <body>
     <header>
@@ -20,21 +20,33 @@
                 <div class="navbar-header">
                     <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">捉妖工具</a>
                 </div>
-                    <div>
-                        <ul class="nav navbar-nav">
-                            <li class="nav-item">
-                                <a class="dropdown" asp-area="" asp-controller="Home" asp-action="Index">已知妖灵</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="dropdown" asp-area="" asp-controller="Home" asp-action="Search">妖灵搜索</a>
-                            </li>
-                        </ul>
+                <div>
+                    <ul class="nav navbar-nav">
+                        <li class="nav-item">
+                            <a class="dropdown" asp-area="" asp-controller="Home" asp-action="Index">已知妖灵</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="dropdown" asp-area="" asp-controller="Home" asp-action="Setting">全局设置</a>
+                        </li>
+
+                    </ul>
+                    <div class="nav navbar-nav navbar-right">
                     </div>
                 </div>
+            </div>
+
         </nav>
+
     </header>
     <div class="container">
-        @*<partial name="_CookieConsentPartial" />*@
+        <div class="row">
+            <img class="col-xs-6 col-sm-6 col-md-6 col-lg-6" src="~/image/weixinsearch.png" />
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                微信小程序"捉妖工具"的网页版，若要在移动设备上使用，请在微信上搜索并使用小程序版<br /><br />
+                首次使用请先进入全局设置进行配置，每款软件的坐标系和格式都不同<br /><br />
+                如有问题请加QQ群：7672057
+            </div>
+        </div>
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

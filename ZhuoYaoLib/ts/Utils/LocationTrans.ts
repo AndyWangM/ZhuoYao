@@ -6,7 +6,6 @@ namespace ZhuoYao {
         static PI = 3.1415926535897932384626;
         static a = 6378245.0;
         static ee = 0.00669342162296594323;
-        static coordinate = "GCJ02";
         
         /**
          * 火星坐标系 (GCJ-02) 与百度坐标系 (BD-09) 的转换

@@ -32,12 +32,16 @@ namespace WebApplicationAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(Configuration);
+            services.AddResponseCompression();
+            services.AddResponseCaching();
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            app.UseResponseCompression();
+            app.UseResponseCaching();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -323,13 +323,13 @@ namespace WebApplicationAPI.Controllers
         public bool CheckValid()
         {
             var userAgent = HttpContext.Request.Headers[HeaderNames.UserAgent].FirstOrDefault().ToLower();
-            var host = HttpContext.Request.Host.Value;
+            var cookies = HttpContext.Request.Cookies;
             var regex = new Regex("micromessenger");
             if (regex.Match(userAgent).Success)
             {
                 return true;
             } 
-            else if (host == "127.0.0.1:3585")
+            else if (cookies.ContainsKey("config"))
             {
                 return true;
             }
@@ -391,7 +391,9 @@ namespace WebApplicationAPI.Controllers
                     if (isWeb)
                     {
                         _spriteConfig.TryGetValue(aliveSprite.SpriteId, out var config);
-                        aliveSprite.SpriteConfig = config;
+                        aliveSprite.Name = config.Name;
+                        aliveSprite.HeadImage = config.GetHeadImageUrl();
+                        aliveSprite.Level = config.Level;
                     }
                     result.Add(aliveSprite);
                 }
