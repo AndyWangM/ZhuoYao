@@ -6,13 +6,13 @@ using System.Linq;
 
 namespace WebApplicationAPI.Redis
 {
-    public class SpriteCache
+    public class RedisCache
     {
         //private readonly RedisClient _redisClient;
         private readonly IDatabase _redisDatabase;
         private readonly IServer _redisServer;
 
-        public SpriteCache(RedisClient redisClient, string configString)
+        public RedisCache(RedisClient redisClient, string configString)
         {
             _redisDatabase = redisClient.GetDatabase(configString);
             _redisServer = redisClient.GetServer(configString);

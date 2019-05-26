@@ -19,4 +19,24 @@ namespace WebApplicationAPI.Models
         [JsonProperty("info")]
         public string Info;
     }
+
+    public class SpriteResultData : CommonData
+    {
+        [JsonProperty("total_page")]
+        public int TotalPage { get; set; }
+        [JsonProperty("sprites")]
+        public List<AliveSprite> Sprites { get; set; }
+    }
+
+    public class SpriteConfigResultData : CommonData
+    {
+        [JsonProperty("configs")]
+        public List<SpriteConfig> Configs { get; set; }
+    }
+
+    public class SpriteFilterResultData : CommonData
+    {
+        [JsonProperty("filters")]
+        public List<SpriteFilter> Filters { get; set; }
+    }
 }

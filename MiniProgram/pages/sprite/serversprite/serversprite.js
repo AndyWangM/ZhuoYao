@@ -1,8 +1,8 @@
 import ZhuoYao from '../../../utils/zhuoyao.js'
 
-// const url = "http://127.0.0.1:3585/";
+const url = "http://127.0.0.1:3585/";
 // const url = "http://192.168.3.25:3585/";
-const url = "https://zhuoyao.wangandi.com/";
+// const url = "https://zhuoyao.wangandi.com/";
 const getAPI = "api/sprites/get/";
 const getTypeAPI = "api/sprites/get/type/";
 const getAllAPI = "api/sprites/getall/";

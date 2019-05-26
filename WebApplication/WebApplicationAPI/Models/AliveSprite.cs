@@ -15,6 +15,8 @@ namespace WebApplicationAPI.Models
         public double Latitude { get; set; }
         [JsonProperty("longtitude")]
         public double Longitude { get; set; }
+        [JsonProperty("sprite_config")]
+        public SpriteConfig SpriteConfig { get; set; }
 
         public int CompareTo(AliveSprite other)
         {
@@ -38,6 +40,11 @@ namespace WebApplicationAPI.Models
             return dispareTime - timeStamp;
         }
 
+        public long GetExpiredDate()
+        {
+            return GenTime + LifeTime;
+        }
+
         public string GetHash()
         {
             var str = "" + SpriteId + GenTime + LifeTime + Latitude + Longitude;
@@ -48,41 +55,5 @@ namespace WebApplicationAPI.Models
         {
             return SpriteId + "_" + GetHash();
         }
-        //public string sprite { get; set; }
-
-        //public GetLeftTime()
-        //{
-        //    var that = this;
-        //    var time = that.gentime + that.lifetime;
-        //    var leftTime = time - (new Date).getTime() / 1000;
-        //    return that.formatTime(leftTime.toFixed(0));
-        //}
-
-        //public initSprite()
-        //{
-        //    var spriteList: HashMap < Sprite > = Utils.getSpriteList();
-        //    // for (const sprite of spriteList) {
-        //    //     if (sprite.Id == this.sprite_id) {
-        //    //         this.sprite = sprite;
-        //    //     }
-        //    // }
-        //    this.sprite = spriteList.get(this.sprite_id);
-        //}
-
-        //formatTime(timeStr: string)
-        //{
-        //    var time: number = Number(timeStr);
-
-        //    var hour = parseInt((time / 3600).toString());
-        //    time = time % 3600;
-        //    var minute = parseInt((time / 60).toString());
-        //    time = time % 60;
-        //    var second = parseInt(time.toString());
-
-        //    return ([hour, minute, second]).map(function(n) {
-        //        var num: string = n.toString();
-        //        return num[1] ? num : '0' + num;
-        //    }).join(':');
-        //}
     }
 }

@@ -18,13 +18,13 @@ namespace WebApplicationAPI.Controllers
     [Route("api/[controller]")]
     public class ConfigController : Controller
     {
-        private readonly SpriteCache _distributedCache;
+        private readonly RedisCache _distributedCache;
         private readonly ILogger _logger;
 
         public ConfigController(IConfiguration config, ILoggerFactory loggerFactory)
         {
             RedisClient _redisClient = RedisClientSingleton.GetInstance(config);
-            _distributedCache = new SpriteCache(_redisClient, "Redis_Config");
+            _distributedCache = new RedisCache(_redisClient, "Redis_Config");
             _logger = loggerFactory.CreateLogger<ConfigController>();
 
         }

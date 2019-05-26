@@ -1,0 +1,225 @@
+﻿@{
+    ViewData["Title"] = "已知妖灵";
+}
+
+<link href="~/Content/bootstrap-table/bootstrap-table.css" rel="stylesheet" />
+<script src="~/Content/bootstrap-table/bootstrap-table.js"></script>
+<script src="~/Content/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<style type="text/css">
+    .pagination-info {
+        display: none;
+    }
+    #qqmap {
+        min-width: 600px;
+        min-height: 767px;
+    }
+</style>
+
+<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=XZFBZ-MM6EX-UBY47-TQA4M-CGOOK-FVFGJ"></script>
+<script>
+    var qqMap;
+    window.onload = function () {
+        //初始化地图函数  自定义函数名init
+        function init() {
+            var center = new qq.maps.LatLng(39.916527, 116.397128);
+            qqMap = new qq.maps.Map(document.getElementById('qqmap'), {
+                center: center,
+                zoom: 5
+            });
+        }
+        init();
+    }
+</script>
+
+<div class="dropdown">
+    <select class="form-control" onchange="selectType(this)">
+        <option>稀有</option>
+        <option>巢穴</option>
+        <option>地域</option>
+        <option>锟</option>
+        <option>三魂七魄</option>
+    </select>
+</div>
+
+<div>
+    <table id="table" class="table table-hover table-responsive"></table>
+</div>
+<div id="qqmap"></div>
+<script>
+    var spriteType = "Rare";
+    var mapping = {
+        "稀有": "Rare",
+        "巢穴": "Den",
+        "地域": "Region",
+        "锟": "Kun",
+        "三魂七魄": "Ghost"
+    }
+    function selectType(e) {
+        spriteType = mapping[e.options[e.options.selectedIndex].value];
+        $("#table").bootstrapTable("refresh", {
+            url: '/api/sprites/get/type/' + spriteType
+        })
+    }
+
+    function initTableHeight() {
+        //拿到父窗口的centerTabs高度(这是iframe子页面拿到父窗口元素的方法，需要根据自己项目所使用的框架自行修改元素的id)
+        var panelH = $("#centerTabs", parent.document).height();
+        //拿到顶部工具栏高度
+        var toolBarH = $(".bs-bars.pull-left").height();
+        //计算表格container该设置的高度
+        var height = panelH - toolBarH - 91;
+        var container = $(".fixed-table-container").css({ "height": height });
+    }
+    function formatTime(timeStr) {
+        var time = Number(timeStr);
+
+        var hour = parseInt((time / 3600).toString());
+        time = time % 3600;
+        var minute = parseInt((time / 60).toString());
+        time = time % 60;
+        var second = parseInt(time.toString());
+
+        return ([hour, minute, second]).map(function (n) {
+            var num = n.toString();
+            return num[1] ? num : '0' + num;
+        }).join(':');
+    }
+
+    function copyLocation(e, latitude, longitude) {
+        var text = (latitude / 1000000) + "," + (longitude / 1000000);
+        var clipboard = new ClipboardJS(e, {
+            text: function () {
+                return text
+            }
+        });
+        e.click();
+        
+    }
+    function getHeadImageUrl(path) {
+        return "https://hy.gwgo.qq.com/sync/pet/" + path;
+    }
+    var columnsArray = [
+        {
+            "title": "名称",
+            "field": "sprite_config",
+            switchable: true,
+            sortable: false,
+            formatter: function (value, row, index) {   //主要配置在这里
+                var path = "https://hy.gwgo.qq.com/sync/pet/" + value.smallImgPath;
+                var result = "<img style='width: 40px; height: 40px;' src='" + path + "'>" + value.name + "</img>";
+                return result;
+            }
+        },
+        {
+            "title": "经度",
+            "field": "longtitude",
+            switchable: true,
+            sortable: false,
+            formatter: function (value, row, index) {   //主要配置在这里
+                return value / 1000000;
+            }
+        },
+        {
+            "title": "纬度",
+            "field": "latitude",
+            switchable: true,
+            sortable: false,
+            formatter: function (value, row, index) {   //主要配置在这里
+                return value / 1000000;
+            }
+        },
+        {
+            "title": "剩余时间",
+            "field": "lefttime",
+            switchable: true,
+            sortable: false,
+            formatter: function (value, row, index) {
+                var now = new Date().getTime() / 1000;
+                return formatTime(Number(row["gentime"]) + Number(row["lifetime"] - now));
+            }
+        },
+        {
+            "title": "复制",
+            "field": "copy",
+            sortable: false,
+            formatter: function (value, row, index) {
+                var button = "<button onclick='copyLocation(this, " + row["latitude"] + "," + row["longtitude"] + ");'>复制</button>"
+                return button;
+            },
+            align: 'center'
+        }];
+
+    // 请求服务器携带参数
+    function queryParams(params) {
+        // 表格, 追加参数
+        var args = $.param({
+            isWeb: true,
+            currentPage: params.offset / params.limit,
+            // 每页显示多少条
+            pageSize: params.limit
+        })
+
+        return args;
+    }
+    var markersArray = []
+
+    //清除覆盖层
+    function clearOverlays() {
+        if (markersArray) {
+            for (i in markersArray) {
+                markersArray[i].setMap(null);
+            }
+        }
+    }
+    $('#table').bootstrapTable('destroy').bootstrapTable({
+        //data: json,
+        url: '/api/sprites/get/type/' + spriteType,
+        singleSelect: true,
+        clickToSelect: true,
+        striped: true,
+        sidePagination: 'server',
+        //searchOnEnterKey: true,//回车搜索
+        // 请求服务器携带参数
+        queryParams: queryParams,
+        //sortName: "lefttime",
+        //sortOrder: "desc",
+        pageSize: 10,
+        pageNumber: 1,
+        pageList: "[10, 25, 50, 100, 200]",
+        //showToggle: true,
+        showRefresh: true,
+        showColumns: true,
+        //search: true,
+        pagination: true,
+        columns: columnsArray,
+        responseHandler: function (res) {
+            var rows = res.data.sprites;
+            clearOverlays();
+            //var center = new qq.maps.LatLng(39.916527, 116.397128);
+            for(var sprite of rows) {
+                var lat = sprite.latitude / 1000000;
+                var lon = sprite.longtitude / 1000000;
+                var center = new qq.maps.LatLng(lat, lon);
+                var marker = new qq.maps.Marker({
+                    position: center,
+                    map: qqMap
+                });
+                var anchor = new qq.maps.Point(0, 39),
+                    scaleSize = new qq.maps.Size(40, 40),
+                    origin = new qq.maps.Point(0, 0),
+                    markerIcon = new qq.maps.MarkerImage(
+                        getHeadImageUrl(sprite.sprite_config.smallImgPath),null,null,null,
+                        scaleSize
+                    );
+                marker.setIcon(markerIcon);
+                markersArray.push(marker);
+            }
+            //创建    
+            
+            return {
+                "total": res.data.total_page * rows.length,//总页数
+                "rows": rows  //数据
+            };
+        }
+    });
+</script>
