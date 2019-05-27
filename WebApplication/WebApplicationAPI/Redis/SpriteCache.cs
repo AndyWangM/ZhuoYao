@@ -1,8 +1,8 @@
 ﻿using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace WebApplicationAPI.Redis
 {
@@ -25,6 +25,9 @@ namespace WebApplicationAPI.Redis
 
         public async Task Add(string key, RedisValue value, long expiredTime = 0)
         {
+            //var isKeyExists = await _redisDatabase.KeyExistsAsync(key);
+            //if (!isKeyExists)
+            //{
             if (expiredTime > 0)
             {
                 await _redisDatabase.StringSetAsync(key, value, TimeSpan.FromSeconds(expiredTime));
@@ -33,6 +36,8 @@ namespace WebApplicationAPI.Redis
             {
                 await _redisDatabase.StringSetAsync(key, value);
             }
+            //}
+
         }
 
         /// <summary>
@@ -59,10 +64,10 @@ namespace WebApplicationAPI.Redis
         //}
 
         //使用Keys *模糊匹配Key
-        public async Task<List<RedisValue>> GetKeys(string key)
+        public async Task<List<RedisKey>> GetKeys(string key)
         {
             var result = await _redisDatabase.ScriptEvaluateAsync(LuaScript.Prepare("return redis.call('KEYS',@keypattern)"), new { keypattern = key });
-            var list = new List<RedisValue>((RedisValue[])result);
+            var list = new List<RedisKey>((RedisKey[])result);
             return list;
         }
 

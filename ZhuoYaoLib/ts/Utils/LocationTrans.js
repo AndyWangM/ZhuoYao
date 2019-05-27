@@ -15,7 +15,7 @@ var ZhuoYao;
             var theta = Math.atan2(lat, lng) + 0.000003 * Math.cos(lng * this.x_PI);
             var bd_lng = z * Math.cos(theta) + 0.0065;
             var bd_lat = z * Math.sin(theta) + 0.006;
-            return [bd_lng.toFixed(6), bd_lat.toFixed(6)];
+            return [bd_lng, bd_lat];
         };
         /**
          * GCJ02 转换为 WGS84
@@ -38,7 +38,7 @@ var ZhuoYao;
                 dlng = (dlng * 180.0) / (this.a / sqrtmagic * Math.cos(radlat) * this.PI);
                 var mglat = Number(lat) + dlat;
                 var mglng = Number(lng) + dlng;
-                return [(lng * 2 - mglng).toFixed(6), (lat * 2 - mglat).toFixed(6)];
+                return [lng * 2 - mglng, lat * 2 - mglat];
             }
         };
         LocationTrans.transformlat = function (lng, lat) {
@@ -68,7 +68,6 @@ var ZhuoYao;
         LocationTrans.PI = 3.1415926535897932384626;
         LocationTrans.a = 6378245.0;
         LocationTrans.ee = 0.00669342162296594323;
-        LocationTrans.coordinate = "GCJ02";
         return LocationTrans;
     }());
     ZhuoYao.LocationTrans = LocationTrans;

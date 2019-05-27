@@ -33,8 +33,8 @@ namespace WebApplicationAPI.Controllers
             _spriteFilterCache = new RedisCache(_redisClient, "Redis_Sprite_Filter");
             _spriteConfigCache = new RedisCache(_redisClient, "Redis_Sprite_Config");
             _logger = loggerFactory.CreateLogger<SpritesController>();
-            InitFilter().Wait(5000);
-            InitConfig().Wait(5000);
+            InitFilter().Wait();
+            InitConfig().Wait();
         }
 
         [HttpGet()]
@@ -45,7 +45,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet("get/{key}")]
-        public async Task<IActionResult> GetById([FromRoute]string key, [FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200, [FromQuery] bool isWeb = false)
+        public async Task<IActionResult> GetById([FromRoute]string key, [FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200)
         {
             try
             {
@@ -53,8 +53,8 @@ namespace WebApplicationAPI.Controllers
                 List<AliveSprite> result = new List<AliveSprite>();
                 if (!string.IsNullOrEmpty(key))
                 {
-                    //var keys = await _distributedCache.GetKeys(key + "_*");
-                    var keys = _distributedCache.GetScanKeys("*" + key + "_*");
+                    var keys = await _distributedCache.GetKeys("*" + key + "_*");
+                    //var keys = _distributedCache.GetScanKeys("*" + key + "_*");
                     if (keys.Count > 0)
                     {
                         if (pageSize > _maxPageSize)
@@ -63,7 +63,7 @@ namespace WebApplicationAPI.Controllers
                         }
                         int totalPage = (keys.Count + pageSize - 1) / pageSize;
                         keys = keys.Skip(currentPage * pageSize).Take(pageSize).ToList();
-                        result = await GetData(keys, isValid, isWeb);
+                        result = await GetData(keys, isValid);
                         return new OkObjectResult(SpriteDTO(totalPage, result));
                     }
                     else
@@ -81,16 +81,16 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet("get/type/{spriteType}")]
-        public async Task<IActionResult> GetByType([FromRoute]SpriteType spriteType, [FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200, [FromQuery] bool isWeb = false)
+        public async Task<IActionResult> GetByType([FromRoute]SpriteType spriteType, [FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200)
         {
             try
             {
                 var isValid = CheckValid();
                 List<AliveSprite> result = new List<AliveSprite>();
-                if (spriteType != null)
+                if (!string.IsNullOrEmpty(spriteType.ToString()))
                 {
-                    //var keys = await _distributedCache.GetKeys(key + "_*");
-                    var keys = _distributedCache.GetScanKeys("*" + spriteType + "_*");
+                    var keys = await _distributedCache.GetKeys("*" + spriteType + "_*");
+                    //var keys = _distributedCache.GetScanKeys("*" + spriteType + "_*");
                     if (keys.Count > 0)
                     {
                         if (pageSize > _maxPageSize)
@@ -99,7 +99,7 @@ namespace WebApplicationAPI.Controllers
                         }
                         int totalPage = (keys.Count + pageSize - 1) / pageSize;
                         keys = keys.Skip(currentPage * pageSize).Take(pageSize).ToList();
-                        result = await GetData(keys, isValid, isWeb);
+                        result = await GetData(keys, isValid);
                         return new OkObjectResult(SpriteDTO(totalPage, result));
                     }
                     else
@@ -117,14 +117,14 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public async Task<IActionResult> GetAll([FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200, [FromQuery] bool isWeb = false)
+        public async Task<IActionResult> GetAll([FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200)
         {
             try
             {
                 var isValid = CheckValid();
                 List<AliveSprite> result = new List<AliveSprite>();
-                //var keys = await _distributedCache.GetKeys("*");
-                var keys = _distributedCache.GetScanKeys("*");
+                var keys = await _distributedCache.GetKeys("*");
+                //var keys = _distributedCache.GetScanKeys("*");
                 if (keys.Count > 0)
                 {
                     if (pageSize > _maxPageSize)
@@ -133,7 +133,7 @@ namespace WebApplicationAPI.Controllers
                     }
                     int totalPage = (keys.Count + pageSize - 1) / pageSize;
                     keys = keys.Skip(currentPage * pageSize).Take(pageSize).ToList();
-                    result = await GetData(keys, isValid, isWeb);
+                    result = await GetData(keys, isValid);
                     return new OkObjectResult(SpriteDTO(totalPage, result));
                 }
                 else
@@ -177,7 +177,7 @@ namespace WebApplicationAPI.Controllers
             }
         }
 
-        [HttpGet("/config")]
+        [HttpGet("config")]
         public async Task<IActionResult> GetConfig()
         {
             try
@@ -185,6 +185,7 @@ namespace WebApplicationAPI.Controllers
                 List<SpriteConfig> result = new List<SpriteConfig>();
                 var isValid = CheckValid();
                 var keys = await _spriteConfigCache.GetKeys("*");
+                //var keys = _spriteConfigCache.GetScanKeys("*");
                 if (keys.Count > 0)
                 {
                     foreach (var key in keys)
@@ -201,7 +202,7 @@ namespace WebApplicationAPI.Controllers
                 }
                 else
                 {
-                    return new OkObjectResult(new RequestResult() { ErrorCode = 1, Data = new CommonData() { Info = "当前暂无妖灵" } });
+                    return new OkObjectResult(new RequestResult() { ErrorCode = 1, Data = new CommonData() { Info = "当前暂无配置" } });
                 }
             }
             catch (Exception ex)
@@ -213,7 +214,8 @@ namespace WebApplicationAPI.Controllers
 
         private async Task InitFilter()
         {
-            var keys = _spriteFilterCache.GetScanKeys("*");
+            //var keys = _spriteFilterCache.GetScanKeys("*");
+            var keys = await _spriteFilterCache.GetKeys("*");
             Dictionary<int, SpriteFilter> result = new Dictionary<int, SpriteFilter>();
             foreach (var key in keys)
             {
@@ -230,7 +232,8 @@ namespace WebApplicationAPI.Controllers
 
         private async Task InitConfig()
         {
-            var keys = _spriteConfigCache.GetScanKeys("*");
+            //var keys = _spriteFilterCache.GetScanKeys("*");
+            var keys = await _spriteFilterCache.GetKeys("*");
             Dictionary<int, SpriteConfig> result = new Dictionary<int, SpriteConfig>();
             foreach (var key in keys)
             {
@@ -266,7 +269,25 @@ namespace WebApplicationAPI.Controllers
                     }
                     await InitFilter();
                 }
-                return new OkObjectResult(new RequestResult() { ErrorCode = 0, Data = new CommonData() { Info = "插入成功" } });
+                return new OkObjectResult(new RequestResult() { ErrorCode = 0, Data = new CommonData() { Info = "更新成功" } });
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(LogLevel.Error, ex.Message);
+                return new OkObjectResult(new RequestResult() { ErrorCode = 3, Data = new CommonData() { Info = "服务器错误，请稍后再试" } });
+            }
+        }
+
+        [HttpGet("filter/get")]
+        public async Task<IActionResult> GetFilter()
+        {
+            try
+            {
+                if (_spriteFilters.Keys.Count == 0)
+                {
+                    await InitFilter();
+                }
+                return new OkObjectResult(SpritFilterDTO(_spriteFilters));
             }
             catch (Exception ex)
             {
@@ -285,30 +306,37 @@ namespace WebApplicationAPI.Controllers
                 if (isValid)
                 {
                     //var filter = new int[] { 2000238, 2000265, 2000106, 2000313, 2000268, 2000327 };
-                    sprites = sprites.Where(x => _spriteFilters.ContainsKey(x.SpriteId)).ToList();
-                    foreach (var sprite in sprites)
+                    var filterSprites = sprites.Where(x => _spriteFilters.ContainsKey(x.SpriteId));
+                    if (filterSprites.Any())
                     {
-                        if (_spriteFilters.TryGetValue(sprite.SpriteId, out var filter))
+                        sprites = filterSprites.ToList();
+                        foreach (var sprite in sprites)
                         {
-                            var random = new Random().Next(0, filter.SampleTotalCount);
-                            if (random <= filter.SampleCount)
+                            if (_spriteFilters.TryGetValue(sprite.SpriteId, out var filter))
                             {
-                                byte[] value = null;
-                                var str = JsonConvert.SerializeObject(sprite);
-                                if (str != "")
+                                var random = new Random().Next(0, filter.SampleTotalCount);
+                                if (random <= filter.SampleCount)
                                 {
-                                    value = Encoding.UTF8.GetBytes(str);
-                                }
-                                var expiredTime = sprite.GetExpiredTime();
-                                if (expiredTime > 0)
-                                {
-                                    var spriteType = filter.SpriteType.ToString() + "_";
-                                    var key = spriteType + sprite.GetKey();
-                                    await _distributedCache.Add(key, value, expiredTime);
+                                    _spriteConfig.TryGetValue(sprite.SpriteId, out var config);
+                                    sprite.Name = config.Name;
+                                    sprite.HeadImage = config.SmallImgPath;
+                                    sprite.Level = config.Level;
+                                    byte[] value = null;
+                                    var str = JsonConvert.SerializeObject(sprite);
+                                    if (str != "")
+                                    {
+                                        value = Encoding.UTF8.GetBytes(str);
+                                    }
+                                    var expiredTime = sprite.GetExpiredTime();
+                                    if (expiredTime > 0)
+                                    {
+                                        var spriteType = filter.SpriteType.ToString() + "_";
+                                        var key = spriteType + sprite.GetKey();
+                                        await _distributedCache.Add(key, value, expiredTime);
+                                    }
                                 }
                             }
                         }
-
                     }
                 }
                 return new OkObjectResult(new RequestResult() { ErrorCode = 0, Data = new CommonData() { Info = "插入成功" } });
@@ -368,7 +396,21 @@ namespace WebApplicationAPI.Controllers
             };
         }
 
-        private async Task<List<AliveSprite>> GetData(List<RedisKey> keys, bool isValid, bool isWeb)
+        private RequestResult SpritFilterDTO(Dictionary<int, SpriteFilter> filters)
+        {
+            var data = new SpriteFilterResultData()
+            {
+                Info = "Request sucess.",
+                Filters = filters
+            };
+            return new RequestResult()
+            {
+                ErrorCode = 0,
+                Data = data
+            };
+        }
+
+        private async Task<List<AliveSprite>> GetData(List<RedisKey> keys, bool isValid)
         {
             List<AliveSprite> result = new List<AliveSprite>();
             foreach (var key in keys)
@@ -387,13 +429,6 @@ namespace WebApplicationAPI.Controllers
                         }
                         aliveSprite.Latitude = aliveSprite.Latitude + (new Random().Next(100, 1000)) * 1000;
                         aliveSprite.Longitude = aliveSprite.Longitude + (new Random().Next(100, 1000)) * 1000;
-                    }
-                    if (isWeb)
-                    {
-                        _spriteConfig.TryGetValue(aliveSprite.SpriteId, out var config);
-                        aliveSprite.Name = config.Name;
-                        aliveSprite.HeadImage = config.GetHeadImageUrl();
-                        aliveSprite.Level = config.Level;
                     }
                     result.Add(aliveSprite);
                 }

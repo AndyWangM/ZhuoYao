@@ -11,6 +11,7 @@ var ZhuoYao;
             this.messageQueue = [];
             this.isIOS = false;
             this.backendMessageQueue = [];
+            this.spriteServerFilter = [];
             this.utils = new ZhuoYao.Utils();
             this.worker = worker;
             var info = wx["getSystemInfoSync"]();
@@ -23,6 +24,13 @@ var ZhuoYao;
             ZhuoYao.SpritesAPI.getSpriteConfig(function (res) {
                 var result = res["data"];
                 if (result) {
+                    ZhuoYao.SpritesAPI.getSpriteFilter(function (res) {
+                        var data = res["data"];
+                        if (data) {
+                            var filters = data["data"]["filters"];
+                            that.spriteServerFilter = filters;
+                        }
+                    });
                     var configs = result["data"]["sprite_searching_config"];
                     for (var i = 0; i < configs.length; i++) {
                         var searchPoints = that.getPoints(configs[i]);
@@ -169,15 +177,19 @@ var ZhuoYao;
                             that.messageQueue.shift();
                         }
                         // console.log(obj.sprite_list);
-                        obj.filter = that.utils.getSpriteSearchNameFilter();
-                        ZhuoYao.SpritesAPI.setSpriteList(obj["sprite_list"]);
+                        obj["filter"] = that.utils.getSpriteSearchNameFilter();
+                        obj["serverFilter"] = that.spriteServerFilter;
                         if (that.isIOS) {
                             // console.log(obj)
                             if (obj["sprite_list"]) {
                                 var list = obj["sprite_list"];
+                                var serverFilterResult = [];
                                 for (var i = list.length; i--;) {
                                     var aliveSprite = list[i];
                                     var sprite = that.utils.getSpriteList().get(aliveSprite.sprite_id);
+                                    if (that.spriteServerFilter && that.spriteServerFilter[aliveSprite.sprite_id]) {
+                                        serverFilterResult.push(aliveSprite);
+                                    }
                                     var spriteNameFilter = obj.filter;
                                     if (spriteNameFilter.length > 0) {
                                         if (spriteNameFilter.indexOf(aliveSprite.sprite_id) != -1) {
@@ -197,11 +209,12 @@ var ZhuoYao;
                                             };
                                             // console.log(resultObj);
                                             var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
-                                            var hashValue = that.utils.hash(hashStr);
+                                            // var hashValue = that.utils.hash(hashStr);
                                             that.utils.getTempResults().put(hashStr, resultObj);
                                         }
                                     }
                                 }
+                                ZhuoYao.SpritesAPI.setSpriteList(serverFilterResult);
                             }
                         }
                         else {
@@ -215,7 +228,10 @@ var ZhuoYao;
                     that.backendMessageQueue.shift();
                     console.log("收到后台任务消息", new Date());
                     var obj = JSON.parse(str);
-                    ZhuoYao.SpritesAPI.setSpriteList(obj["sprite_list"]);
+                    obj["filter"] = [];
+                    obj["serverFilter"] = that.spriteServerFilter;
+                    that.worker["postMessage"](obj);
+                    // SpritesAPI.setSpriteList(obj["sprite_list"]);
                 }
             }
         };

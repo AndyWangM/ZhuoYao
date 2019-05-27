@@ -1,8 +1,8 @@
 import ZhuoYao from '../../../utils/zhuoyao.js'
 
-const url = "http://127.0.0.1:3585/";
+// const url = "http://127.0.0.1:3585/";
 // const url = "http://192.168.3.25:3585/";
-// const url = "https://zhuoyao.wangandi.com/";
+const url = "https://zhuoyao.wangandi.com/";
 const getAPI = "api/sprites/get/";
 const getTypeAPI = "api/sprites/get/type/";
 const getAllAPI = "api/sprites/getall/";
@@ -41,7 +41,10 @@ Page({
         displayName: "鲲"
       }, {
         spriteType: "ghost",
-        displayName: "三魂七魄"
+        displayName: "黑白鬼"
+      }, {
+        spriteType: "other",
+        displayName: "其他"
       }
     ],
     spriteTypeIndex: 0
@@ -59,11 +62,6 @@ Page({
       totalPage: -1,
       hasNextPage: true
     });
-    if (this.data.inputVal == "虚灵灵") {
-      this.data.inputVal = "三魂"
-    } else if (this.data.inputVal == "抱抱朴"){
-      this.data.inputVal = "七魄"
-    }
     var spriteId = app.globalData.zhuoyao.utils.getSpriteNameHash().get(this.data.inputVal);
     var spriteType = this.data.spriteType[this.data.spriteTypeIndex].spriteType;
     var getUrl;

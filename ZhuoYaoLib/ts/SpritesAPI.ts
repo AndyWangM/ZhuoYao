@@ -5,6 +5,7 @@ namespace ZhuoYao {
         private static url: string = "https://zhuoyao.wangandi.com/";
         // private static url: string = "http://127.0.0.1:3585/";
         private static spriteConfigUrl: string = "https://zhuoyao.wangandi.com/api/config/getSearchConfig";
+        private static spriteFilterUrl: string = "https://zhuoyao.wangandi.com/api/sprites/filter/get";
         // private static spriteConfigUrl: string = "http://127.0.0.1:3585/api/config/getSearchConfig";
         private static getAPI: string = "api/sprites/get/"
         private static setAPI: string = "api/sprites/set/"
@@ -18,6 +19,10 @@ namespace ZhuoYao {
 
         public static getSpriteConfig(callback) {
             this.httpUtils.get(this.spriteConfigUrl, null, callback);
+        }
+
+        public static getSpriteFilter(callback) {
+            this.httpUtils.get(this.spriteFilterUrl, null, callback);
         }
 
         public static get(id: string) {

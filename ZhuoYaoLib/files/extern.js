@@ -1,4 +1,4 @@
-var ZhuoYao, Socket, utils;
+var ZhuoYao, Socket, utils, SpritesAPI;
 var initSocket, sendSocketMessage, isSearching, clearMessageQueue;
 var genRequestId;
 var convertLocation, getLeftTime, getSpriteList, setSpriteConfig, getSpriteByName, getSpriteNameHash, setCoordinate, getLocation, hash, getTempResults, getMarkerInfo,
@@ -9,3 +9,5 @@ var get, put, clear;
 var Id, Name, FiveEle, PrefabName, ImaName, HeadImage, BigImgPath, SmallImgPath, Level, Checked;
 
 var gentime, latitude, lifetime, longtitude, sprite_id;
+
+var setSpriteList;

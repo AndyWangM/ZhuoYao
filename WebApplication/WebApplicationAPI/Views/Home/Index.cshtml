@@ -2,10 +2,10 @@
     ViewData["Title"] = "已知妖灵";
 }
 
-<link href="~/Content/bootstrap-table/bootstrap-table.css" rel="stylesheet" />
-<script src="~/Content/bootstrap-table/bootstrap-table.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.css">
+<script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
 <script src="~/js/LocationTrans.js"></script>
-<script src="~/Content/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script src="~/js/bootstrap-table-zh-CN.min.js"></script>
 <style type="text/css">
     .pagination-info {
         display: none;
@@ -50,11 +50,11 @@
         </select>
     </div>
     @*<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 input-group">
-        <input type="text" class="form-control" placeholder="单个妖灵搜索，默认按类型搜索">
-        <span class="input-group-btn">
-            <button class="btn btn-default" type="button" onclick="searchSplit">搜索</button>
-        </span>
-    </div>*@
+            <input type="text" class="form-control" placeholder="单个妖灵搜索，默认按类型搜索">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" onclick="searchSplit">搜索</button>
+            </span>
+        </div>*@
 </div>
 
 <div>
@@ -76,7 +76,7 @@
             url: '/api/sprites/get/type/' + spriteType
         })
     }
-    
+
     function formatTime(timeStr) {
         var time = Number(timeStr);
 
@@ -127,6 +127,10 @@
         Toast("复制成功", 500);
     }
 
+    function getHeadImage(image) {
+        return "https://hy.gwgo.qq.com/sync/pet/" + image;
+    }
+
     var columnsArray = [
         {
             "title": "名称",
@@ -135,7 +139,7 @@
             sortable: false,
             formatter: function (value, row, index) {   //主要配置在这里
                 //var path = "https://hy.gwgo.qq.com/sync/pet/" + value.headimage;
-                var result = "<img style='width: 40px; height: 40px;' src='" + value + "'>" + row.name + "</img>";
+                var result = "<img style='width: 40px; height: 40px;' src='" + getHeadImage(value) + "'>" + row.name + "</img>";
                 return result;
             }
         },
@@ -203,7 +207,7 @@
         striped: true,
         sidePagination: 'server',
         ajaxOptions: {
-            xhrFields: { 
+            xhrFields: {
                 withCredentials: true
             },
             crossDomain: true
@@ -227,11 +231,9 @@
                     position: center,
                     map: qqMap
                 });
-                var anchor = new qq.maps.Point(0, 39),
-                    scaleSize = new qq.maps.Size(40, 40),
-                    origin = new qq.maps.Point(0, 0),
+                var scaleSize = new qq.maps.Size(40, 40),
                     markerIcon = new qq.maps.MarkerImage(
-                        sprite.headimage, null, null, null,
+                        getHeadImage(sprite.headimage), null, null, null,
                         scaleSize
                     );
                 marker.setIcon(markerIcon);

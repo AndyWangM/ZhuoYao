@@ -37,6 +37,6 @@ namespace WebApplicationAPI.Models
     public class SpriteFilterResultData : CommonData
     {
         [JsonProperty("filters")]
-        public List<SpriteFilter> Filters { get; set; }
+        public Dictionary<int, SpriteFilter> Filters { get; set; }
     }
 }

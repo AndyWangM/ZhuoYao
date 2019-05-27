@@ -4,11 +4,18 @@ import ZhuoYao from './zhuoyao.js'
 worker.onMessage(function (obj) {
   // console.log(obj);
   var arr = []
+  var serverFilterResult = [];
   if (obj.sprite_list) {
+
     for (var i = obj.sprite_list.length; i--;) {
       var aliveSprite = obj.sprite_list[i];
       // for (const aliveSprite of obj.sprite_list) {
       // if (sprite) {
+      var serverFilter = obj.serverFilter;
+      if (serverFilter && serverFilter[aliveSprite.sprite_id]) {
+          serverFilterResult.push(aliveSprite);
+      }
+
       var spriteNameFilter = obj.filter;
       if (spriteNameFilter.length > 0) {
         if (spriteNameFilter.indexOf(aliveSprite.sprite_id) != -1) {
@@ -18,5 +25,5 @@ worker.onMessage(function (obj) {
     }
   }
   // console.log(wx)
-  worker.postMessage(arr);
+  worker.postMessage({ sprites: arr, serverSprites: serverFilterResult});
 })

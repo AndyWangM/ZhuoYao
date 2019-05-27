@@ -19,7 +19,7 @@ namespace ZhuoYao {
             var theta = Math.atan2(lat, lng) + 0.000003 * Math.cos(lng * this.x_PI);
             var bd_lng = z * Math.cos(theta) + 0.0065;
             var bd_lat = z * Math.sin(theta) + 0.006;
-            return [bd_lng.toFixed(6), bd_lat.toFixed(6)]
+            return [bd_lng, bd_lat]
         }
 
         /**
@@ -43,7 +43,7 @@ namespace ZhuoYao {
                 dlng = (dlng * 180.0) / (this.a / sqrtmagic * Math.cos(radlat) * this.PI);
                 var mglat = Number(lat) + dlat;
                 var mglng = Number(lng) + dlng;
-                return [(lng * 2 - mglng).toFixed(6), (lat * 2 - mglat).toFixed(6)]
+                return [lng * 2 - mglng, lat * 2 - mglat]
             }
         }
 

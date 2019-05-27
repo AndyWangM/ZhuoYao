@@ -7,10 +7,15 @@ const worker = wx.createWorker('workers/request/index.js') // 文件名指定 wo
 //   msg: 'hello worker'
 // })
 worker.onMessage(function (res) {
-  // console.log(res)
-  if (res.length > 0) {
-    for (var i = res.length; i--;) {
-      var aliveSprite = res[i];
+  console.log(res)
+  var sprites = res.sprites;
+  var serverSprites = res.serverSprites;
+  if (serverSprites && serverSprites.length > 0) {
+    ZhuoYao.SpritesAPI.setSpriteList(serverSprites);
+  }
+  if (sprites.length > 0) {
+    for (var i = sprites.length; i--;) {
+      var aliveSprite = sprites[i];
       var sprite = app.globalData.zhuoyao.utils.getSpriteList().get(aliveSprite.sprite_id);
       var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
       var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
