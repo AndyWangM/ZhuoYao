@@ -26,3 +26,31 @@ function initConfig() {
     }
 }
 initConfig();
+
+function getSpriteConfig() {
+    var spcfgCache = Cookies.getJSON("spcfgCache");
+    if (!spcfgCache) {
+        $.ajax({
+            url: "/api/sprites/config",
+            async: false,
+            success: function (res) {
+                if (res) {
+                    var spriteConfig = res.data.configs;
+                    var kv = {};
+                    for (var sprite of spriteConfig) {
+                        kv[sprite.name] = sprite.id;
+                    }
+                    localStorage.setItem('spriteConfig', encodeURIComponent(JSON.stringify(kv)));
+                    Cookies.set('spcfgCache', 1, { expires: 1 });
+                    return kv;
+                }
+            }
+        });
+    } else {
+        return JSON.parse(decodeURIComponent(localStorage.getItem('spriteConfig')));
+    }
+}
+
+$(document).ready(function () {
+    getSpriteConfig();
+});
