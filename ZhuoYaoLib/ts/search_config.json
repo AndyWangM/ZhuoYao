@@ -1,10 +1,178 @@
 [
     {
-        "region": "Ruian",
-        "latitude": 27799895,
-        "longitude": 120646102,
+        "region": "Beijing",
+        "latitude": 39929947,
+        "longitude": 116412980,
         "xIndex": 6,
         "yIndex": 6
+    },
+    {
+        "region": "Beijing1",
+        "latitude": 39824430,
+        "longitude": 116400604,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Beijing2",
+        "latitude": 39837784,
+        "longitude": 116290390,
+        "xIndex": 7,
+        "yIndex": 6
+    },
+    {
+        "region": "Beijing3",
+        "latitude": 39967503,
+        "longitude": 116288430,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Beijing4",
+        "latitude": 39826440,
+        "longitude": 116213480,
+        "xIndex": 10,
+        "yIndex": 3
+    },
+    {
+        "region": "Changchun",
+        "latitude": 43830600,
+        "longitude": 125293785,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Changchun1",
+        "latitude": 43923885,
+        "longitude": 125242210,
+        "xIndex": 3,
+        "yIndex": 10
+    },
+    {
+        "region": "Changchun2",
+        "latitude": 43797314,
+        "longitude": 125207480,
+        "xIndex": 6,
+        "yIndex": 4
+    },
+    {
+        "region": "Changsha",
+        "latitude": 28206339,
+        "longitude": 113023320,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Changsha1",
+        "latitude": 28193256,
+        "longitude": 112892740,
+        "xIndex": 6,
+        "yIndex": 5
+    },
+    {
+        "region": "Changsha2",
+        "latitude": 28081360,
+        "longitude": 112920890,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Changsha3",
+        "latitude": 28096828,
+        "longitude": 113050090,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Chengdu",
+        "latitude": 30569893,
+        "longitude": 103955540,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Chengdu1",
+        "latitude": 30690664,
+        "longitude": 103952780,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Chengdu2",
+        "latitude": 30664640,
+        "longitude": 104084526,
+        "xIndex": 7,
+        "yIndex": 6
+    },
+    {
+        "region": "Chengdu3",
+        "latitude": 30554033,
+        "longitude": 104085495,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Chongqing",
+        "latitude": 29517914,
+        "longitude": 106449460,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Chongzuo",
+        "latitude": 22357830,
+        "longitude": 107337425,
+        "xIndex": 6,
+        "yIndex": 4
+    },
+    {
+        "region": "Dongguan",
+        "latitude": 22909353,
+        "longitude": 113598980,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Dongguan1",
+        "latitude": 22934307,
+        "longitude": 113728040,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Dongguan2",
+        "latitude": 23006470,
+        "longitude": 113638960,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Dongguan3",
+        "latitude": 23004904,
+        "longitude": 113703970,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Dongguan4",
+        "latitude": 23017385,
+        "longitude": 113779076,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Dongguan5",
+        "latitude": 23059603,
+        "longitude": 113708230,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Fuzhou",
+        "latitude": 26053534,
+        "longitude": 119313870,
+        "xIndex": 4,
+        "yIndex": 4
     },
     {
         "region": "Fuzhou1",
@@ -14,37 +182,86 @@
         "yIndex": 6
     },
     {
-        "region": "Xinjiang",
-        "latitude": 43805553,
-        "longitude": 87582320,
-        "xIndex": 5,
-        "yIndex": 5
+        "region": "Fuzhou2",
+        "latitude": 25994678,
+        "longitude": 119212580,
+        "xIndex": 3,
+        "yIndex": 10
     },
     {
-        "region": "Kunming",
-        "latitude": 24895110,
-        "longitude": 102780360,
-        "xIndex": 4,
-        "yIndex": 4
-    },
-    {
-        "region": "Shanghai5",
-        "latitude": 31221540,
-        "longitude": 121278940,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Nanjing1",
-        "latitude": 31979786,
-        "longitude": 118718870,
+        "region": "Guangzhou",
+        "latitude": 23056005,
+        "longitude": 113215280,
         "xIndex": 7,
         "yIndex": 4
     },
     {
-        "region": "Beijing1",
-        "latitude": 39824430,
-        "longitude": 116400604,
+        "region": "Guangzhou1",
+        "latitude": 23066301,
+        "longitude": 113282550,
+        "xIndex": 6,
+        "yIndex": 4
+    },
+    {
+        "region": "Guangzhou2",
+        "latitude": 23056469,
+        "longitude": 113359024,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Guangzhou3",
+        "latitude": 22967016,
+        "longitude": 113249954,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Guiyang",
+        "latitude": 26549788,
+        "longitude": 106696396,
+        "xIndex": 7,
+        "yIndex": 3
+    },
+    {
+        "region": "Hangzhou",
+        "latitude": 30292734,
+        "longitude": 120219820,
+        "xIndex": 7,
+        "yIndex": 6
+    },
+    {
+        "region": "Hangzhou1",
+        "latitude": 30276148,
+        "longitude": 120075020,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Hangzhou2",
+        "latitude": 39837784,
+        "longitude": 116290390,
+        "xIndex": 7,
+        "yIndex": 6
+    },
+    {
+        "region": "Hangzhou3",
+        "latitude": 30158100,
+        "longitude": 120062164,
+        "xIndex": 7,
+        "yIndex": 6
+    },
+    {
+        "region": "Hangzhou4",
+        "latitude": 30120586,
+        "longitude": 120206930,
+        "xIndex": 8,
+        "yIndex": 6
+    },
+    {
+        "region": "Hefei",
+        "latitude": 31825020,
+        "longitude": 117221420,
         "xIndex": 6,
         "yIndex": 6
     },
@@ -56,9 +273,198 @@
         "yIndex": 5
     },
     {
-        "region": "Shenzhen8",
-        "latitude": 22575403,
-        "longitude": 114104170,
+        "region": "Huzhou",
+        "latitude": 30831244,
+        "longitude": 120159630,
+        "xIndex": 4,
+        "yIndex": 4
+    },
+    {
+        "region": "Huzhou1",
+        "latitude": 30831020,
+        "longitude": 120068950,
+        "xIndex": 6,
+        "yIndex": 5
+    },
+    {
+        "region": "Jinan",
+        "latitude": 36626343,
+        "longitude": 117075935,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Jinan1",
+        "latitude": 28193256,
+        "longitude": 112892740,
+        "xIndex": 6,
+        "yIndex": 5
+    },
+    {
+        "region": "Jinan2",
+        "latitude": 36561764,
+        "longitude": 116987840,
+        "xIndex": 10,
+        "yIndex": 3
+    },
+    {
+        "region": "Jinan3",
+        "latitude": 36570873,
+        "longitude": 116907790,
+        "xIndex": 9,
+        "yIndex": 3
+    },
+    {
+        "region": "Kunming",
+        "latitude": 24895110,
+        "longitude": 102780360,
+        "xIndex": 4,
+        "yIndex": 4
+    },
+    {
+        "region": "Nanchang",
+        "latitude": 28691460,
+        "longitude": 115815470,
+        "xIndex": 4,
+        "yIndex": 6
+    },
+    {
+        "region": "Nanchang1",
+        "latitude": 28620173,
+        "longitude": 115918150,
+        "xIndex": 7,
+        "yIndex": 4
+    },
+    {
+        "region": "Nanchang2",
+        "latitude": 28618896,
+        "longitude": 115836525,
+        "xIndex": 4,
+        "yIndex": 5
+    },
+    {
+        "region": "Nanjing",
+        "latitude": 32059475,
+        "longitude": 118813750,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Nanjing1",
+        "latitude": 31979786,
+        "longitude": 118718870,
+        "xIndex": 7,
+        "yIndex": 4
+    },
+    {
+        "region": "Nanjing2",
+        "latitude": 31965967,
+        "longitude": 118806854,
+        "xIndex": 6,
+        "yIndex": 4
+    },
+    {
+        "region": "Nanning",
+        "latitude": 22799660,
+        "longitude": 108274734,
+        "xIndex": 4,
+        "yIndex": 5
+    },
+    {
+        "region": "Panjin",
+        "latitude": 41081436,
+        "longitude": 122025734,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Pingxiang",
+        "latitude": 22055477,
+        "longitude": 106729355,
+        "xIndex": 6,
+        "yIndex": 3
+    },
+    {
+        "region": "Ruian",
+        "latitude": 27799895,
+        "longitude": 120646102,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shanghai",
+        "latitude": 31080680,
+        "longitude": 121334366,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shanghai1",
+        "latitude": 31199776,
+        "longitude": 121353980,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shanghai2",
+        "latitude": 31194138,
+        "longitude": 121501150,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shanghai3",
+        "latitude": 31119234,
+        "longitude": 121491020,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shanghai4",
+        "latitude": 31292742,
+        "longitude": 121462320,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shanghai5",
+        "latitude": 31221540,
+        "longitude": 121278940,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shengyang2",
+        "latitude": 41638310,
+        "longitude": 123433105,
+        "xIndex": 6,
+        "yIndex": 4
+    },
+    {
+        "region": "Shenyang",
+        "latitude": 41784092,
+        "longitude": 123434560,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shenyang1",
+        "latitude": 41754227,
+        "longitude": 123307274,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shenyang2",
+        "latitude": 43797314,
+        "longitude": 125207480,
+        "xIndex": 6,
+        "yIndex": 4
+    },
+    {
+        "region": "Shenzhen",
+        "latitude": 22509142,
+        "longitude": 113882960,
         "xIndex": 6,
         "yIndex": 6
     },
@@ -70,10 +476,24 @@
         "yIndex": 6
     },
     {
-        "region": "Hangzhou",
-        "latitude": 30292734,
-        "longitude": 120219820,
-        "xIndex": 7,
+        "region": "Shenzhen2",
+        "latitude": 22697247,
+        "longitude": 113771153,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shenzhen3",
+        "latitude": 22598303,
+        "longitude": 113972210,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shenzhen4",
+        "latitude": 22651140,
+        "longitude": 113997720,
+        "xIndex": 6,
         "yIndex": 6
     },
     {
@@ -82,6 +502,62 @@
         "longitude": 114028880,
         "xIndex": 6,
         "yIndex": 6
+    },
+    {
+        "region": "Shenzhen6",
+        "latitude": 22523990,
+        "longitude": 113989440,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shenzhen7",
+        "latitude": 22517776,
+        "longitude": 114034040,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Shenzhen8",
+        "latitude": 22575403,
+        "longitude": 114104170,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Tianjing",
+        "latitude": 39062880,
+        "longitude": 117135740,
+        "xIndex": 8,
+        "yIndex": 4
+    },
+    {
+        "region": "Tianjing1",
+        "latitude": 39039207,
+        "longitude": 117206590,
+        "xIndex": 8,
+        "yIndex": 4
+    },
+    {
+        "region": "Wenzhou",
+        "latitude": 27620047,
+        "longitude": 120309735,
+        "xIndex": 3,
+        "yIndex": 3
+    },
+    {
+        "region": "Wenzhou1",
+        "latitude": 27945096,
+        "longitude": 120627650,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Wenzhou3",
+        "latitude": 27557879,
+        "longitude": 120509266,
+        "xIndex": 5,
+        "yIndex": 5
     },
     {
         "region": "Wuhan",
@@ -98,216 +574,6 @@
         "yIndex": 4
     },
     {
-        "region": "Wenzhou3",
-        "latitude": 27557879,
-        "longitude": 120509266,
-        "xIndex": 5,
-        "yIndex": 5
-    },
-    {
-        "region": "Chongqing",
-        "latitude": 29517914,
-        "longitude": 106449460,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Guangzhou2",
-        "latitude": 23056469,
-        "longitude": 113359024,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Tianjing1",
-        "latitude": 39039207,
-        "longitude": 117206590,
-        "xIndex": 8,
-        "yIndex": 4
-    },
-    {
-        "region": "Tianjing",
-        "latitude": 39062880,
-        "longitude": 117135740,
-        "xIndex": 8,
-        "yIndex": 4
-    },
-    {
-        "region": "Guangzhou",
-        "latitude": 23056005,
-        "longitude": 113215280,
-        "xIndex": 7,
-        "yIndex": 4
-    },
-    {
-        "region": "Beijing3",
-        "latitude": 39967503,
-        "longitude": 116288430,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Shenzhen3",
-        "latitude": 22598303,
-        "longitude": 113972210,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Jinan3",
-        "latitude": 36570873,
-        "longitude": 116907790,
-        "xIndex": 9,
-        "yIndex": 3
-    },
-    {
-        "region": "Dongguan1",
-        "latitude": 22934307,
-        "longitude": 113728040,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Nanchang",
-        "latitude": 28691460,
-        "longitude": 115815470,
-        "xIndex": 4,
-        "yIndex": 6
-    },
-    {
-        "region": "Guangzhou1",
-        "latitude": 23066301,
-        "longitude": 113282550,
-        "xIndex": 6,
-        "yIndex": 4
-    },
-    {
-        "region": "Shanghai2",
-        "latitude": 31194138,
-        "longitude": 121501150,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Shenzhen",
-        "latitude": 22509142,
-        "longitude": 113882960,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Jinan",
-        "latitude": 36626343,
-        "longitude": 117075935,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Beijing",
-        "latitude": 39929947,
-        "longitude": 116412980,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Dongguan2",
-        "latitude": 23006470,
-        "longitude": 113638960,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Nanjing",
-        "latitude": 32059475,
-        "longitude": 118813750,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Shanghai3",
-        "latitude": 31119234,
-        "longitude": 121491020,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Nanchang2",
-        "latitude": 28618896,
-        "longitude": 115836525,
-        "xIndex": 4,
-        "yIndex": 5
-    },
-    {
-        "region": "Dongguan3",
-        "latitude": 23004904,
-        "longitude": 113703970,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Shanghai1",
-        "latitude": 31199776,
-        "longitude": 121353980,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Zhoushan",
-        "latitude": 29971580,
-        "longitude": 122161480,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Changsha",
-        "latitude": 28206339,
-        "longitude": 113023320,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Hefei",
-        "latitude": 31825020,
-        "longitude": 117221420,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Wenzhou",
-        "latitude": 27620047,
-        "longitude": 120309735,
-        "xIndex": 3,
-        "yIndex": 3
-    },
-    {
-        "region": "Shenzhen4",
-        "latitude": 22651140,
-        "longitude": 113997720,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Hangzhou1",
-        "latitude": 30276148,
-        "longitude": 120075020,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Shanghai4",
-        "latitude": 31292742,
-        "longitude": 121462320,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Guangzhou3",
-        "latitude": 22967016,
-        "longitude": 113249954,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
         "region": "Wuhan2",
         "latitude": 28618896,
         "longitude": 115836525,
@@ -322,174 +588,6 @@
         "yIndex": 6
     },
     {
-        "region": "Hangzhou2",
-        "latitude": 39837784,
-        "longitude": 116290390,
-        "xIndex": 7,
-        "yIndex": 6
-    },
-    {
-        "region": "Chengdu",
-        "latitude": 30569893,
-        "longitude": 103955540,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Shenzhen6",
-        "latitude": 22523990,
-        "longitude": 113989440,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Changsha2",
-        "latitude": 28081360,
-        "longitude": 112920890,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Dongguan5",
-        "latitude": 23059603,
-        "longitude": 113708230,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Chengdu1",
-        "latitude": 30690664,
-        "longitude": 103952780,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Jinan2",
-        "latitude": 36561764,
-        "longitude": 116987840,
-        "xIndex": 10,
-        "yIndex": 3
-    },
-    {
-        "region": "Chengdu3",
-        "latitude": 30554033,
-        "longitude": 104085495,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Fuzhou2",
-        "latitude": 25994678,
-        "longitude": 119212580,
-        "xIndex": 3,
-        "yIndex": 10
-    },
-    {
-        "region": "Hangzhou3",
-        "latitude": 30158100,
-        "longitude": 120062164,
-        "xIndex": 7,
-        "yIndex": 6
-    },
-    {
-        "region": "Dongguan4",
-        "latitude": 23017385,
-        "longitude": 113779076,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Guiyang",
-        "latitude": 26549788,
-        "longitude": 106696396,
-        "xIndex": 7,
-        "yIndex": 3
-    },
-    {
-        "region": "Shenzhen7",
-        "latitude": 22517776,
-        "longitude": 114034040,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Beijing4",
-        "latitude": 39826440,
-        "longitude": 116213480,
-        "xIndex": 10,
-        "yIndex": 3
-    },
-    {
-        "region": "Fuzhou",
-        "latitude": 26053534,
-        "longitude": 119313870,
-        "xIndex": 4,
-        "yIndex": 4
-    },
-    {
-        "region": "Nanchang1",
-        "latitude": 28620173,
-        "longitude": 115918150,
-        "xIndex": 7,
-        "yIndex": 4
-    },
-    {
-        "region": "Beijing2",
-        "latitude": 39837784,
-        "longitude": 116290390,
-        "xIndex": 7,
-        "yIndex": 6
-    },
-    {
-        "region": "Nanning",
-        "latitude": 22799660,
-        "longitude": 108274734,
-        "xIndex": 4,
-        "yIndex": 5
-    },
-    {
-        "region": "Changsha1",
-        "latitude": 28193256,
-        "longitude": 112892740,
-        "xIndex": 6,
-        "yIndex": 5
-    },
-    {
-        "region": "Chengdu2",
-        "latitude": 30664640,
-        "longitude": 104084526,
-        "xIndex": 7,
-        "yIndex": 6
-    },
-    {
-        "region": "Wenzhou1",
-        "latitude": 27945096,
-        "longitude": 120627650,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Shenzhen2",
-        "latitude": 22697247,
-        "longitude": 113771153,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Changsha3",
-        "latitude": 28096828,
-        "longitude": 113050090,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
-        "region": "Dongguan",
-        "latitude": 22909353,
-        "longitude": 113598980,
-        "xIndex": 6,
-        "yIndex": 6
-    },
-    {
         "region": "Xian",
         "latitude": 34231823,
         "longitude": 108899826,
@@ -497,30 +595,65 @@
         "yIndex": 6
     },
     {
-        "region": "Jinan1",
-        "latitude": 28193256,
-        "longitude": 112892740,
-        "xIndex": 6,
+        "region": "Xinjiang",
+        "latitude": 43805553,
+        "longitude": 87582320,
+        "xIndex": 5,
         "yIndex": 5
     },
     {
-        "region": "Hangzhou4",
-        "latitude": 30120586,
-        "longitude": 120206930,
-        "xIndex": 8,
+        "region": "Zhangzhou",
+        "latitude": 24451874,
+        "longitude": 117644930,
+        "xIndex": 6,
         "yIndex": 6
     },
     {
-        "region": "Nanjing2",
-        "latitude": 31965967,
-        "longitude": 118806854,
-        "xIndex": 6,
-        "yIndex": 4
+        "region": "Zhangzhou1",
+        "latitude": 24485570,
+        "longitude": 117545265,
+        "xIndex": 7,
+        "yIndex": 5
     },
     {
-        "region": "Shanghai",
-        "latitude": 31080680,
-        "longitude": 121334366,
+        "region": "Zhangzhou2",
+        "latitude": 24501764,
+        "longitude": 117649540,
+        "xIndex": 4,
+        "yIndex": 6
+    },
+    {
+        "region": "Zhengzhou",
+        "latitude": 34745460,
+        "longitude": 113674580,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Zhengzhou1",
+        "latitude": 34750977,
+        "longitude": 113542915,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Zhengzhou2",
+        "latitude": 34649320,
+        "longitude": 113552540,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Zhengzhou3",
+        "latitude": 34638523,
+        "longitude": 113672200,
+        "xIndex": 6,
+        "yIndex": 6
+    },
+    {
+        "region": "Zhoushan",
+        "latitude": 29971580,
+        "longitude": 122161480,
         "xIndex": 6,
         "yIndex": 6
     }

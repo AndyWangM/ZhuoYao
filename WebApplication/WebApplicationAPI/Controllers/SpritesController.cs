@@ -12,19 +12,29 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WebApplicationAPI.Models;
 using WebApplicationAPI.Redis;
+using WebApplicationAPI.Utils;
 
 namespace WebApplicationAPI.Controllers
 {
     [Route("api/[controller]")]
     public class SpritesController : Controller
     {
+        private readonly Dictionary<int, string> GAODE_MAP_REGEO = new Dictionary<int, string>
+        {
+            {1, "https://restapi.amap.com/v3/geocode/regeo?key=abd14aafdd67e4f82e5314b26f0b912d&radius=0"},
+            {2, "https://restapi.amap.com/v3/geocode/regeo?key=a5f595eed0b2b5486844cf1f685ddf6e&radius=0"},
+            {3, "https://restapi.amap.com/v3/geocode/regeo?key=2b932c27ff7c7efcefd7feba59178f5b&radius=0"},
+            {4, "https://restapi.amap.com/v3/geocode/regeo?key=44cc8e9f1184eeac0c1608c2979a56f4&radius=0"},
+            {5, "https://restapi.amap.com/v3/geocode/regeo?key=adc000cb8cca58032eb095d4e91da624&radius=0"}
+        };
         private readonly RedisCache _distributedCache;
         private readonly RedisCache _spriteConfigCache;
         private readonly RedisCache _spriteFilterCache;
+        private readonly RedisCache _spriteKeyCache;
         private readonly int _maxPageSize = 200;
+        private readonly ILogger _logger;
         private static Dictionary<int, SpriteFilter> _spriteFilters = new Dictionary<int, SpriteFilter>();
         private static Dictionary<int, SpriteConfig> _spriteConfig = new Dictionary<int, SpriteConfig>();
-        private readonly ILogger _logger;
 
         public SpritesController(IConfiguration config, ILoggerFactory loggerFactory)
         {
@@ -32,6 +42,7 @@ namespace WebApplicationAPI.Controllers
             _distributedCache = new RedisCache(_redisClient, "Redis_Sprite");
             _spriteFilterCache = new RedisCache(_redisClient, "Redis_Sprite_Filter");
             _spriteConfigCache = new RedisCache(_redisClient, "Redis_Sprite_Config");
+            _spriteKeyCache = new RedisCache(_redisClient, "Redis_Sprite_Key");
             _logger = loggerFactory.CreateLogger<SpritesController>();
             InitFilter().Wait();
             InitConfig().Wait();
@@ -45,7 +56,9 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet("get/{key}")]
-        public async Task<IActionResult> GetById([FromRoute]string key, [FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200)
+        public async Task<IActionResult> GetById([FromRoute]string key,
+            [FromQuery] string province = null, [FromQuery] string city = null,
+            [FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200)
         {
             try
             {
@@ -53,7 +66,21 @@ namespace WebApplicationAPI.Controllers
                 List<AliveSprite> result = new List<AliveSprite>();
                 if (!string.IsNullOrEmpty(key))
                 {
-                    var keys = await _distributedCache.GetKeys("*" + key + "_*");
+                    var pattern = "*" + key + "_*";
+                    if (!string.IsNullOrEmpty(province))
+                    {
+                        pattern = pattern + MD5Helper.EncryptString(province) + "_";
+                    }
+                    else
+                    {
+                        pattern = pattern + "*_";
+                    }
+                    if (!string.IsNullOrEmpty(city))
+                    {
+                        pattern = pattern + MD5Helper.EncryptString(city) + "_";
+                    }
+                    pattern = pattern + "*";
+                    var keys = await _distributedCache.GetKeys(pattern);
                     //var keys = _distributedCache.GetScanKeys("*" + key + "_*");
                     if (keys.Count > 0)
                     {
@@ -81,7 +108,9 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet("get/type/{spriteType}")]
-        public async Task<IActionResult> GetByType([FromRoute]SpriteType spriteType, [FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200)
+        public async Task<IActionResult> GetByType([FromRoute]SpriteType spriteType, 
+            [FromQuery] string province = null, [FromQuery] string city = null, 
+            [FromQuery] int currentPage = 0, [FromQuery] int pageSize = 200)
         {
             try
             {
@@ -89,7 +118,21 @@ namespace WebApplicationAPI.Controllers
                 List<AliveSprite> result = new List<AliveSprite>();
                 if (!string.IsNullOrEmpty(spriteType.ToString()))
                 {
-                    var keys = await _distributedCache.GetKeys("*" + spriteType + "_*");
+                    var pattern = spriteType + "_*_";
+                    if (!string.IsNullOrEmpty(province))
+                    {
+                        pattern = pattern + MD5Helper.EncryptString(province) + "_";
+                    }
+                    else
+                    {
+                        pattern = pattern + "*_";
+                    }
+                    if (!string.IsNullOrEmpty(city))
+                    {
+                        pattern = pattern + MD5Helper.EncryptString(city) + "_";
+                    }
+                    pattern = pattern + "*";
+                    var keys = await _distributedCache.GetKeys(pattern);
                     //var keys = _distributedCache.GetScanKeys("*" + spriteType + "_*");
                     if (keys.Count > 0)
                     {
@@ -317,22 +360,43 @@ namespace WebApplicationAPI.Controllers
                                 var random = new Random().Next(0, filter.SampleTotalCount);
                                 if (random <= filter.SampleCount)
                                 {
-                                    _spriteConfig.TryGetValue(sprite.SpriteId, out var config);
-                                    sprite.Name = config.Name;
-                                    sprite.HeadImage = config.SmallImgPath;
-                                    sprite.Level = config.Level;
-                                    byte[] value = null;
-                                    var str = JsonConvert.SerializeObject(sprite);
-                                    if (str != "")
+                                    var spriteType = filter.SpriteType.ToString() + "_";
+                                    var spriteKey = sprite.GetSpriteKey();
+                                    if (!_spriteKeyCache.KeyExists(spriteKey).Result)
                                     {
-                                        value = Encoding.UTF8.GetBytes(str);
-                                    }
-                                    var expiredTime = sprite.GetExpiredTime();
-                                    if (expiredTime > 0)
-                                    {
-                                        var spriteType = filter.SpriteType.ToString() + "_";
-                                        var key = spriteType + sprite.GetKey();
-                                        await _distributedCache.Add(key, value, expiredTime);
+                                        _spriteConfig.TryGetValue(sprite.SpriteId, out var config);
+                                        sprite.Name = config.Name;
+                                        sprite.HeadImage = config.SmallImgPath;
+                                        sprite.Level = config.Level;
+
+                                        var expiredTime = sprite.GetExpiredTime();
+                                        if (expiredTime > 0)
+                                        {
+                                            var randomRegeoIndex = new Random().Next(1, GAODE_MAP_REGEO.Keys.Count + 1);
+                                            GAODE_MAP_REGEO.TryGetValue(randomRegeoIndex, out var regeoUrl);
+                                            var location = "location=" + sprite.Longitude / 1000000 + "," + sprite.Latitude / 1000000;
+                                            var url = string.Join("&", regeoUrl, location);
+                                            var res = await HttpRequestHelper.HttpGetRequestAsync(url);
+                                            var regeo = JsonConvert.DeserializeObject<GaodeRegeo>(res);
+                                            if (regeo.InfoCode == "10000")
+                                            {
+                                                sprite.Province = regeo.Regeocode.AddressComponent.Province;
+                                                sprite.City = regeo.Regeocode.AddressComponent.City as string;
+                                            }
+                                            else
+                                            {
+                                                _logger.Log(LogLevel.Error, "geo_error with code: " + regeo.InfoCode);
+                                            }
+                                            byte[] value = null;
+                                            var str = JsonConvert.SerializeObject(sprite);
+                                            if (str != "")
+                                            {
+                                                value = Encoding.UTF8.GetBytes(str);
+                                            }
+                                            var spriteLocationKey = spriteType + sprite.GetLocationKey();
+                                            await _spriteKeyCache.Add(spriteKey, "", expiredTime);
+                                            await _distributedCache.Add(spriteLocationKey, value, expiredTime);
+                                        }
                                     }
                                 }
                             }
@@ -356,7 +420,7 @@ namespace WebApplicationAPI.Controllers
             if (regex.Match(userAgent).Success)
             {
                 return true;
-            } 
+            }
             else if (cookies.ContainsKey("config"))
             {
                 return true;

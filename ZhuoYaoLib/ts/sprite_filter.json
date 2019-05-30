@@ -1,128 +1,170 @@
-[
-    {
-        "sprite_id": 2000238,
+{
+    "2000040": {
+        "sprite_id": 2000040,
+        "sprite_type": 0,
         "sample_count": 1,
-        "sample_total_count": 1,
-        "sprite_type": "rare"
+        "sample_total_count": 50
     },
-    {
-        "sprite_id": 2000265,
-        "sample_count": 1,
-        "sample_total_count": 1,
-        "sprite_type": "rare"
-    },
-    {
+    "2000106": {
         "sprite_id": 2000106,
+        "sprite_type": 0,
         "sample_count": 1,
-        "sample_total_count": 1,
-        "sprite_type": "rare"
+        "sample_total_count": 1
     },
-    {
-        "sprite_id": 2000313,
-        "sample_count": 1,
-        "sample_total_count": 1,
-        "sprite_type": "rare"
-    },
-    {
-        "sprite_id": 2000268,
-        "sample_count": 1,
-        "sample_total_count": 1,
-        "sprite_type": "rare"
-    },
-    {
-        "sprite_id": 2000327,
-        "sample_count": 1,
-        "sample_total_count": 1,
-        "sprite_type": "rare"
-    },
-    {
-        "sprite_id": 2000324,
-        "sample_count": 1,
-        "sample_total_count": 1000,
-        "sprite_type": "den"
-    },
-    {
-        "sprite_id": 2000321,
-        "sample_count": 1,
-        "sample_total_count": 1000,
-        "sprite_type": "den"
-    },
-    {
+    "2000112": {
         "sprite_id": 2000112,
+        "sprite_type": 1,
         "sample_count": 1,
-        "sample_total_count": 1000,
-        "sprite_type": "den"
+        "sample_total_count": 1000
     },
-    {
-        "sprite_id": 2004007,
-        "sample_count": 1,
-        "sample_total_count": 1,
-        "sprite_type": "region"
-    },
-    {
-        "sprite_id": 2004004,
-        "sample_count": 1,
-        "sample_total_count": 1,
-        "sprite_type": "region"
-    },
-    {
-        "sprite_id": 2004013,
-        "sample_count": 1,
-        "sample_total_count": 1,
-        "sprite_type": "region"
-    },
-    {
+    "2000182": {
         "sprite_id": 2000182,
+        "sprite_type": 2,
         "sample_count": 1,
-        "sample_total_count": 1,
-        "sprite_type": "region"
+        "sample_total_count": 1
     },
-    {
+    "2000206": {
         "sprite_id": 2000206,
+        "sprite_type": 2,
         "sample_count": 1,
-        "sample_total_count": 1,
-        "sprite_type": "region"
+        "sample_total_count": 1
     },
-    {
-        "sprite_id": 2004010,
+    "2000238": {
+        "sprite_id": 2000238,
+        "sprite_type": 0,
         "sample_count": 1,
-        "sample_total_count": 1,
-        "sprite_type": "region"
+        "sample_total_count": 1
     },
-    {
+    "2000241": {
+        "sprite_id": 2000241,
+        "sprite_type": 0,
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    "2000265": {
+        "sprite_id": 2000265,
+        "sprite_type": 0,
+        "sample_count": 1,
+        "sample_total_count": 1
+    },
+    "2000268": {
+        "sprite_id": 2000268,
+        "sprite_type": 0,
+        "sample_count": 1,
+        "sample_total_count": 1
+    },
+    "2000271": {
         "sprite_id": 2000271,
+        "sprite_type": 4,
         "sample_count": 1,
-        "sample_total_count": 1000,
-        "sprite_type": "ghost"
+        "sample_total_count": 1000
     },
-    {
+    "2000272": {
         "sprite_id": 2000272,
+        "sprite_type": 4,
         "sample_count": 1,
-        "sample_total_count": 1000,
-        "sprite_type": "ghost"
+        "sample_total_count": 1000
     },
-    {
-        "sprite_id": 2000519,
+    "2000313": {
+        "sprite_id": 2000313,
+        "sprite_type": 0,
         "sample_count": 1,
-        "sample_total_count": 50,
-        "sprite_type": "kun"
+        "sample_total_count": 1
     },
-    {
+    "2000321": {
+        "sprite_id": 2000321,
+        "sprite_type": 1,
+        "sample_count": 1,
+        "sample_total_count": 1000
+    },
+    "2000324": {
+        "sprite_id": 2000324,
+        "sprite_type": 1,
+        "sample_count": 1,
+        "sample_total_count": 1000
+    },
+    "2000327": {
+        "sprite_id": 2000327,
+        "sprite_type": 0,
+        "sample_count": 1,
+        "sample_total_count": 1
+    },
+    "2000501": {
         "sprite_id": 2000501,
+        "sprite_type": 3,
         "sample_count": 1,
-        "sample_total_count": 50,
-        "sprite_type": "kun"
+        "sample_total_count": 50
     },
-    {
-        "sprite_id": 2000504,
-        "sample_count": 1,
-        "sample_total_count": 50,
-        "sprite_type": "kun"
-    },
-    {
+    "2000502": {
         "sprite_id": 2000502,
+        "sprite_type": 3,
         "sample_count": 1,
-        "sample_total_count": 50,
-        "sprite_type": "kun"
+        "sample_total_count": 50
+    },
+    "2000504": {
+        "sprite_id": 2000504,
+        "sprite_type": 3,
+        "sample_count": 1,
+        "sample_total_count": 50
+    },
+    "2000506": {
+        "sprite_id": 2000506,
+        "sprite_type": 90,
+        "sample_count": 1,
+        "sample_total_count": 1000
+    },
+    "2000507": {
+        "sprite_id": 2000507,
+        "sprite_type": 90,
+        "sample_count": 1,
+        "sample_total_count": 50
+    },
+    "2000508": {
+        "sprite_id": 2000508,
+        "sprite_type": 90,
+        "sample_count": 1,
+        "sample_total_count": 50
+    },
+    "2000509": {
+        "sprite_id": 2000509,
+        "sprite_type": 90,
+        "sample_count": 1,
+        "sample_total_count": 50
+    },
+    "2000519": {
+        "sprite_id": 2000519,
+        "sprite_type": 3,
+        "sample_count": 1,
+        "sample_total_count": 50
+    },
+    "2004004": {
+        "sprite_id": 2004004,
+        "sprite_type": 2,
+        "sample_count": 1,
+        "sample_total_count": 1
+    },
+    "2004007": {
+        "sprite_id": 2004007,
+        "sprite_type": 2,
+        "sample_count": 1,
+        "sample_total_count": 1
+    },
+    "2004010": {
+        "sprite_id": 2004010,
+        "sprite_type": 2,
+        "sample_count": 1,
+        "sample_total_count": 1
+    },
+    "2004013": {
+        "sprite_id": 2004013,
+        "sprite_type": 2,
+        "sample_count": 1,
+        "sample_total_count": 1
+    },
+    "2004019": {
+        "sprite_id": 2004019,
+        "sprite_type": 0,
+        "sample_count": 1,
+        "sample_total_count": 50
     }
-]
+}

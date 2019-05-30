@@ -56,12 +56,10 @@ namespace WebApplicationAPI.Redis
             return ReturnBool;
         }
 
-        //public RedisResult GetKeys(string pattern)
-        //{
-        //    var _server = _redisServer; //默认一个服务器
-        //    var keys = _server.Keys(database: _redisDatabase.Database, pattern: pattern); //StackExchange.Redis 会根据redis版本决定用keys还是   scan(>2.8) 
-        //    return null;
-        //}
+        public async Task<bool> KeyExists(string pattern)
+        {
+            return await _redisDatabase.KeyExistsAsync(pattern);
+        }
 
         //使用Keys *模糊匹配Key
         public async Task<List<RedisKey>> GetKeys(string key)

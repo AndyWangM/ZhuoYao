@@ -3,6 +3,7 @@ import ZhuoYao from '../../utils/zhuoyao.js'
 const app = getApp();
 var defaultAvatar = "data:image/jpg;base64,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";
 let interstitialAd = null
+let videoAd = null
 
 var defaultUserInfo = {
   avatarUrl: defaultAvatar,
@@ -33,6 +34,11 @@ Page({
       type: 'page'
     },
     {
+      icon: 'images/setting.png',
+      text: '观看广告',
+      type: 'ad'
+    },
+    {
       icon: 'images/tel.png',
       text: 'QQ群: 7672057',
       type: 'none'
@@ -42,20 +48,13 @@ Page({
     this.setData({
       userInfo: defaultUserInfo
     });
-    if (wx.createInterstitialAd) {
-      interstitialAd = wx.createInterstitialAd({
-        adUnitId: 'adunit-714f7553f006326e'
+    if (wx.createRewardedVideoAd) {
+      videoAd = wx.createRewardedVideoAd({
+        adUnitId: 'adunit-c4353499034a807a'
       })
-      interstitialAd.onLoad(() => {
-        console.log('插屏 广告加载成功')
-      })
-      interstitialAd.onError((err) => {
-        console.log('插屏 广告错误')
-
-      })
-      interstitialAd.onClose(() => {
-        console.log('插屏 广告关闭')
-      })
+      videoAd.onLoad(() => { })
+      videoAd.onError((err) => { })
+      videoAd.onClose((res) => { })
     }
   },
   onShow() {
@@ -95,7 +94,7 @@ Page({
   getHelp: function () {
     var that = this;
     wx.showActionSheet({
-      itemList: ['注意事项', '妖灵搜索', '已知妖灵', '经纬度坐标系', '这是广告'],
+      itemList: ['注意事项', '妖灵搜索', '已知妖灵', '经纬度坐标系', '省/市过滤'],
       success(res) {
         switch (res.tapIndex) {
           case 0:
@@ -111,11 +110,7 @@ Page({
             that.showInfo('经纬度坐标系', '1. 默认是火星坐标系，如需使用其他坐标系，请在坐标系中切换，然后重新搜索和获取已知妖灵')
             break;
           case 4:
-            if (interstitialAd) {
-              interstitialAd.show().catch((err) => {
-                console.error(err)
-              })
-            }
+            that.showInfo('省市过滤', '1. 不填则全国搜索，填入则按省/市全名过滤，如浙江省、南昌市、上海市。若想搜索浙江省杭州市，则直接填入杭州市即可，若您的省/市妖灵过少，可以在QQ群反馈。')
             break;
         }
         console.log(res.tapIndex)
@@ -254,6 +249,18 @@ Page({
           break;
         case "page":
           that.setPage();
+          break;
+        case "ad":
+          if (videoAd) {
+            videoAd.show().catch(() => {
+              // 失败重试
+              videoAd.load()
+                .then(() => videoAd.show())
+                .catch(err => {
+                  console.log('激励视频 广告显示失败')
+                })
+            })
+          }
           break;
         case "none":
           break;

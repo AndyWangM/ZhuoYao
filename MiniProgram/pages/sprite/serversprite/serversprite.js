@@ -22,6 +22,8 @@ Page({
     totalPage: -1,
     geturl: null,
     hasNextPage: true,
+    provinceInputVal: null,
+    cityInputVal: null,
     spriteType: [
       // {
       //   spriteType: "null",
@@ -111,12 +113,19 @@ Page({
     wx.showLoading({
       title: '请稍后'
     })
+    var data = {
+      currentPage: that.data.currentPage,
+      pageSize: app.globalData.zhuoyao.utils.getPageSize()
+    };
+    if (that.data.provinceInputVal) {
+      data.province = that.data.provinceInputVal;
+    }
+    if (that.data.cityInputVal) {
+      data.city = that.data.cityInputVal;
+    }
     wx["request"]({
       url: getUrl,
-      data: {
-        currentPage: that.data.currentPage,
-        pageSize: app.globalData.zhuoyao.utils.getPageSize()
-      },
+      data: data,
       method: "GET",
       success(res) {
         wx.hideLoading();
@@ -210,6 +219,18 @@ Page({
   bindInput: function (e) {
     e && this.setData({
       inputVal: e.detail.value
+    })
+    // this.bindGoSearch();
+  },
+  bindProvinceInput: function (e) {
+    e && this.setData({
+      provinceInputVal: e.detail.value
+    })
+    // this.bindGoSearch();
+  },
+  bindCityInput: function (e) {
+    e && this.setData({
+      cityInputVal: e.detail.value
     })
     // this.bindGoSearch();
   },

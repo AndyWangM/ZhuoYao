@@ -15,8 +15,10 @@ namespace WebApplicationAPI.Models
         public double Latitude { get; set; }
         [JsonProperty("longtitude")]
         public double Longitude { get; set; }
-        [JsonProperty("region")]
-        public string Region { get; set; }
+        [JsonProperty("city")]
+        public string City { get; set; }
+        [JsonProperty("province")]
+        public string Province { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("headimage")]
@@ -46,15 +48,40 @@ namespace WebApplicationAPI.Models
             return dispareTime - timeStamp;
         }
 
-        public string GetHash()
+        public string GetSpriteHash()
         {
             var str = "" + SpriteId + GenTime + LifeTime + Latitude + Longitude;
             return Utils.MD5Helper.EncryptString(str);
         }
 
-        public string GetKey()
+        public string GetLocationHash()
         {
-            return SpriteId + "_" + GetHash();
+            if (string.IsNullOrEmpty(Province))
+            {
+                return "unknown";
+            }
+            var provinceHash = Utils.MD5Helper.EncryptString(Province);
+            if (!string.IsNullOrEmpty(City))
+            {
+                var cityHash = Utils.MD5Helper.EncryptString(City);
+                return provinceHash + "_" + cityHash;
+            }
+            else
+            {
+                return provinceHash;
+            }
+        }
+
+        public string GetSpriteKey()
+        {
+            return SpriteId + "_" + GetSpriteHash();
+        }
+
+        public string GetLocationKey()
+        {
+            var locationHash = GetLocationHash();
+            var spriteHash = GetSpriteHash();
+            return SpriteId + "_" + locationHash + "_" + spriteHash;
         }
     }
 }
