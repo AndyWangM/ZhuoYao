@@ -34,8 +34,8 @@ namespace WebApplicationAPI.Models
         public object City { get; set; }
         [JsonProperty("province")]
         public string Province { get; set; }
-        [JsonProperty("district")]
-        public string District { get; set; }
+        //[JsonProperty("district")]
+        //public string District { get; set; }
     }
 
 }
