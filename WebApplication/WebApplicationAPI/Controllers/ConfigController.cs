@@ -134,8 +134,12 @@ namespace WebApplicationAPI.Controllers
         {
             var userAgent = HttpContext.Request.Headers[HeaderNames.UserAgent].FirstOrDefault().ToLower();
             var regex = new Regex("micromessenger");
+            var cookies = HttpContext.Request.Cookies;
             if (regex.Match(userAgent).Success)
             {
+                return true;
+            }
+            else if (cookies.ContainsKey("config")) {
                 return true;
             }
             else

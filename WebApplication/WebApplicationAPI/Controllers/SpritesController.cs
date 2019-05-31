@@ -348,7 +348,6 @@ namespace WebApplicationAPI.Controllers
                 var isValid = CheckValid();
                 if (isValid)
                 {
-                    //var filter = new int[] { 2000238, 2000265, 2000106, 2000313, 2000268, 2000327 };
                     var filterSprites = sprites.Where(x => _spriteFilters.ContainsKey(x.SpriteId));
                     if (filterSprites.Any())
                     {

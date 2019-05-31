@@ -46,13 +46,20 @@
             Toast("请输入正确的妖灵全名", 500);
             return;
         }
+        var url = '/api/sprites/get/' + id;
+        if (window.region) {
+            url = url + "?province=" + window.region;
+        }
         $("#table").bootstrapTable("refresh", {
-            url: '/api/sprites/get/' + id
+            url: url
         })
+    }
+    function changeRegion(e) {
+        window.region = e.value;
     }
 </script>
 
-<div id="toolbar" class="row">
+<div class="row">
     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
         <select class="form-control" onchange="selectType(this)">
             <option>稀有</option>
@@ -67,6 +74,10 @@
         <span class="input-group-btn">
             <button class="btn btn-default" type="button" onclick="searchSplit()">搜索</button>
         </span>
+    </div>
+
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <input id="regionInput" type="text" class="form-control" onchange="changeRegion(this)" placeholder="按省/市全程过滤，如浙江省或者温州市，输入完毕切换类型或搜索即生效">
     </div>
 </div>
 
@@ -186,7 +197,7 @@
             "field": "copy",
             sortable: false,
             formatter: function (value, row, index) {
-                var button = "<button onclick='copyLocation(this, " + row["latitude"] + "," + row["longtitude"] + ");'>复制</button>"
+                var button = "<button class='btn' onclick='copyLocation(this, " + row["latitude"] + "," + row["longtitude"] + ");'>复制</button>"
                 return button;
             },
             align: 'center'
@@ -249,6 +260,9 @@
                 isWeb: true,
                 currentPage: params.offset / params.limit,
                 pageSize: params.limit
+            }
+            if (window.region) {
+                params.province = window.region;
             }
             return params;
         },
