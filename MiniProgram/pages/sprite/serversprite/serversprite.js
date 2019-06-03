@@ -45,6 +45,15 @@ Page({
         spriteType: "ghost",
         displayName: "黑白鬼"
       }, {
+        spriteType: "winner",
+        displayName: "人生赢家"
+      }, {
+        spriteType: "once",
+        displayName: "一觉"
+      }, {
+        spriteType: "twice",
+        displayName: "二觉"
+      }, {
         spriteType: "other",
         displayName: "其他"
       }

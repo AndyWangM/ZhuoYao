@@ -6,9 +6,9 @@
       </picker>
       <picker class="colorGray" bindchange="bindPickerChange" value="{{spriteTypeIndex}}" range="{{spriteType}}" range-key="{{'displayName'}}">
       </picker>
-      <input class="text_search" type='text' placeholder="按省/市全名过滤(如浙江省、南昌市，不填则全国)" bindinput="bindProvinceInput" value="{{province}}"></input>
+      <input class="text_search" type='text' placeholder="按省/市全名过滤(如浙江省或南昌市，默认全国)" bindinput="bindProvinceInput" value="{{province}}"></input>
       <view class="head_search">
-        <input class="text_search" type='text' confirm-type="search" placeholder="搜索单个妖灵全名(不输入则根据类型搜索)" bindinput="bindInput" bindconfirm="bindGoSearch" value="{{inputVal}}"></input>
+        <input class="text_search" type='text' confirm-type="search" placeholder="搜索单个妖灵全名(如银角小妖，默认全部)" bindinput="bindInput" bindconfirm="bindGoSearch" value="{{inputVal}}"></input>
         <button class="icon_search" bindtap='getLatestSprite'>搜索</button>
       </view>
     </view>

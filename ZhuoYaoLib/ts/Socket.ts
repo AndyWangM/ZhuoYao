@@ -19,6 +19,7 @@ namespace ZhuoYao {
         utils: Utils;
         backendMessageQueue: Object[] = [];
         spriteServerFilter: Object[] = [];
+        isBackMessage: boolean;
 
         constructor(worker) {
             this.utils = new Utils();
@@ -36,7 +37,7 @@ namespace ZhuoYao {
                 if (result) {
                     SpritesAPI.getSpriteFilter(function (res) {
                         var data = res["data"];
-                        if (data){
+                        if (data) {
                             var filters = data["data"]["filters"];
                             that.spriteServerFilter = filters;
                         }
@@ -113,9 +114,11 @@ namespace ZhuoYao {
             setInterval(function () {
                 if (that.messageQueue.length > 0) {
                     var message = that.messageQueue[0];
+                    that.isBackMessage = false;
                     that.sendSocketMessage(message);
                 } else if (that.backendMessageQueue.length > 0) {
                     var message = that.buildRequest(that.backendMessageQueue[0]);
+                    that.isBackMessage = true;
                     that.sendSocketMessage(message);
                 } else {
                     that.getBackendMessage();
@@ -176,7 +179,7 @@ namespace ZhuoYao {
             var that: Socket = this;
             var str: string = that.utils.utf8ByteToUnicodeStr(new Uint8Array(e.data).slice(4));
             if (str.length > 0) {
-                if (that.messageQueue.length > 0) {
+                if (that.messageQueue.length > 0 && !that.isBackMessage) {
                     console.log("收到服务器消息", new Date())
                     var obj = JSON.parse(str);
                     // console.log(obj)
