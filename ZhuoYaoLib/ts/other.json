@@ -1,0 +1,38 @@
+[
+    {
+        "sprite_id": 2000511,
+        "sprite_type": 90,
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2000512,
+        "sprite_type": 90,
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2000513,
+        "sprite_type": 90,
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2000514,
+        "sprite_type": 90,
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2000515,
+        "sprite_type": 90,
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2000203,
+        "sprite_type": 90,
+        "sample_count": 1,
+        "sample_total_count": 50
+    }
+]
