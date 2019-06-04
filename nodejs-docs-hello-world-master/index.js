@@ -102,6 +102,7 @@ var StringUtils = /** @class */ (function () {
 }());
 
 var strUtils = new StringUtils();
+var lastTime;
 
 var request = require('request');
 const WebSocketClient = require('websocket').w3cwebsocket;
@@ -120,7 +121,7 @@ function recMessage(data) {
             body: data
         }, function (error, response, body) {
             if (!error && response.statusCode == 200) {
-                console.log(body);
+                console.log("[" + new Date() + "]" + JSON.stringify(body));
             }
         });
     }
@@ -129,39 +130,41 @@ var ws;
 function initSocket() {
     ws = new WebSocketClient("wss://publicld.gwgo.qq.com?account_value=0&account_type=0&appid=0&token=0");
     ws.onopen = function () {
-        initMessageQueueChecker();
-        console.log("open")
-        var e = {
-            "request_type": "1004",
-            "cfg_type": 1,
-            "requestid": (new Date).getTime() % 1234567,
-            "platform": 0
-        };
-        ws.send(strUtils.str2ab(e));
+        console.log("[" + new Date() + "]Open.")
     };
     // 接收到服务端响应的数据时，触发事件
     ws.onmessage = evt => {
+        console.log("[" + new Date() + "]Received message.")
         const { data } = evt;
+        // console.log(data)
         if (typeof data === 'object') {
             const buf = Buffer.from(data);
             const tempresult = buf.toString('utf8', 4);
             var obj = JSON.parse(tempresult);
+            // console.log(tempresult.substring(0,100))
             if (obj.sprite_list) {
                 recMessage(obj.sprite_list)
             }
         }
+        lastTime = new Date();
     };
     ws.onerror = err => {
-        rej(err);
+        try {
+            ws.close();
+        } catch (ex) {
+
+        }
+        initSocket()
     };
     ws.onclose = () => {
         setTimeout(() => {
-            ws = new WebSocketClient("wss://publicld.gwgo.qq.com?account_value=0&account_type=0&appid=0&token=0");
+            initSocket();
         }, 1000);
-        console.log('关闭');
+        console.log("[" + new Date() + "]Close.");
     };
 }
 initSocket();
+initMessageQueueChecker();
 
 var backendMessageQueue = [];
 var region;
@@ -169,7 +172,7 @@ const http = require('http');
 
 const server = http.createServer((request, response) => {
     response.writeHead(200, { "Content-Type": "text/plain" });
-    response.end(region + ": " + JSON.stringify(backendMessageQueue));
+    response.end("[" + lastTime + "]" + region + ": " + JSON.stringify(backendMessageQueue));
 });
 
 const port = process.env.PORT || 1337;
@@ -230,7 +233,11 @@ function buildRequest(location) {
 }
 
 function sendSocketMessage(str) {
-    ws.send(strUtils.str2ab(str));
+    try {
+        ws.send(strUtils.str2ab(str));
+    } catch (e) {
+
+    }
 }
 
 function initMessageQueueChecker() {
@@ -241,7 +248,7 @@ function initMessageQueueChecker() {
         } else {
             getBackendMessage();
         }
-    }, 2000)
+    }, 5000)
 }
 console.log("Server running at http://localhost:%d", port);
 var azureUrl = ".azurewebsites.net";
@@ -261,7 +268,7 @@ setInterval(() => {
         }, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 if (body) {
-                    console.log(body)
+                    // console.log(body)
                 }
             }
         });
@@ -280,7 +287,7 @@ setInterval(() => {
         }, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 if (body) {
-                    console.log(body)
+                    // console.log(body)
                 }
             }
         });
@@ -288,6 +295,5 @@ setInterval(() => {
 }, 10000);
 setInterval(() => {
     ws.close();
-    initSocket();
-}, 60 * 10 * 1000)
+}, 5 * 60 * 1000);
 
