@@ -248,7 +248,7 @@ function initMessageQueueChecker() {
         } else {
             getBackendMessage();
         }
-    }, 5000)
+    }, 2000)
 }
 console.log("Server running at http://localhost:%d", port);
 var azureUrl = ".azurewebsites.net";
@@ -293,7 +293,4 @@ setInterval(() => {
         });
     }
 }, 10000);
-setInterval(() => {
-    ws.close();
-}, 5 * 60 * 1000);
 

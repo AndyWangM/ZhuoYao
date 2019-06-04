@@ -1,38 +1,134 @@
 [
     {
         "sprite_id": 2000511,
-        "sprite_type": 90,
+        "sprite_type": "other",
         "sample_count": 1,
         "sample_total_count": 500
     },
     {
         "sprite_id": 2000512,
-        "sprite_type": 90,
+        "sprite_type": "other",
         "sample_count": 1,
         "sample_total_count": 500
     },
     {
         "sprite_id": 2000513,
-        "sprite_type": 90,
+        "sprite_type": "other",
         "sample_count": 1,
         "sample_total_count": 500
     },
     {
         "sprite_id": 2000514,
-        "sprite_type": 90,
+        "sprite_type": "other",
         "sample_count": 1,
         "sample_total_count": 500
     },
     {
         "sprite_id": 2000515,
-        "sprite_type": 90,
+        "sprite_type": "other",
         "sample_count": 1,
         "sample_total_count": 500
     },
     {
         "sprite_id": 2000203,
-        "sprite_type": 90,
+        "sprite_type": "other",
         "sample_count": 1,
-        "sample_total_count": 50
+        "sample_total_count": 200
+    },
+    {
+        "sprite_id": 2000197,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 200
+    },
+    {
+        "sprite_id": 2000028,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 200
+    },
+    {
+        "sprite_id": 2000109,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 200
+    },
+    {
+        "sprite_id": 2000007,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 200
+    },
+    {
+        "sprite_id": 2000078,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 200
+    },
+    {
+        "sprite_id": 2000156,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 300
+    },
+    {
+        "sprite_id": 2000022,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2000025,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2000034,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2000075,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2000173,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2004022,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2004023,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2004024,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2004025,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2000247,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 500
     }
 ]
