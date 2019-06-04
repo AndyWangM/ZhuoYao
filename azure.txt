@@ -1,0 +1,28 @@
+Azure AAD Application creation completed successfully (Application Id: 9ea3912e-4bb8-4096-a76a-7e04076a4674)
+Creating a new SPN
+SPN creation completed successfully (SPN Name: )
+Waiting for SPN creation to reflect in Directory before Role assignment
+Assigning role (owner) to SPN App (9ea3912e-4bb8-4096-a76a-7e04076a4674)
+
+RoleAssignmentId   : /subscriptions/b124cd91-de72-4792-9855-70a5858da9bd/providers/Microsoft.Authorization/roleAssignme
+                     nts/7a0a22c9-0e3d-4df2-a8de-90355c0d1777
+Scope              : /subscriptions/b124cd91-de72-4792-9855-70a5858da9bd
+DisplayName        : VSO.wangandi.dc090d51-4dbc-4441-91a9-4fe8124aba99
+SignInName         :
+RoleDefinitionName : Owner
+RoleDefinitionId   : 8e3af657-a8ff-443c-a75c-2fe8c4bcb635
+ObjectId           : 4f28e773-dbae-477f-9c1c-7a963b88a0a7
+ObjectType         : ServicePrincipal
+CanDelegate        : False
+
+SPN role assignment completed successfully
+
+Copy and Paste below values for Service Connection
+***************************************************************************
+Connection Name: (SPN)
+Subscription Id: b124cd91-de72-4792-9855-70a5858da9bd
+Subscription Name:
+Service Principal Id: 9ea3912e-4bb8-4096-a76a-7e04076a4674
+Service Principal key: &amp;amp;lt;Password that you typed in&amp;amp;gt;
+Tenant Id: 504b54d2-efc8-4dc3-b5ab-c15111f0b72e
+***************************************************************************
