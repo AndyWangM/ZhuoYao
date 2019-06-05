@@ -6,97 +6,13 @@
         "sample_total_count": 50
     },
     {
-        "sprite_id": 2000005,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000008,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000014,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000023,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000026,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000029,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000035,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000038,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000047,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
         "sprite_id": 2000056,
         "sprite_type": "once",
         "sample_count": 1,
         "sample_total_count": 50
     },
     {
-        "sprite_id": 2000062,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000076,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000079,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
         "sprite_id": 2000104,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000110,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000162,
         "sprite_type": "once",
         "sample_count": 1,
         "sample_total_count": 50
@@ -114,43 +30,7 @@
         "sample_total_count": 50
     },
     {
-        "sprite_id": 2000171,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000174,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000177,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
         "sprite_id": 2000180,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000186,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000192,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000195,
         "sprite_type": "once",
         "sample_count": 1,
         "sample_total_count": 50
@@ -162,55 +42,7 @@
         "sample_total_count": 50
     },
     {
-        "sprite_id": 2000201,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000204,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000210,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
         "sprite_id": 2000216,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000219,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000222,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000233,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000236,
-        "sprite_type": "once",
-        "sample_count": 1,
-        "sample_total_count": 50
-    },
-    {
-        "sprite_id": 2000242,
         "sprite_type": "once",
         "sample_count": 1,
         "sample_total_count": 50

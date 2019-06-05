@@ -130,5 +130,11 @@
         "sprite_type": "other",
         "sample_count": 1,
         "sample_total_count": 500
+    },
+    {
+        "sprite_id": 2000191,
+        "sprite_type": "other",
+        "sample_count": 1,
+        "sample_total_count": 300
     }
 ]
