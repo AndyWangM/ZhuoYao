@@ -25,7 +25,12 @@ namespace WebApplicationAPI.Controllers
             {2, "https://restapi.amap.com/v3/geocode/regeo?key=a5f595eed0b2b5486844cf1f685ddf6e&radius=0"},
             {3, "https://restapi.amap.com/v3/geocode/regeo?key=2b932c27ff7c7efcefd7feba59178f5b&radius=0"},
             {4, "https://restapi.amap.com/v3/geocode/regeo?key=44cc8e9f1184eeac0c1608c2979a56f4&radius=0"},
-            {5, "https://restapi.amap.com/v3/geocode/regeo?key=adc000cb8cca58032eb095d4e91da624&radius=0"}
+            {5, "https://restapi.amap.com/v3/geocode/regeo?key=adc000cb8cca58032eb095d4e91da624&radius=0"},
+            {6, "https://restapi.amap.com/v3/geocode/regeo?key=e38826c62d7665de6cb72153a25d3d93&radius=0"},
+            {7, "https://restapi.amap.com/v3/geocode/regeo?key=62a1dcc018621b39e7431e77d486e408&radius=0"},
+            {8, "https://restapi.amap.com/v3/geocode/regeo?key=68d85c120415fe56b10e3cfc090c70f8&radius=0"},
+            {9, "https://restapi.amap.com/v3/geocode/regeo?key=30bf8d67c8604ba04d012c61ecf09b76&radius=0"},
+            {10, "https://restapi.amap.com/v3/geocode/regeo?key=83a35dd82f6180453e1df28052047b5c&radius=0"}
         };
         private readonly RedisCache _distributedCache;
         private readonly RedisCache _spriteConfigCache;
