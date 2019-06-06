@@ -1,5 +1,6 @@
 import Touches from './utils/Touches.js'
 import ZhuoYao from './utils/zhuoyao.js'
+const mtjwxsdk = require('./utils/mtj-wx-sdk.js');
 
 const updateManager = wx.getUpdateManager()
 
