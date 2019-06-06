@@ -357,6 +357,7 @@ namespace WebApplicationAPI.Controllers
                     if (filterSprites.Any())
                     {
                         sprites = filterSprites.ToList();
+                        GaodeRegeo gaodeRegeo = null;
                         foreach (var sprite in sprites)
                         {
                             if (_spriteFilters.TryGetValue(sprite.SpriteId, out var filter))
@@ -377,19 +378,22 @@ namespace WebApplicationAPI.Controllers
                                         if (expiredTime > 0)
                                         {
                                             var randomRegeoIndex = new Random().Next(1, GAODE_MAP_REGEO.Keys.Count + 1);
-                                            GAODE_MAP_REGEO.TryGetValue(randomRegeoIndex, out var regeoUrl);
-                                            var location = "location=" + sprite.Longitude / 1000000 + "," + sprite.Latitude / 1000000;
-                                            var url = string.Join("&", regeoUrl, location);
-                                            var res = await HttpRequestHelper.HttpGetRequestAsync(url);
-                                            var regeo = JsonConvert.DeserializeObject<GaodeRegeo>(res);
-                                            if (regeo.InfoCode == "10000")
+                                            if (gaodeRegeo == null)
                                             {
-                                                sprite.Province = regeo.Regeocode.AddressComponent.Province;
-                                                sprite.City = regeo.Regeocode.AddressComponent.City as string;
+                                                GAODE_MAP_REGEO.TryGetValue(randomRegeoIndex, out var regeoUrl);
+                                                var location = "location=" + sprite.Longitude / 1000000 + "," + sprite.Latitude / 1000000;
+                                                var url = string.Join("&", regeoUrl, location);
+                                                var res = await HttpRequestHelper.HttpGetRequestAsync(url);
+                                                gaodeRegeo = JsonConvert.DeserializeObject<GaodeRegeo>(res);
+                                            }
+                                            if (gaodeRegeo.InfoCode == "10000")
+                                            {
+                                                sprite.Province = gaodeRegeo.Regeocode.AddressComponent.Province;
+                                                sprite.City = gaodeRegeo.Regeocode.AddressComponent.City as string;
                                             }
                                             else
                                             {
-                                                _logger.Log(LogLevel.Error, "geo_error with code: " + regeo.InfoCode);
+                                                _logger.Log(LogLevel.Error, "geo_error with code: " + gaodeRegeo.InfoCode);
                                             }
                                             byte[] value = null;
                                             var str = JsonConvert.SerializeObject(sprite);
