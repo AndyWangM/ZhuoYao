@@ -1,4 +1,4 @@
-var ZhuoYao, Socket, utils, SpritesAPI;
+var ZhuoYao, Socket, utils, SpritesAPI, HashMap, containsKey;
 var initSocket, sendSocketMessage, isSearching, clearMessageQueue;
 var genRequestId;
 var convertLocation, getLeftTime, getSpriteList, setSpriteConfig, getSpriteByName, getSpriteNameHash, setCoordinate, getLocation, hash, getTempResults, getMarkerInfo,

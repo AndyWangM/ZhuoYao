@@ -21,6 +21,21 @@ updateManager.onUpdateReady(function () {
 App({
   onLaunch: function () {
     var that = this;
+    setInterval(function() {
+      var obj = wx.getStorageSync("clickedObj");
+      var newObj = {};
+      if (obj) {
+        var now = new Date().getTime() / 1000;
+        for(var i in obj) {
+          if (obj[i] > now) {
+            newObj[i] = obj[i];
+          }
+        }
+      }
+      wx.setStorageSync("clickedObj", newObj);
+      that.globalData.clickedObj = newObj
+      // console.log(that.globalData.clickedObj)
+    }, 1000);
   },
   onShow() {
     if (!wx.getStorageSync('isfirst')) {
@@ -40,6 +55,7 @@ App({
   },
   globalData: {
     userInfo: null,
+    clickedObj: wx.getStorageSync("clickedObj") || {},
     zhuoyao: new ZhuoYao.Socket()
   },
   Touches: new Touches()

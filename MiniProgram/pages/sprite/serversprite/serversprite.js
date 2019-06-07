@@ -16,6 +16,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    clickedObj: {},
     result: [],
     inputVal: "",
     currentPage: 0,
@@ -65,7 +66,15 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    var that = this;
+    this.setData({
+      clickedObj: app.globalData.clickedObj || {}
+    })
+    setInterval(function () {
+      that.setData({
+        clickedObj: app.globalData.clickedObj || {}
+      })
+    }, 1000);
   },
   getLatestSprite() {
     this.setData({
@@ -97,6 +106,15 @@ Page({
   },
   tapview(e) {
     var content = e.currentTarget.dataset.content;
+    var hashStr = content.name + content.latitude + content.longitude;
+    var a = app.globalData.clickedObj;
+    a[this.hash(hashStr)] = content.totaltime;
+    // clickedObj.put(this.hash(hashStr), content.totaltime);
+    this.setData({
+      clickedObj: a
+    })
+    wx.setStorageSync("clickedObj", this.data.clickedObj)
+    app.globalData.clickedObj = this.data.clickedObj;
     var splitSign = app.globalData.zhuoyao.utils.getSplitSign();
     var lonfront = app.globalData.zhuoyao.utils.getLonfront();
     var data;
@@ -115,6 +133,29 @@ Page({
         })
       }
     })
+  },
+  hash(input) {
+    var I64BIT_TABLE =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('')
+    var hash = 5381;
+    var i = input.length - 1;
+
+    if (typeof input == 'string') {
+      for (; i > -1; i--)
+        hash += (hash << 5) + input.charCodeAt(i);
+    } else {
+      for (; i > -1; i--)
+        hash += (hash << 5) + input[i];
+    }
+    var value = hash & 0x7FFFFFFF;
+
+    var retValue = '';
+    do {
+      retValue += I64BIT_TABLE[value & 0x3F];
+    }
+    while (value >>= 6);
+
+    return retValue;
   },
   getSprites() {
     var that = this;
@@ -169,10 +210,12 @@ Page({
             var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
             var location = app.globalData.zhuoyao.utils.getLocation(longitude, latitude);
             var resultObj = {
+              "hashid": that.hash(sprite.Name + location[1] + location[0]),
               "name": sprite.Name,
               "latitude": location[1],
               "longitude": location[0],
               "lefttime": app.globalData.zhuoyao.utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
+              "totaltime": aliveSprite.gentime + aliveSprite.lifetime,
               "iconPath": sprite.HeadImage,
               "id": sprite.Id + ":" + latitude + " " + longitude,
               "width": 40,
@@ -247,7 +290,9 @@ Page({
     var currentPage = this.data.currentPage + 1;
     if (this.data.totalPage != -1 && currentPage >= this.data.totalPage - 1) {
       currentPage = this.data.totalPage - 1;
-      this.setData({ hasNextPage: false });
+      this.setData({
+        hasNextPage: false
+      });
     }
     this.setData({
       currentPage: currentPage
@@ -257,7 +302,9 @@ Page({
   frontPage() {
     var currentPage = this.data.currentPage - 1;
     if (this.data.totalPage != -1 && currentPage < this.data.totalPage - 1) {
-      this.setData({ hasNextPage: true });
+      this.setData({
+        hasNextPage: true
+      });
     }
     if (currentPage < 0) {
       currentPage = 0;

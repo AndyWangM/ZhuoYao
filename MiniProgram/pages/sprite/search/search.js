@@ -2,6 +2,7 @@ import ZhuoYao from '../../../utils/zhuoyao.js'
 
 const app = getApp();
 var socket;
+
 const worker = wx.createWorker('workers/request/index.js') // 文件名指定 worker 的入口文件路径，绝对路径
 // worker.postMessage({
 //   msg: 'hello worker'
@@ -21,10 +22,12 @@ worker.onMessage(function (res) {
       var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
       var location = app.globalData.zhuoyao.utils.getLocation(longitude, latitude);
       var resultObj = {
+        "hashid": app.globalData.zhuoyao.utils.hash(sprite.Name + location[1] + location[0]),
         "name": sprite.Name,
         "latitude": location[1],
         "longitude": location[0],
         "lefttime": app.globalData.zhuoyao.utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
+        "totaltime": aliveSprite.gentime + aliveSprite.lifetime,
         "iconPath": sprite.HeadImage,
         "id": sprite.Id + ":" + latitude + " " + longitude,
         "width": 40,
@@ -38,6 +41,7 @@ worker.onMessage(function (res) {
 })
 Page({
   data: {
+    clickedObj: {},
     mapInfo: {},
     spriteName: null,
     result: [],
@@ -49,6 +53,14 @@ Page({
   },
   onLoad() {
     var that = this;
+    this.setData({
+      clickedObj: app.globalData.clickedObj || {}
+    })
+    setInterval(function () {
+      that.setData({
+        clickedObj: app.globalData.clickedObj || {}
+      })
+    }, 1000);
     setInterval(function () {
       if (socket.isSearching()) {
         that.setData({
@@ -95,6 +107,15 @@ Page({
   },
   tapview(e) {
     var content = e.currentTarget.dataset.content;
+    var hashStr = content.name + content.latitude + content.longitude;
+    var a = app.globalData.clickedObj;
+    a[this.hash(hashStr)] = content.totaltime;
+    // clickedObj.put(this.hash(hashStr), content.totaltime);
+    this.setData({
+      clickedObj: a
+    })
+    wx.setStorageSync("clickedObj", this.data.clickedObj)
+    app.globalData.clickedObj = this.data.clickedObj;
     var splitSign = app.globalData.zhuoyao.utils.getSplitSign();
     var lonfront = app.globalData.zhuoyao.utils.getLonfront();
     var data;
@@ -113,6 +134,29 @@ Page({
         })
       }
     })
+  },
+  hash(input) {
+    var I64BIT_TABLE =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-'.split('')
+    var hash = 5381;
+    var i = input.length - 1;
+
+    if (typeof input == 'string') {
+      for (; i > -1; i--)
+        hash += (hash << 5) + input.charCodeAt(i);
+    } else {
+      for (; i > -1; i--)
+        hash += (hash << 5) + input[i];
+    }
+    var value = hash & 0x7FFFFFFF;
+
+    var retValue = '';
+    do {
+      retValue += I64BIT_TABLE[value & 0x3F];
+    }
+    while (value >>= 6);
+
+    return retValue;
   },
   getConfig() {
     this.getSettingFileName()

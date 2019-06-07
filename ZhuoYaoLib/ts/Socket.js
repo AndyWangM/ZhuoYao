@@ -200,10 +200,12 @@ var ZhuoYao;
                                             var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
                                             var location = that.utils.getLocation(longitude, latitude);
                                             var resultObj = {
+                                                "hashid": that.utils.hash(sprite.Name + location[1] + location[0]),
                                                 "name": sprite.Name,
                                                 "latitude": location[1],
                                                 "longitude": location[0],
                                                 "lefttime": that.utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
+                                                "totaltime": aliveSprite.gentime + aliveSprite.lifetime,
                                                 "iconPath": sprite.HeadImage,
                                                 "id": sprite.Id + ":" + latitude + " " + longitude,
                                                 "width": 40,
