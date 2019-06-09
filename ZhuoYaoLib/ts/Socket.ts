@@ -20,10 +20,12 @@ namespace ZhuoYao {
         backendMessageQueue: Object[] = [];
         spriteServerFilter: Object[] = [];
         isBackMessage: boolean;
+        app: any;
 
-        constructor(worker) {
+        constructor(worker, app) {
             this.utils = new Utils();
             this.worker = worker;
+            this.app = app;
             var info = wx["getSystemInfoSync"]();
             if (info["brand"].toLocaleLowerCase().indexOf("iphone") != -1) {
                 this.isIOS = true;
@@ -215,22 +217,31 @@ namespace ZhuoYao {
                                             var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
                                             var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
                                             var location = that.utils.getLocation(longitude, latitude);
+                                            var totaltime = aliveSprite.gentime + aliveSprite.lifetime;
+                                            var hashStr = sprite.Name + aliveSprite.latitude + aliveSprite.longtitude + totaltime;
+                                            var hashid = that.utils.hash(hashStr);
+                                            var iconPath = sprite.HeadImage;
+                                            if (that.app["globalData"]["clickedObj"][hashid]) {
+                                              iconPath = "/images/all.png";
+                                            }
                                             var resultObj = {
-                                                "hashid": that.utils.hash(sprite.Name + location[1] + location[0]),
+                                                "hashid": hashid,
                                                 "name": sprite.Name,
-                                                "latitude": location[1],
-                                                "longitude": location[0],
+                                                "latitude": latitude,
+                                                "longitude": longitude,
+                                                "rlatitude": location[1],
+                                                "rlongitude": location[0],
                                                 "lefttime": that.utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
-                                                "totaltime": aliveSprite.gentime + aliveSprite.lifetime,
-                                                "iconPath": sprite.HeadImage,
-                                                "id": sprite.Id + ":" + latitude + " " + longitude,
+                                                "totaltime": totaltime,
+                                                "iconPath": iconPath,
+                                                "id": hashid + ":" + totaltime + ":" + latitude + " " + longitude,
                                                 "width": 40,
-                                                "height": 40
+                                                "height": 40,
+                                                "callout": {
+                                                  "content": sprite.Name
+                                                }
                                             };
-                                            // console.log(resultObj);
-                                            var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
-                                            // var hashValue = that.utils.hash(hashStr);
-                                            that.utils.getTempResults().put(hashStr, resultObj);
+                                            that.utils.getTempResults().put(hashid, resultObj);
                                         }
                                     }
                                 }

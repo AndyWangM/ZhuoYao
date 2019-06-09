@@ -78,6 +78,9 @@ var ZhuoYao;
                 this.mapSize++;
                 this.entry[key] = value;
             }
+            else {
+                this.entry[key] = value;
+            }
         };
         // Map取get方法
         HashMap.prototype.get = function (key) {

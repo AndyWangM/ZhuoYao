@@ -141,9 +141,16 @@ var ZhuoYao;
          */
         Utils.prototype.getMarkerInfo = function (e) {
             var kv1 = e.split(":");
-            var id = kv1[0];
-            var location = kv1[1];
-            return location.split(" ");
+            var hashid = kv1[0];
+            var time = kv1[1];
+            var location = kv1[2].split(" ");
+            var obj = {
+                "hashid": hashid,
+                "totaltime": time,
+                "latitude": location[0],
+                "longitude": location[1]
+            };
+            return obj;
         };
         /**
          * 设置经纬度坐标系

@@ -27,7 +27,7 @@
           <view class="time">{{item.lefttime}}</view>
         </view>
         <!-- <view class="info-content">{{item.info}}</view> -->
-        <view class="info-content">{{item.latitude + ", " + item.longitude}}</view>
+        <view class="info-content">{{item.rlatitude + ", " + item.rlongitude}}</view>
       </view>
     </view>
   </view>

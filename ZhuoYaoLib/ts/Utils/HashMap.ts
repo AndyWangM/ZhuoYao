@@ -80,6 +80,8 @@ namespace ZhuoYao {
             if (!this.containsKey(key)) {
                 this.mapSize++;
                 this.entry[key] = value;
+            } else {
+                this.entry[key] = value;
             }
         }
 

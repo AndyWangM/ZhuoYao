@@ -106,11 +106,18 @@ Page({
   },
   tapview(e) {
     var content = e.currentTarget.dataset.content;
-    var hashStr = content.name + content.latitude + content.longitude;
+    var hashid = content.hashid;
+    var temp = this.data.result;
+    for (var res of temp) {
+      if (res.hashid == hashid) {
+        res.iconPath = "/images/all.png";
+      }
+    }
     var a = app.globalData.clickedObj;
-    a[this.hash(hashStr)] = content.totaltime;
+    a[hashid] = content.totaltime;
     // clickedObj.put(this.hash(hashStr), content.totaltime);
     this.setData({
+      result: temp,
       clickedObj: a
     })
     wx.setStorageSync("clickedObj", this.data.clickedObj)
@@ -119,9 +126,9 @@ Page({
     var lonfront = app.globalData.zhuoyao.utils.getLonfront();
     var data;
     if (lonfront) {
-      data = content.longitude + splitSign + content.latitude
+      data = content.rlongitude + splitSign + content.rlatitude
     } else {
-      data = content.latitude + splitSign + content.longitude
+      data = content.rlatitude + splitSign + content.rlongitude
     }
     wx.setClipboardData({
       data: data,
@@ -209,18 +216,31 @@ Page({
             var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
             var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
             var location = app.globalData.zhuoyao.utils.getLocation(longitude, latitude);
+            var totaltime = aliveSprite.gentime + aliveSprite.lifetime;
+            var hashStr = sprite.Name + aliveSprite.latitude + aliveSprite.longtitude + totaltime;
+            var hashid = that.hash(hashStr); 
+            var iconPath = sprite.HeadImage;
+            if (app.globalData.clickedObj[hashid]) {
+              iconPath = "/images/all.png";
+            }
             var resultObj = {
-              "hashid": that.hash(sprite.Name + location[1] + location[0]),
+              "hashid": hashid,
               "name": sprite.Name,
-              "latitude": location[1],
-              "longitude": location[0],
+              "latitude": latitude,
+              "longitude": longitude,
+              "rlatitude": location[1],
+              "rlongitude": location[0],
               "lefttime": app.globalData.zhuoyao.utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
-              "totaltime": aliveSprite.gentime + aliveSprite.lifetime,
-              "iconPath": sprite.HeadImage,
-              "id": sprite.Id + ":" + latitude + " " + longitude,
+              "totaltime": totaltime,
+              "iconPath": iconPath,
+              "id": hashid + ":" + totaltime + ":" + latitude + " " + longitude,
               "width": 40,
-              "height": 40
+              "height": 40,
+              "callout": {
+                "content": sprite.Name
+              }
             };
+
             result.push(resultObj);
           }
           that.setData({
@@ -247,8 +267,24 @@ Page({
   },
   markertap(e) {
     var markerId = e.markerId;
-    var loc = app.globalData.zhuoyao.utils.getMarkerInfo(markerId);
-    var location = app.globalData.zhuoyao.utils.getLocation(loc[1], loc[0]);
+    var obj = app.globalData.zhuoyao.utils.getMarkerInfo(markerId);
+    var hashid = obj.hashid;
+    var temp = this.data.result;
+    for (var res of temp) {
+      if (res.hashid == hashid) {
+        res.iconPath = "/images/all.png";
+      }
+    }
+    var a = app.globalData.clickedObj;
+    a[hashid] = obj.totaltime;
+    // clickedObj.put(this.hash(hashStr), content.totaltime);
+    this.setData({
+      result: temp,
+      clickedObj: a
+    })
+    wx.setStorageSync("clickedObj", this.data.clickedObj)
+    app.globalData.clickedObj = this.data.clickedObj;
+    var location = app.globalData.zhuoyao.utils.getLocation(obj.longitude, obj.latitude);
     var splitSign = app.globalData.zhuoyao.utils.getSplitSign();
     var lonfront = app.globalData.zhuoyao.utils.getLonfront();
     var data;

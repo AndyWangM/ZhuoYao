@@ -21,21 +21,31 @@ worker.onMessage(function (res) {
       var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
       var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
       var location = app.globalData.zhuoyao.utils.getLocation(longitude, latitude);
+      var totaltime = aliveSprite.gentime + aliveSprite.lifetime;
+      var hashStr = sprite.Name + aliveSprite.latitude + aliveSprite.longtitude + totaltime;
+      var hashid = app.globalData.zhuoyao.utils.hash(hashStr);
+      var iconPath = sprite.HeadImage;
+      if (app.globalData.clickedObj[hashid]) {
+        iconPath = "/images/all.png";
+      }
       var resultObj = {
-        "hashid": app.globalData.zhuoyao.utils.hash(sprite.Name + location[1] + location[0]),
+        "hashid": hashid,
         "name": sprite.Name,
-        "latitude": location[1],
-        "longitude": location[0],
+        "latitude": latitude,
+        "longitude": longitude,
+        "rlatitude": location[1],
+        "rlongitude": location[0],
         "lefttime": app.globalData.zhuoyao.utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
-        "totaltime": aliveSprite.gentime + aliveSprite.lifetime,
-        "iconPath": sprite.HeadImage,
-        "id": sprite.Id + ":" + latitude + " " + longitude,
+        "totaltime": totaltime,
+        "iconPath": iconPath,
+        "id": hashid + ":" + totaltime + ":" + latitude + " " + longitude,
         "width": 40,
-        "height": 40
+        "height": 40,
+        "callout": {
+          "content": sprite.Name
+        }
       };
-      var hashStr = "" + aliveSprite.sprite_id + aliveSprite.latitude + aliveSprite.longtitude + aliveSprite.gentime + aliveSprite.lifetime;
-      var hashValue = app.globalData.zhuoyao.utils.hash(hashStr);
-      app.globalData.zhuoyao.utils.getTempResults().put(hashStr, resultObj);
+      app.globalData.zhuoyao.utils.getTempResults().put(hashid, resultObj);
     }
   }
 })
@@ -52,6 +62,48 @@ Page({
     allPoints: []
   },
   onLoad() {
+    wx.getSetting({
+      success(res) {
+        if (!res.authSetting['scope.userLocation']) {
+          wx.authorize({
+            scope: 'scope.userLocation',
+            success() {
+              wx.getLocation({
+                type: 'gcj02',
+                success(res) {
+                  var mapInfo = {
+                    address: res.address,
+                    latitude: res.latitude,
+                    longitude: res.longitude
+                  }
+                  that.setData({
+                    mapInfo: mapInfo
+                  });
+                  that.getPoints()
+                }
+              })
+            }
+          })
+        } else {
+
+          wx.getLocation({
+            type: 'gcj02',
+            success(res) {
+              var mapInfo = {
+                address: res.address,
+                latitude: res.latitude,
+                longitude: res.longitude
+              }
+              that.setData({
+                mapInfo: mapInfo
+              });
+              that.getPoints()
+            }
+          })
+        }
+      }
+    })
+
     var that = this;
     this.setData({
       clickedObj: app.globalData.clickedObj || {}
@@ -75,7 +127,7 @@ Page({
         result: app.globalData.zhuoyao.utils.getTempResults().values() || []
       })
     }, 1000);
-    socket = new ZhuoYao.Socket(worker);
+    socket = new ZhuoYao.Socket(worker, app);
     app.globalData.zhuoyao.utils = socket.utils;
   },
   onShow() {
@@ -84,8 +136,26 @@ Page({
   },
   markertap(e) {
     var markerId = e.markerId;
-    var loc = app.globalData.zhuoyao.utils.getMarkerInfo(markerId);
-    var location = app.globalData.zhuoyao.utils.getLocation(loc[1], loc[0]);
+    var obj = app.globalData.zhuoyao.utils.getMarkerInfo(markerId);
+    var hashid = obj.hashid;
+    var temp = this.data.result;
+    for (var res of temp) {
+      if (res.hashid == hashid) {
+        res.iconPath = "/images/all.png";
+        app.globalData.zhuoyao.utils.getTempResults().remove(hashid)
+        app.globalData.zhuoyao.utils.getTempResults().put(hashid, res);
+      }
+    }
+    var a = app.globalData.clickedObj;
+    a[hashid] = obj.totaltime;
+    // clickedObj.put(this.hash(hashStr), content.totaltime);
+    this.setData({
+      result: app.globalData.zhuoyao.utils.getTempResults().values(),
+      clickedObj: a
+    })
+    wx.setStorageSync("clickedObj", this.data.clickedObj)
+    app.globalData.clickedObj = this.data.clickedObj;
+    var location = app.globalData.zhuoyao.utils.getLocation(obj.longitude, obj.latitude);
     var splitSign = app.globalData.zhuoyao.utils.getSplitSign();
     var lonfront = app.globalData.zhuoyao.utils.getLonfront();
     var data;
@@ -107,11 +177,19 @@ Page({
   },
   tapview(e) {
     var content = e.currentTarget.dataset.content;
-    var hashStr = content.name + content.latitude + content.longitude;
+    var hashid = content.hashid;
+    var temp = this.data.result;
+    for (var res of temp) {
+      if (res.hashid == hashid) {
+        res.iconPath = "/images/all.png";
+        app.globalData.zhuoyao.utils.getTempResults().put(hashid, res);
+      }
+    }
     var a = app.globalData.clickedObj;
-    a[this.hash(hashStr)] = content.totaltime;
+    a[hashid] = content.totaltime;
     // clickedObj.put(this.hash(hashStr), content.totaltime);
     this.setData({
+      result: app.globalData.zhuoyao.utils.getTempResults().values(),
       clickedObj: a
     })
     wx.setStorageSync("clickedObj", this.data.clickedObj)
@@ -120,9 +198,9 @@ Page({
     var lonfront = app.globalData.zhuoyao.utils.getLonfront();
     var data;
     if (lonfront) {
-      data = content.longitude + splitSign + content.latitude
+      data = content.rlongitude + splitSign + content.rlatitude
     } else {
-      data = content.latitude + splitSign + content.longitude
+      data = content.rlatitude + splitSign + content.rlongitude
     }
     wx.setClipboardData({
       data: data,
@@ -184,22 +262,47 @@ Page({
   // },
   selectLocation() {
     var that = this;
-    this.confim('scope.userLocation',
-      wx.chooseLocation({
-        success: function (obj) {
-          console.log(obj)
-          var mapInfo = {
-            address: obj.address,
-            latitude: obj.latitude,
-            longitude: obj.longitude
-          }
-          that.setData({
-            mapInfo: mapInfo
-          });
-          that.getPoints()
+    wx.getSetting({
+      success(res) {
+        if (!res.authSetting['scope.userLocation']) {
+          wx.authorize({
+            scope: 'scope.userLocation',
+            success() {
+              // 用户已经同意小程序使用录音功能，后续调用 wx.startRecord 接口不会弹窗询问
+              wx.chooseLocation({
+                success: function (obj) {
+                  console.log(obj)
+                  var mapInfo = {
+                    address: obj.address,
+                    latitude: obj.latitude,
+                    longitude: obj.longitude
+                  }
+                  that.setData({
+                    mapInfo: mapInfo
+                  });
+                  that.getPoints()
+                }
+              })
+            }
+          })
+        } else {
+          wx.chooseLocation({
+            success: function (obj) {
+              console.log(obj)
+              var mapInfo = {
+                address: obj.address,
+                latitude: obj.latitude,
+                longitude: obj.longitude
+              }
+              that.setData({
+                mapInfo: mapInfo
+              });
+              that.getPoints()
+            }
+          })
         }
-      })
-    );
+      }
+    })
 
   },
   confim(str, callback) {
