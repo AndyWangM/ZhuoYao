@@ -1,27 +1,14 @@
 {
-	"description": "项目配置文件",
+	"projectid": "1109634337_ZhuoYao",
 	"packOptions": {
 		"ignore": []
 	},
-	"setting": {
-		"urlCheck": true,
-		"es6": true,
-		"postcss": true,
-		"minified": true,
-		"newFeature": true,
-		"autoAudits": false,
-		"checkInvalidKey": true
-	},
 	"compileType": "miniprogram",
-	"libVersion": "2.5.2",
-	"appid": "wxd8e02ffff5381d10",
+	"qqappid": "1109634337",
 	"projectname": "ZhuoYao",
-	"debugOptions": {
-		"hidedInDevtools": []
+	"setting": {
+		"newFeature": true
 	},
-	"isGameTourist": false,
-	"simulatorType": "wechat",
-	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,

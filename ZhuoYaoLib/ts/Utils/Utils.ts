@@ -157,10 +157,11 @@ namespace ZhuoYao {
          */
         private getHeadImagePath(sprite: Sprite) {
             if (sprite) {
-                return this.petUrl + sprite.SmallImgPath;
-            } else {
-                return "/image/default-head.png";
-            }
+                if (sprite.SmallImgPath) {
+                    return this.petUrl + sprite.SmallImgPath;
+                }
+            } 
+            return "/images/default-head.png";
         }
 
         /**

@@ -94,7 +94,7 @@ var ZhuoYao;
                 if (!that.isOpen) {
                     that.connectSocket();
                 }
-            }, 500);
+            }, 5000);
         };
         Socket.prototype.initMessageQueueChecker = function () {
             var that = this;
@@ -176,7 +176,7 @@ var ZhuoYao;
                         that.messageQueue.shift();
                     }
                     else {
-                        if (obj["packageNO"] && obj["packageNO"] == 1) {
+                        if ((obj["packageNO"] && obj["packageNO"] == 1) || (!obj["sprite_list"] || obj["sprite_list"].length == 0)) {
                             that.messageQueue.shift();
                         }
                         // console.log(obj.sprite_list);
@@ -332,6 +332,36 @@ var ZhuoYao;
                 console.log("存在新版，开始下载");
                 this.downloadFile(e);
             }
+            var list = this.utils.storage.getItem("SpriteList");
+            var isUpdated;
+            if (list) {
+                if (!this.utils.getSpriteNameHash().get("复读鸡")) {
+                    list.push({
+                        "Id": 2004041,
+                        "Name": "复读鸡",
+                        "FiveEle": [
+                            "无"
+                        ],
+                        "Level": 1
+                    });
+                    isUpdated = true;
+                }
+                if (!this.utils.getSpriteNameHash().get("真香")) {
+                    list.push({
+                        "Id": 2004043,
+                        "Name": "真香",
+                        "FiveEle": [
+                            "无"
+                        ],
+                        "Level": 1
+                    });
+                    isUpdated = true;
+                }
+                if (isUpdated) {
+                    this.utils.setSpriteConfig(list);
+                    this.utils.setSpriteList(list);
+                }
+            }
         };
         Socket.prototype.setFileName = function (filename) {
             this.utils.storage.setItem("filename", filename);
@@ -352,6 +382,36 @@ var ZhuoYao;
                         // e.globalData.iconList = l.Switch,
                         that.utils.setSpriteConfig(spriteList);
                         that.utils.setSpriteList(spriteList);
+                        var isUpdated;
+                        var list = that.utils.storage.getItem("SpriteList");
+                        if (list) {
+                            if (!that.utils.getSpriteNameHash().get("复读鸡")) {
+                                list.push({
+                                    "Id": 2004041,
+                                    "Name": "复读鸡",
+                                    "FiveEle": [
+                                        "无"
+                                    ],
+                                    "Level": 1
+                                });
+                                isUpdated = true;
+                            }
+                            if (!that.utils.getSpriteNameHash().get("真香")) {
+                                list.push({
+                                    "Id": 2004043,
+                                    "Name": "真香",
+                                    "FiveEle": [
+                                        "无"
+                                    ],
+                                    "Level": 1
+                                });
+                                isUpdated = true;
+                            }
+                            if (isUpdated) {
+                                that.utils.setSpriteConfig(list);
+                                that.utils.setSpriteList(list);
+                            }
+                        }
                         that.setFileName(i);
                         // t.changeSetting("iconList", e.globalData.iconList)
                         // a.saveVersion(i)

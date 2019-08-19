@@ -86,7 +86,7 @@ Page({
     var spriteType = this.data.spriteType[this.data.spriteTypeIndex].spriteType;
     var getUrl;
     if (this.data.inputVal && !spriteId) {
-      wx.showModal({
+      qq.showModal({
         title: '提示',
         content: '没有该妖灵，请重新输入',
       })
@@ -120,7 +120,7 @@ Page({
       result: temp,
       clickedObj: a
     })
-    wx.setStorageSync("clickedObj", this.data.clickedObj)
+    qq.setStorageSync("clickedObj", this.data.clickedObj)
     app.globalData.clickedObj = this.data.clickedObj;
     var splitSign = app.globalData.zhuoyao.utils.getSplitSign();
     var lonfront = app.globalData.zhuoyao.utils.getLonfront();
@@ -130,10 +130,10 @@ Page({
     } else {
       data = content.rlatitude + splitSign + content.rlongitude
     }
-    wx.setClipboardData({
+    qq.setClipboardData({
       data: data,
       success(res) {
-        wx.getClipboardData({
+        qq.getClipboardData({
           success(res) {
             console.log(res.data) // data
           }
@@ -167,7 +167,7 @@ Page({
   getSprites() {
     var that = this;
     var getUrl = that.data.getUrl;
-    wx.showLoading({
+    qq.showLoading({
       title: '请稍后'
     })
     var data = {
@@ -180,17 +180,17 @@ Page({
     if (that.data.cityInputVal) {
       data.city = that.data.cityInputVal;
     }
-    wx["request"]({
+    qq["request"]({
       url: getUrl,
       data: data,
       method: "GET",
       success(res) {
-        wx.hideLoading();
+        qq.hideLoading();
         var request = res.data;
         var data;
         if (request.error_code != undefined) {
           if (request.error_code != 0) {
-            wx.showModal({
+            qq.showModal({
               title: "提示",
               content: request.data.info
             })
@@ -250,8 +250,8 @@ Page({
         }
       },
       failed(res) {
-        wx.hideLoading();
-        wx.showModal({
+        qq.hideLoading();
+        qq.showModal({
           title: "提示",
           content: "请求超时，请稍后再试"
         })
@@ -282,7 +282,7 @@ Page({
       result: temp,
       clickedObj: a
     })
-    wx.setStorageSync("clickedObj", this.data.clickedObj)
+    qq.setStorageSync("clickedObj", this.data.clickedObj)
     app.globalData.clickedObj = this.data.clickedObj;
     var location = app.globalData.zhuoyao.utils.getLocation(obj.longitude, obj.latitude);
     var splitSign = app.globalData.zhuoyao.utils.getSplitSign();
@@ -293,10 +293,10 @@ Page({
     } else {
       data = location[1] + splitSign + location[0]
     }
-    wx.setClipboardData({
+    qq.setClipboardData({
       data: data,
       success(res) {
-        wx.getClipboardData({
+        qq.getClipboardData({
           success(res) {
             console.log(res.data) // data
           }

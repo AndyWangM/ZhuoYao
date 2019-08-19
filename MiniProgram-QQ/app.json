@@ -1,0 +1,43 @@
+{
+  "pages": [
+    "pages/sprite/search/search",
+    "pages/sprite/filter/filter",
+    "pages/sprite/serversprite/serversprite",
+    "pages/user/user"
+  ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "workers": "workers",
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "捉妖工具",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color":"#000",
+    "selectedColor":"#25CB00",
+    "backgroundColor":"#FFF",
+    "list": [
+      {
+        "pagePath": "pages/sprite/search/search",
+        "text": "妖灵搜索"
+      },
+      {
+        "pagePath": "pages/sprite/filter/filter",
+        "text": "妖灵过滤"
+      },
+      {
+        "pagePath": "pages/sprite/serversprite/serversprite",
+        "text": "已知妖灵"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "全局设置"
+      }
+    ]
+  }
+}
