@@ -1,3 +1,14 @@
+<wxs module="m1">
+var getHeadImagePath = function(path) {
+  if (path) {
+    return path;
+  }
+  return "/images/default-head.png";
+}
+
+module.exports.getHeadImagePath = getHeadImagePath;
+</wxs>
+
 <view scroll-y style="height:{{height}}px;" class="item-wrapper">
   <view class="search">
     <view class="colorGray">
@@ -22,7 +33,8 @@
 <scroll-view scroll-y class="item-wrapper">
   <view class="item-list" wx:for="{{result}}" wx:for-item="item" wx:for-index="index" wx:key="that">
     <view class="item-info" style="{{clickedObj[item.hashid]?'background:#BBFFFF':''}}" bindtap="tapview" data-content="{{item}}">
-      <view class="info-wrapper">
+        <image class="info-img" src="{{m1.getHeadImagePath(item.iconPath)}}" ></image> 
+        <view class="info-wrapper">
         <view class="info-desc">
           <view class="name">{{item.name}}</view>
           <view class="time">{{item.lefttime}}</view>

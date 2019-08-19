@@ -62,21 +62,31 @@ var ZhuoYao;
         platform: 0
       }; this.sendMessage(a)
     }; b.prototype.ga = function (a) {
-      console.log("fileName", a); this.getFileName() != a && (console.log("\u5b58\u5728\u65b0\u7248\uff0c\u5f00\u59cb\u4e0b\u8f7d"), this.I(a)); a = this.utils.a.getItem("SpriteList"); var c; a && (this.utils.getSpriteNameHash().get("\u590d\u8bfb\u9e21") || (a.push({ Id: 2004041, Name: "\u590d\u8bfb\u9e21", FiveEle: ["\u65e0"], Level: 1 }), c = !0), this.utils.getSpriteNameHash().get("\u771f\u9999") || (a.push({ Id: 2004043, Name: "\u771f\u9999", FiveEle: ["\u65e0"], Level: 1 }), c = !0),
-        c && (this.utils.setSpriteConfig(a), this.utils.setSpriteList(a)))
+      console.log("fileName", a); this.getFileName() != a && (console.log("\u5b58\u5728\u65b0\u7248\uff0c\u5f00\u59cb\u4e0b\u8f7d"), this.I(a)); a = this.utils.a.getItem("SpriteList"); var c; a && (this.utils.getSpriteNameHash().get("\u67e0\u6aac\u7cbe") || (a.push({ Id: 2004040, Name: "\u67e0\u6aac\u7cbe", FiveEle: ["\u65e0"], PrefabName: "4040_NingMeng", ImgName: "4040", BigImgPath: "512_head/4040_NingMeng_big.png", SmallImgPath: "128_head/4040_NingMeng_head.png", Level: 1 }),
+        c = !0), this.utils.getSpriteNameHash().get("\u590d\u8bfb\u9e21") || (a.push({ Id: 2004041, Name: "\u590d\u8bfb\u9e21", FiveEle: ["\u65e0"], PrefabName: "4041_FuDuJi", ImgName: "4041", BigImgPath: "512_body/4041_FuDuJi.png", SmallImgPath: "128_head/4041_FuDuJi_head.png", Level: 1 }), c = !0), this.utils.getSpriteNameHash().get("\u9e3d\u4e86") || (a.push({
+          Id: 2004042, Name: "\u9e3d\u4e86", FiveEle: ["\u65e0"], PrefabName: "4042_GeZi_head", ImgName: "4042", BigImgPath: "512_body/4042_GeZi_big.png", SmallImgPath: "128_head/4042_GeZi_head.png",
+          Level: 1
+        }), c = !0), this.utils.getSpriteNameHash().get("\u771f\u9999") || (a.push({ Id: 2004043, Name: "\u771f\u9999", FiveEle: ["\u65e0"], PrefabName: "4043_ZhenXiang", ImgName: "4043", BigImgPath: "512_body/4043_ZhenXiang.png", SmallImgPath: "128_head/4043_ZhenXiang_head.png", Level: 1 }), c = !0), this.utils.getSpriteNameHash().get("\u5168\u5458\u6076\u4eba") || (a.push({
+          Id: 2004044, Name: "\u5168\u5458\u6076\u4eba", FiveEle: ["\u7a7a"], PrefabName: "4044_QuanYuanERen_head", ImgName: "4044", BigImgPath: "512_body/4044_QuanYuanERen_big.png",
+          SmallImgPath: "128_head/4044_QuanYuanERen_head.png", Level: 1
+        }), c = !0), c && (this.utils.setSpriteConfig(a), this.utils.setSpriteList(a)))
     }; b.prototype.pa = function (a) { this.utils.a.setItem("filename", a) }; b.prototype.getFileName = function () { return this.utils.a.getItem("filename") }; b.prototype.I = function (a) {
       var c = this; wx.downloadFile({
         url: "https://hy.gwgo.qq.com/sync/pet/config/" + a, success: function (d) {
           if (200 === d.statusCode) {
-            console.log("\u4e0b\u8f7d\u6210\u529f" + a); d = wx.getFileSystemManager().readFileSync(d.tempFilePath, "utf8"); d = JSON.parse(d).Data; c.utils.setSpriteConfig(d);
-            c.utils.setSpriteList(d); var b; if (d = c.utils.a.getItem("SpriteList")) c.utils.getSpriteNameHash().get("\u590d\u8bfb\u9e21") || (d.push({ Id: 2004041, Name: "\u590d\u8bfb\u9e21", FiveEle: ["\u65e0"], Level: 1 }), b = !0), c.utils.getSpriteNameHash().get("\u771f\u9999") || (d.push({ Id: 2004043, Name: "\u771f\u9999", FiveEle: ["\u65e0"], Level: 1 }), b = !0), b && (c.utils.setSpriteConfig(d), c.utils.setSpriteList(d)); c.pa(a)
+            console.log("\u4e0b\u8f7d\u6210\u529f" + a); d = wx.getFileSystemManager().readFileSync(d.tempFilePath,
+              "utf8"); d = JSON.parse(d).Data; c.utils.setSpriteConfig(d); c.utils.setSpriteList(d); var b; if (d = c.utils.a.getItem("SpriteList")) this.utils.getSpriteNameHash().get("\u67e0\u6aac\u7cbe") || (d.push({ Id: 2004040, Name: "\u67e0\u6aac\u7cbe", FiveEle: ["\u65e0"], PrefabName: "4040_NingMeng", ImgName: "4040", BigImgPath: "512_head/4040_NingMeng_big.png", SmallImgPath: "128_head/4040_NingMeng_head.png", Level: 1 }), b = !0), c.utils.getSpriteNameHash().get("\u590d\u8bfb\u9e21") || (d.push({
+                Id: 2004041, Name: "\u590d\u8bfb\u9e21", FiveEle: ["\u65e0"],
+                PrefabName: "4041_FuDuJi", ImgName: "4041", BigImgPath: "512_body/4041_FuDuJi.png", SmallImgPath: "128_head/4041_FuDuJi_head.png", Level: 1
+              }), b = !0), this.utils.getSpriteNameHash().get("\u9e3d\u4e86") || (d.push({ Id: 2004042, Name: "\u9e3d\u4e86", FiveEle: ["\u65e0"], PrefabName: "4042_GeZi_head", ImgName: "4042", BigImgPath: "512_body/4042_GeZi_big.png", SmallImgPath: "128_head/4042_GeZi_head.png", Level: 1 }), b = !0), c.utils.getSpriteNameHash().get("\u771f\u9999") || (d.push({
+                Id: 2004043, Name: "\u771f\u9999", FiveEle: ["\u65e0"], PrefabName: "4043_ZhenXiang",
+                ImgName: "4043", BigImgPath: "512_body/4043_ZhenXiang.png", SmallImgPath: "128_head/4043_ZhenXiang_head.png", Level: 1
+              }), b = !0), b && (c.utils.setSpriteConfig(d), c.utils.setSpriteList(d)), this.utils.getSpriteNameHash().get("\u5168\u5458\u6076\u4eba") || d.push({ Id: 2004044, Name: "\u5168\u5458\u6076\u4eba", FiveEle: ["\u7a7a"], PrefabName: "4044_QuanYuanERen_head", ImgName: "4044", BigImgPath: "512_body/4044_QuanYuanERen_big.png", SmallImgPath: "128_head/4044_QuanYuanERen_head.png", Level: 1 }); c.pa(a)
           } else c.H(a)
         }, fail: function () { c.H(a) }
       })
-    }; b.prototype.H = function (a) {
-      var c = this; console.log(a); setTimeout(function () { c.I(a) },
-        3E3)
-    }; return b
+    };
+    b.prototype.H = function (a) { var c = this; console.log(a); setTimeout(function () { c.I(a) }, 3E3) }; return b
   }(); e.Socket = f
 })(ZhuoYao || (ZhuoYao = {})); (function (e) {
   var f = function () {
@@ -86,7 +96,7 @@ var ZhuoYao;
           (a[d + 2] & 63) << 18, b |= (a[d + 3] & 63) << 12, b |= (a[d + 4] & 63) << 6, b |= a[d + 5] & 63, c += String.fromCharCode(b), d += 6) : 248 === (b & 248) ? (b = (a[d] & 7) << 24, b |= (a[d + 1] & 63) << 18, b |= (a[d + 2] & 63) << 12, b |= (a[d + 3] & 63) << 6, b |= a[d + 4] & 63, c += String.fromCharCode(b), d += 5) : 240 === (b & 240) ? (b = (a[d] & 15) << 18, b |= (a[d + 1] & 63) << 12, b |= (a[d + 2] & 63) << 6, b |= a[d + 3] & 63, c += String.fromCharCode(b), d += 4) : 224 === (b & 224) ? (b = (a[d] & 31) << 12, b |= (a[d + 1] & 63) << 6, b |= a[d + 2] & 63, c += String.fromCharCode(b), d += 3) : 192 === (b & 192) ? (b = (a[d] & 63) << 6, b |= a[d + 1] & 63, c += String.fromCharCode(b),
             d += 2) : (c += String.fromCharCode(a[d]), d += 1)
       } return c
-    }; b.prototype.sa = function (a) { for (var c = new ArrayBuffer(2 * a.length), c = new Uint16Array(c), b = 0, e = a.length; b < e; b++)c[b] = a.charCodeAt(b); return c }; b.prototype.w = function (a) { a = this.sa(JSON.stringify(a)); var b = a.length, d = new ArrayBuffer(4); (new DataView(d)).setUint32(0, b); b = new Uint8Array(4 + b); b.set(new Uint8Array(d), 0); b.set(a, 4); return b.buffer }; return b
+    }; b.prototype.sa = function (a) { for (var c = new ArrayBuffer(2 * a.length), c = new Uint16Array(c), b = 0, e = a.length; b < e; b++)c[b] = a.charCodeAt(b); return c }; b.prototype.w = function (a) { a = this.sa(JSON.stringify(a)); var c = a.length, b = new ArrayBuffer(4); (new DataView(b)).setUint32(0, c); c = new Uint8Array(4 + c); c.set(new Uint8Array(b), 0); c.set(a, 4); return c.buffer }; return b
   }(); e.U = f
 })(ZhuoYao || (ZhuoYao = {})); (function (e) { e.ya = function () { return function () { } }() })(ZhuoYao || (ZhuoYao = {})); (function (e) {
   var f = function () {

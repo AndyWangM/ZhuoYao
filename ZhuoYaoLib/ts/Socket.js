@@ -335,6 +335,21 @@ var ZhuoYao;
             var list = this.utils.storage.getItem("SpriteList");
             var isUpdated;
             if (list) {
+                if (!this.utils.getSpriteNameHash().get("柠檬精")) {
+                    list.push({
+                        "Id": 2004040,
+                        "Name": "柠檬精",
+                        "FiveEle": [
+                            "无"
+                        ],
+                        "PrefabName": "4040_NingMeng",
+                        "ImgName": "4040",
+                        "BigImgPath": "512_head/4040_NingMeng_big.png",
+                        "SmallImgPath": "128_head/4040_NingMeng_head.png",
+                        "Level": 1
+                    });
+                    isUpdated = true;
+                }
                 if (!this.utils.getSpriteNameHash().get("复读鸡")) {
                     list.push({
                         "Id": 2004041,
@@ -342,6 +357,25 @@ var ZhuoYao;
                         "FiveEle": [
                             "无"
                         ],
+                        "PrefabName": "4041_FuDuJi",
+                        "ImgName": "4041",
+                        "BigImgPath": "512_body/4041_FuDuJi.png",
+                        "SmallImgPath": "128_head/4041_FuDuJi_head.png",
+                        "Level": 1
+                    });
+                    isUpdated = true;
+                }
+                if (!this.utils.getSpriteNameHash().get("鸽了")) {
+                    list.push({
+                        "Id": 2004042,
+                        "Name": "鸽了",
+                        "FiveEle": [
+                            "无"
+                        ],
+                        "PrefabName": "4042_GeZi_head",
+                        "ImgName": "4042",
+                        "BigImgPath": "512_body/4042_GeZi_big.png",
+                        "SmallImgPath": "128_head/4042_GeZi_head.png",
                         "Level": 1
                     });
                     isUpdated = true;
@@ -353,6 +387,25 @@ var ZhuoYao;
                         "FiveEle": [
                             "无"
                         ],
+                        "PrefabName": "4043_ZhenXiang",
+                        "ImgName": "4043",
+                        "BigImgPath": "512_body/4043_ZhenXiang.png",
+                        "SmallImgPath": "128_head/4043_ZhenXiang_head.png",
+                        "Level": 1
+                    });
+                    isUpdated = true;
+                }
+                if (!this.utils.getSpriteNameHash().get("全员恶人")) {
+                    list.push({
+                        "Id": 2004044,
+                        "Name": "全员恶人",
+                        "FiveEle": [
+                            "空"
+                        ],
+                        "PrefabName": "4044_QuanYuanERen_head",
+                        "ImgName": "4044",
+                        "BigImgPath": "512_body/4044_QuanYuanERen_big.png",
+                        "SmallImgPath": "128_head/4044_QuanYuanERen_head.png",
                         "Level": 1
                     });
                     isUpdated = true;
@@ -385,6 +438,21 @@ var ZhuoYao;
                         var isUpdated;
                         var list = that.utils.storage.getItem("SpriteList");
                         if (list) {
+                            if (!this.utils.getSpriteNameHash().get("柠檬精")) {
+                                list.push({
+                                    "Id": 2004040,
+                                    "Name": "柠檬精",
+                                    "FiveEle": [
+                                        "无"
+                                    ],
+                                    "PrefabName": "4040_NingMeng",
+                                    "ImgName": "4040",
+                                    "BigImgPath": "512_head/4040_NingMeng_big.png",
+                                    "SmallImgPath": "128_head/4040_NingMeng_head.png",
+                                    "Level": 1
+                                });
+                                isUpdated = true;
+                            }
                             if (!that.utils.getSpriteNameHash().get("复读鸡")) {
                                 list.push({
                                     "Id": 2004041,
@@ -392,6 +460,25 @@ var ZhuoYao;
                                     "FiveEle": [
                                         "无"
                                     ],
+                                    "PrefabName": "4041_FuDuJi",
+                                    "ImgName": "4041",
+                                    "BigImgPath": "512_body/4041_FuDuJi.png",
+                                    "SmallImgPath": "128_head/4041_FuDuJi_head.png",
+                                    "Level": 1
+                                });
+                                isUpdated = true;
+                            }
+                            if (!this.utils.getSpriteNameHash().get("鸽了")) {
+                                list.push({
+                                    "Id": 2004042,
+                                    "Name": "鸽了",
+                                    "FiveEle": [
+                                        "无"
+                                    ],
+                                    "PrefabName": "4042_GeZi_head",
+                                    "ImgName": "4042",
+                                    "BigImgPath": "512_body/4042_GeZi_big.png",
+                                    "SmallImgPath": "128_head/4042_GeZi_head.png",
                                     "Level": 1
                                 });
                                 isUpdated = true;
@@ -403,6 +490,10 @@ var ZhuoYao;
                                     "FiveEle": [
                                         "无"
                                     ],
+                                    "PrefabName": "4043_ZhenXiang",
+                                    "ImgName": "4043",
+                                    "BigImgPath": "512_body/4043_ZhenXiang.png",
+                                    "SmallImgPath": "128_head/4043_ZhenXiang_head.png",
                                     "Level": 1
                                 });
                                 isUpdated = true;
@@ -410,6 +501,21 @@ var ZhuoYao;
                             if (isUpdated) {
                                 that.utils.setSpriteConfig(list);
                                 that.utils.setSpriteList(list);
+                            }
+                            if (!this.utils.getSpriteNameHash().get("全员恶人")) {
+                                list.push({
+                                    "Id": 2004044,
+                                    "Name": "全员恶人",
+                                    "FiveEle": [
+                                        "空"
+                                    ],
+                                    "PrefabName": "4044_QuanYuanERen_head",
+                                    "ImgName": "4044",
+                                    "BigImgPath": "512_body/4044_QuanYuanERen_big.png",
+                                    "SmallImgPath": "128_head/4044_QuanYuanERen_head.png",
+                                    "Level": 1
+                                });
+                                isUpdated = true;
                             }
                         }
                         that.setFileName(i);
