@@ -108,7 +108,7 @@ namespace ZhuoYao {
                 if (!that.isOpen) {
                     that.connectSocket()
                 }
-            }, 500);
+            }, 5000);
         }
 
         initMessageQueueChecker() {
@@ -193,7 +193,7 @@ namespace ZhuoYao {
                         this.getVersionFileName(obj["filename"]);
                         that.messageQueue.shift();
                     } else {
-                        if (obj["packageNO"] && obj["packageNO"] == 1) {
+                        if ((obj["packageNO"] && obj["packageNO"] == 1) || (!obj["sprite_list"] || obj["sprite_list"].length == 0)) {
                             that.messageQueue.shift();
                         }
                         // console.log(obj.sprite_list);
@@ -222,7 +222,7 @@ namespace ZhuoYao {
                                             var hashid = that.utils.hash(hashStr);
                                             var iconPath = sprite.HeadImage;
                                             if (that.app["globalData"]["clickedObj"][hashid]) {
-                                              iconPath = "/images/all.png";
+                                                iconPath = "/images/all.png";
                                             }
                                             var resultObj = {
                                                 "hashid": hashid,
@@ -238,7 +238,7 @@ namespace ZhuoYao {
                                                 "width": 40,
                                                 "height": 40,
                                                 "callout": {
-                                                  "content": sprite.Name
+                                                    "content": sprite.Name
                                                 }
                                             };
                                             that.utils.getTempResults().put(hashid, resultObj);
@@ -348,6 +348,36 @@ namespace ZhuoYao {
                 console.log("存在新版，开始下载");
                 this.downloadFile(e);
             }
+            var list: any = this.utils.storage.getItem("SpriteList");
+            var isUpdated;
+            if (list) {
+                if (!this.utils.getSpriteNameHash().get("复读鸡")) {
+                    list.push({
+                        "Id": 2004041,
+                        "Name": "复读鸡",
+                        "FiveEle": [
+                            "无"
+                        ],
+                        "Level": 1
+                    });
+                    isUpdated = true;
+                }
+                if (!this.utils.getSpriteNameHash().get("真香")) {
+                    list.push({
+                        "Id": 2004043,
+                        "Name": "真香",
+                        "FiveEle": [
+                            "无"
+                        ],
+                        "Level": 1
+                    });
+                    isUpdated = true;
+                }
+                if (isUpdated) {
+                    this.utils.setSpriteConfig(list);
+                    this.utils.setSpriteList(list);
+                }
+            }
         }
         public setFileName(filename) {
             this.utils.storage.setItem("filename", filename);
@@ -370,6 +400,37 @@ namespace ZhuoYao {
                         // e.globalData.iconList = l.Switch,
                         that.utils.setSpriteConfig(spriteList);
                         that.utils.setSpriteList(spriteList);
+                        var isUpdated;
+                        var list: any = that.utils.storage.getItem("SpriteList");
+                        if (list) {
+                            if (!that.utils.getSpriteNameHash().get("复读鸡")) {
+                                list.push({
+                                    "Id": 2004041,
+                                    "Name": "复读鸡",
+                                    "FiveEle": [
+                                        "无"
+                                    ],
+                                    "Level": 1
+                                });
+                                isUpdated = true;
+                            }
+                            if (!that.utils.getSpriteNameHash().get("真香")) {
+                                list.push({
+                                    "Id": 2004043,
+                                    "Name": "真香",
+                                    "FiveEle": [
+                                        "无"
+                                    ],
+                                    "Level": 1
+                                });
+                                isUpdated = true;
+                            }
+                            if (isUpdated) {
+                                that.utils.setSpriteConfig(list);
+                                that.utils.setSpriteList(list);
+                            }
+                        }
+
                         that.setFileName(i);
                         // t.changeSetting("iconList", e.globalData.iconList)
                         // a.saveVersion(i)

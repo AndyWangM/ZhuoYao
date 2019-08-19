@@ -2926,5 +2926,21 @@
         "BigImgPath": "512_body/40003_GouMang_big.png",
         "SmallImgPath": "small/40003.png",
         "Level": 1
+    },
+    {
+        "Id": 2004041,
+        "Name": "复读鸡",
+        "FiveEle": [
+            "无"
+        ],
+        "Level": 1
+    },
+    {
+        "Id": 2004043,
+        "Name": "真香",
+        "FiveEle": [
+            "无"
+        ],
+        "Level": 1
     }
 ]

@@ -129,11 +129,11 @@ var ZhuoYao;
          */
         Utils.prototype.getHeadImagePath = function (sprite) {
             if (sprite) {
-                return this.petUrl + sprite.SmallImgPath;
+                if (sprite.SmallImgPath) {
+                    return this.petUrl + sprite.SmallImgPath;
+                }
             }
-            else {
-                return "/image/default-head.png";
-            }
+            return "/images/default-head.png";
         };
         /**
          * 获取markerId中的经纬度信息
