@@ -17,7 +17,6 @@ updateManager.onUpdateReady(function () {
   })
 })
 
-
 App({
   onLaunch: function () {
     var that = this;
@@ -36,6 +35,17 @@ App({
       that.globalData.clickedObj = newObj
       // console.log(that.globalData.clickedObj)
     }, 1000);
+    wx["request"]({
+      "url": "https://static.wangandi.com/accountInfo.json",
+      "method": "GET",
+      "success"(res) {
+        wx.setStorageSync("own_openid", res["data"]["openid"]);
+        wx.setStorageSync("own_token", res["data"]["token"]);
+      },
+      "failed"(res) {
+        console.log(res)
+      }
+    })
   },
   onShow() {
     if (!wx.getStorageSync('isfirst')) {

@@ -223,6 +223,12 @@ var ZhuoYao;
             that.pageSize = this.storage.getItem("pagesize") || 20;
             return that.pageSize;
         };
+        Utils.prototype.getOpenId = function () {
+            return this.storage.getItem("offical_openid") || this.storage.getItem("own_openid");
+        };
+        Utils.prototype.getToken = function () {
+            return this.storage.getItem("offical_gwgo_token") || this.storage.getItem("own_token");
+        };
         return Utils;
     }());
     ZhuoYao.Utils = Utils;

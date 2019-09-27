@@ -13,6 +13,8 @@ var defaultUserInfo = {
 Page({
   data: {
     userInfo: {},
+    showModal: false,
+    offical_openid: wx.getStorageSync("offical_openid") || "",
     list: [{
       icon: 'images/help.png',
       text: '使用说明',
@@ -37,6 +39,11 @@ Page({
       icon: 'images/setting.png',
       text: '观看广告',
       type: 'ad'
+    },
+    {
+      icon: 'images/setting.png',
+      text: '设置官方小程序身份码',
+      type: 'official'
     },
     {
       icon: 'images/tel.png',
@@ -250,6 +257,11 @@ Page({
         case "page":
           that.setPage();
           break;
+        case "official":
+          that.setData({
+            showModal: true
+          })
+          break;
         case "ad":
           if (videoAd) {
             videoAd.show().catch(() => {
@@ -278,6 +290,35 @@ Page({
     return {
       title: '捉妖工具',
       path: '/pages/sprite/search/search'
+    }
+  },
+  bindOFOpenID(e) {
+    if (e.detail.value) {
+      this.setData({
+        offical_openid: e.detail.value
+      })
+      wx.setStorageSync("offical_openid", e.detail.value);
+    }
+  },
+  bindOFToken(e) {
+    if (e.detail.value) {
+      wx.setStorageSync("offical_gwgo_token", e.detail.value)
+    }
+  },
+  modalCancel(e) {
+    this.setData({
+      showModal: false
+    })
+  },
+  modalConfirm(e) {
+    this.setData({
+      showModal: false
+    })
+    if (wx.getStorageSync("offical_openid") && wx.getStorageSync("offical_gwgo_token")) {
+      wx.showModal({
+        title: '注意',
+        content: '设置成功，请关闭小程序进程后重新打开'
+      })
     }
   }
 });

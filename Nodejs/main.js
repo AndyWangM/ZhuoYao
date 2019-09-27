@@ -134,7 +134,10 @@ function initSocket() {
             "request_type": "1004",
             "cfg_type": 1,
             "requestid": (new Date).getTime() % 1234567,
-            "platform": 0
+            "platform": 0,
+            "appid": "wx19376645db21af08",
+            "openid": "oxARK5A5MG-HzgE_KUDWnFER1lCQ",
+            "gwgo_token": "8518102552478646272"
         };
         ws.send(strUtils.str2ab(e));
     };
@@ -213,7 +216,10 @@ function buildRequest(location) {
         "longtitude": location.longitude,
         "latitude": location.latitude,
         "requestid": (new Date).getTime() % 1234567,
-        "platform": 0
+        "platform": 0,
+        "appid": "wx19376645db21af08",
+        "openid": "oxARK5A5MG-HzgE_KUDWnFER1lCQ",
+        "gwgo_token": "8518102552478646272"
     };
     return obj;
 }

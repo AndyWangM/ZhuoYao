@@ -1,8 +1,8 @@
 var ZhuoYao, Socket, utils, SpritesAPI, HashMap, containsKey;
-var initSocket, sendSocketMessage, isSearching, clearMessageQueue;
+var initSocket, sendSocketMessage, isSearching, clearMessageQueue, clearAllMessageQueue;
 var genRequestId;
 var convertLocation, getLeftTime, getSpriteList, setSpriteConfig, getSpriteByName, getSpriteNameHash, setCoordinate, getLocation, hash, getTempResults, getMarkerInfo,
-    getSplitSign, setSplitSign, setLonfront, getLonfront, getPageSize, setPageSize;
+    getSplitSign, setSplitSign, setLonfront, getLonfront, getPageSize, setPageSize, getOpenId, getToken;
 
 var get, put, clear;
 

@@ -35,7 +35,6 @@ var ZhuoYao;
                     var configs = result["data"]["sprite_searching_config"];
                     for (var i = 0; i < configs.length; i++) {
                         var searchPoints = that.getPoints(configs[i]);
-                        console.log(configs[i]["region"]);
                         that.backendMessageQueue = searchPoints;
                     }
                 }
@@ -60,8 +59,36 @@ var ZhuoYao;
             }
             return allPoints;
         };
+        Socket.prototype.fistLetterUpper = function (str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        };
+        ;
+        Socket.prototype.downloadFileFromServer = function () {
+            var that = this;
+            if (!that.utils.storage.getItem("SpriteList")) {
+                ZhuoYao.SpritesAPI.getConfig(function (res) {
+                    if (200 === res["statusCode"]) {
+                        var configs = res["data"]["data"]["configs"];
+                        var spriteList = [];
+                        for (var i = 0; i < configs.length; i++) {
+                            var obj = {};
+                            for (var key in configs[i]) {
+                                obj[that.fistLetterUpper(key)] = configs[i][key];
+                            }
+                            spriteList.push(obj);
+                        }
+                        that.utils.setSpriteConfig(spriteList);
+                        that.utils.setSpriteList(spriteList);
+                    }
+                });
+            }
+            else {
+                console.log(that.utils.storage.getItem("SpriteList"));
+            }
+        };
         Socket.prototype.initSocket = function () {
             var that = this;
+            this.downloadFileFromServer();
             this.initSocketChecker();
             this.initMessageQueueChecker();
             that.connectSocket();
@@ -121,7 +148,10 @@ var ZhuoYao;
                 "longtitude": location.longitude,
                 "latitude": location.latitude,
                 "requestid": that.genRequestId("1001"),
-                "platform": 0
+                "platform": 0,
+                "appid": "wx19376645db21af08",
+                "openid": that.utils.getOpenId(),
+                "gwgo_token": that.utils.getToken()
             };
             return obj;
         };
@@ -144,6 +174,10 @@ var ZhuoYao;
         };
         Socket.prototype.clearMessageQueue = function () {
             this.messageQueue = [];
+        };
+        Socket.prototype.clearAllMessageQueue = function () {
+            this.messageQueue = [];
+            this.backendMessageQueue = [];
         };
         Socket.prototype.sendSocketMessage = function (str, callback) {
             var that = this;
@@ -322,7 +356,10 @@ var ZhuoYao;
                 "request_type": "1004",
                 "cfg_type": 1,
                 "requestid": that.genRequestId("10041"),
-                "platform": 0
+                "platform": 0,
+                "appid": "wx19376645db21af08",
+                "openid": that.utils.getOpenId(),
+                "gwgo_token": that.utils.getToken()
             };
             that.sendMessage(e);
         };
@@ -332,89 +369,6 @@ var ZhuoYao;
                 console.log("存在新版，开始下载");
                 this.downloadFile(e);
             }
-            // var list: any = this.utils.storage.getItem("SpriteList");
-            // var isUpdated;
-            // if (list) {
-            //     if (!this.utils.getSpriteNameHash().get("柠檬精")) {
-            //         list.push({
-            //             "Id": 2004040,
-            //             "Name": "柠檬精",
-            //             "FiveEle": [
-            //                 "无"
-            //             ],
-            //             "PrefabName": "4040_NingMeng",
-            //             "ImgName": "4040",
-            //             "BigImgPath": "512_head/4040_NingMeng_big.png",
-            //             "SmallImgPath": "128_head/4040_NingMeng_head.png",
-            //             "Level": 1
-            //         });
-            //         isUpdated = true;
-            //     }
-            //     if (!this.utils.getSpriteNameHash().get("复读鸡")) {
-            //         list.push({
-            //             "Id": 2004041,
-            //             "Name": "复读鸡",
-            //             "FiveEle": [
-            //                 "无"
-            //             ],
-            //             "PrefabName": "4041_FuDuJi",
-            //             "ImgName": "4041",
-            //             "BigImgPath": "512_body/4041_FuDuJi.png",
-            //             "SmallImgPath": "128_head/4041_FuDuJi_head.png",
-            //             "Level": 1
-            //         });
-            //         isUpdated = true;
-            //     }
-            //     if (!this.utils.getSpriteNameHash().get("鸽了")) {
-            //         list.push({
-            //             "Id": 2004042,
-            //             "Name": "鸽了",
-            //             "FiveEle": [
-            //                 "无"
-            //             ],
-            //             "PrefabName": "4042_GeZi_head",
-            //             "ImgName": "4042",
-            //             "BigImgPath": "512_body/4042_GeZi_big.png",
-            //             "SmallImgPath": "128_head/4042_GeZi_head.png",
-            //             "Level": 1
-            //         });
-            //         isUpdated = true;
-            //     }
-            //     if (!this.utils.getSpriteNameHash().get("真香")) {
-            //         list.push({
-            //             "Id": 2004043,
-            //             "Name": "真香",
-            //             "FiveEle": [
-            //                 "无"
-            //             ],
-            //             "PrefabName": "4043_ZhenXiang",
-            //             "ImgName": "4043",
-            //             "BigImgPath": "512_body/4043_ZhenXiang.png",
-            //             "SmallImgPath": "128_head/4043_ZhenXiang_head.png",
-            //             "Level": 1
-            //         });
-            //         isUpdated = true;
-            //     }
-            //     if (!this.utils.getSpriteNameHash().get("全员恶人")) {
-            //         list.push({
-            //             "Id": 2004044,
-            //             "Name": "全员恶人",
-            //             "FiveEle": [
-            //                 "空"
-            //             ],
-            //             "PrefabName": "4044_QuanYuanERen_head",
-            //             "ImgName": "4044",
-            //             "BigImgPath": "512_body/4044_QuanYuanERen_big.png",
-            //             "SmallImgPath": "128_head/4044_QuanYuanERen_head.png",
-            //             "Level": 1
-            //         });
-            //         isUpdated = true;
-            //     }
-            //     if (isUpdated) {
-            // this.utils.setSpriteConfig(list);
-            // this.utils.setSpriteList(list);
-            // }
-            // }
         };
         Socket.prototype.setFileName = function (filename) {
             this.utils.storage.setItem("filename", filename);
@@ -431,96 +385,9 @@ var ZhuoYao;
                         console.log("下载成功" + i);
                         var n = wx["getFileSystemManager"]()["readFileSync"](s["tempFilePath"], "utf8"), l = JSON.parse(n);
                         var spriteList = l["Data"];
-                        // console.log(spriteHash);
-                        // e.globalData.iconList = l.Switch,
                         that.utils.setSpriteConfig(spriteList);
                         that.utils.setSpriteList(spriteList);
-                        // var isUpdated;
-                        // var list: any = that.utils.storage.getItem("SpriteList");
-                        // if (list) {
-                        //     if (!this.utils.getSpriteNameHash().get("柠檬精")) {
-                        //         list.push({
-                        //             "Id": 2004040,
-                        //             "Name": "柠檬精",
-                        //             "FiveEle": [
-                        //                 "无"
-                        //             ],
-                        //             "PrefabName": "4040_NingMeng",
-                        //             "ImgName": "4040",
-                        //             "BigImgPath": "512_head/4040_NingMeng_big.png",
-                        //             "SmallImgPath": "128_head/4040_NingMeng_head.png",
-                        //             "Level": 1
-                        //         });
-                        //         isUpdated = true;
-                        //     }
-                        //     if (!that.utils.getSpriteNameHash().get("复读鸡")) {
-                        //         list.push({
-                        //             "Id": 2004041,
-                        //             "Name": "复读鸡",
-                        //             "FiveEle": [
-                        //                 "无"
-                        //             ],
-                        //             "PrefabName": "4041_FuDuJi",
-                        //             "ImgName": "4041",
-                        //             "BigImgPath": "512_body/4041_FuDuJi.png",
-                        //             "SmallImgPath": "128_head/4041_FuDuJi_head.png",
-                        //             "Level": 1
-                        //         });
-                        //         isUpdated = true;
-                        //     }
-                        //     if (!this.utils.getSpriteNameHash().get("鸽了")) {
-                        //         list.push({
-                        //             "Id": 2004042,
-                        //             "Name": "鸽了",
-                        //             "FiveEle": [
-                        //                 "无"
-                        //             ],
-                        //             "PrefabName": "4042_GeZi_head",
-                        //             "ImgName": "4042",
-                        //             "BigImgPath": "512_body/4042_GeZi_big.png",
-                        //             "SmallImgPath": "128_head/4042_GeZi_head.png",
-                        //             "Level": 1
-                        //         });
-                        //         isUpdated = true;
-                        //     }
-                        //     if (!that.utils.getSpriteNameHash().get("真香")) {
-                        //         list.push({
-                        //             "Id": 2004043,
-                        //             "Name": "真香",
-                        //             "FiveEle": [
-                        //                 "无"
-                        //             ],
-                        //             "PrefabName": "4043_ZhenXiang",
-                        //             "ImgName": "4043",
-                        //             "BigImgPath": "512_body/4043_ZhenXiang.png",
-                        //             "SmallImgPath": "128_head/4043_ZhenXiang_head.png",
-                        //             "Level": 1
-                        //         });
-                        //         isUpdated = true;
-                        //     }
-                        //     if (isUpdated) {
-                        //         that.utils.setSpriteConfig(list);
-                        //         that.utils.setSpriteList(list);
-                        //     }
-                        //     if (!this.utils.getSpriteNameHash().get("全员恶人")) {
-                        //         list.push({
-                        //             "Id": 2004044,
-                        //             "Name": "全员恶人",
-                        //             "FiveEle": [
-                        //                 "空"
-                        //             ],
-                        //             "PrefabName": "4044_QuanYuanERen_head",
-                        //             "ImgName": "4044",
-                        //             "BigImgPath": "512_body/4044_QuanYuanERen_big.png",
-                        //             "SmallImgPath": "128_head/4044_QuanYuanERen_head.png",
-                        //             "Level": 1
-                        //         });
-                        //         isUpdated = true;
-                        //     }
-                        // }
                         that.setFileName(i);
-                        // t.changeSetting("iconList", e.globalData.iconList)
-                        // a.saveVersion(i)
                     }
                     else
                         that.downloadFailed(i);

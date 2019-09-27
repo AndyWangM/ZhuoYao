@@ -77,3 +77,8 @@
   background: salmon;
   opacity: 0;
 }
+
+.text-tyle {
+  color: red;
+  font-size: 20rpx;
+}

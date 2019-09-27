@@ -61,7 +61,10 @@ Page({
     polygons: [],
     allPoints: []
   },
-  onLoad() {
+  onLoad(e) {
+    if (e.isRelaunch && socket) {
+      socket = null;
+    }
     wx.getSetting({
       success(res) {
         if (!res.authSetting['scope.userLocation']) {
@@ -130,7 +133,7 @@ Page({
     socket = new ZhuoYao.Socket(worker, app);
     app.globalData.zhuoyao.utils = socket.utils;
   },
-  onShow() {
+  onShow(e) {
     var that = this;
     socket.initSocket();
   },
@@ -255,11 +258,6 @@ Page({
       this.getPoints()
     }
   },
-  // bindSpeed(e) {
-  //   this.setData({
-  //     speed: e.detail.value
-  //   })
-  // },
   selectLocation() {
     var that = this;
     wx.getSetting({
@@ -337,6 +335,19 @@ Page({
   },
   searchYaojing() {
     var that = this;
+    if (!socket.utils.getOpenId() || !socket.utils.getToken()) {
+      wx.showModal({
+        title: '注意事项',
+        content: '全局设置中的官方小程序OpenID或Token没有配置，无法进行搜索，仅可使用已知妖灵。',
+        success(res) {
+          if (res.confirm) {
+            wx.switchTab({
+              url: '/pages/user/user'
+            })
+          }
+        }
+      })
+    }
     var convertLocation = function (num) {
       var numStr = num.toFixed(6);
       return parseInt(1e6 * numStr);
@@ -356,7 +367,10 @@ Page({
       request_type: "1004",
       cfg_type: 1,
       requestid: socket.genRequestId("10041"),
-      platform: 0
+      platform: 0,
+      appid: "wx19376645db21af08",
+      openid: socket.utils.getOpenId(),
+      gwgo_token: socket.utils.getToken()
     };
     that.sendMessage(e, "10041")
   },
@@ -366,7 +380,10 @@ Page({
       request_type: "1004",
       cfg_type: 0,
       requestid: socket.genRequestId("10040"),
-      platform: 0
+      platform: 0,
+      appid: "wx19376645db21af08",
+      openid: socket.utils.getOpenId(),
+      gwgo_token: socket.utils.getToken()
     };
     that.sendMessage(e, "10040")
   },
@@ -453,7 +470,10 @@ Page({
         longtitude: app.globalData.zhuoyao.utils.convertLocation(Number(points[m]["longitude"])),
         latitude: app.globalData.zhuoyao.utils.convertLocation(Number(points[m]["latitude"])),
         requestid: socket.genRequestId("1001"),
-        platform: 0
+        platform: 0, 
+        appid: "wx19376645db21af08",
+        openid: socket.utils.getOpenId(),
+        gwgo_token: socket.utils.getToken()
       };
       that.sendMessage(e, "1001")
       // }, timeout);
@@ -477,7 +497,10 @@ Page({
       longtitude: app.globalData.zhuoyao.utils.convertLocation(mapInfo.longitude),
       latitude: app.globalData.zhuoyao.utils.convertLocation(mapInfo.latitude),
       requestid: socket.genRequestId("1002"),
-      platform: 0
+      platform: 0, 
+      appid: "wx19376645db21af08",
+      openid: socket.utils.getOpenId(),
+      gwgo_token: socket.utils.getToken()
     };
     that.sendMessage(e, "1002")
   },

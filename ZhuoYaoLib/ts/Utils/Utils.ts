@@ -251,6 +251,12 @@ namespace ZhuoYao {
             that.pageSize = this.storage.getItem("pagesize") || 20;
             return that.pageSize;
         }
+        public getOpenId() {
+            return this.storage.getItem("offical_openid") || this.storage.getItem("own_openid");
+        }
+        public getToken() {
+            return this.storage.getItem("offical_gwgo_token") || this.storage.getItem("own_token");
+        }
     }
 
 

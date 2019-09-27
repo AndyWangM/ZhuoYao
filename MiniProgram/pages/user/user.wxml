@@ -23,3 +23,13 @@
   </view>
   <template wx:for="{{list}}" is="list" data="{{...item}}"></template>
 </scroll-view>
+
+<!-- <modal show="{{showModal}}" height='60%' bindcancel="modalCancel" bindconfirm='modalConfirm'>
+    <input type="text" bindinput='bindOFOpenID' placeholder='官方小程序OpenID' value="{{offical_openid}}"></input>
+    <input type="text" bindinput='bindOFToken' placeholder='官方小程序Token'></input>
+</modal> -->
+<modal class="modal" hidden="{{!showModal}}" no-cancel bindconfirm="modalConfirm">
+  <text class="text-tyle">Token具有时效性，一般为2小时，若妖灵搜索没有结果时，需要再次更新Token，进群了解如何获取身份码。</text>
+  <input type="text" bindinput='bindOFOpenID' placeholder='官方小程序OpenID' value="{{offical_openid}}"></input>
+  <input type="text" bindinput='bindOFToken' placeholder='官方小程序Token' value="{{offical_gwgo_token}}"></input>
+</modal>
