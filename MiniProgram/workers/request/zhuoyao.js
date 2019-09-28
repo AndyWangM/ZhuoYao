@@ -72,7 +72,7 @@ var ZhuoYao;
   }(); e.Aa = f
 })(ZhuoYao || (ZhuoYao = {})); (function (e) {
   var f = function () {
-    function b() { } b.setSpriteList = function (a) { this.h.qa(this.url + this.sa, a) }; b.ha = function (a) { this.h.get(this.ua, null, a) }; b.ia = function (a) { this.h.get(this.va, null, a) }; b.da = function (a) { this.h.get(this.X, null, a) }; b.get = function (a) { this.h.get(this.url + this.ba + a) }; b.url = "https://www.wangandi.com/"; b.ua = "https://www.wangandi.com/api/config/getSearchConfig"; b.va = "https://www.wangandi.com/api/sprites/filter/get"; b.X = "http://www.wangandi.com/api/sprites/config"; b.ba = "api/sprites/get/";
+    function b() { } b.setSpriteList = function (a) { this.h.qa(this.url + this.sa, a) }; b.ha = function (a) { this.h.get(this.ua, null, a) }; b.ia = function (a) { this.h.get(this.va, null, a) }; b.da = function (a) { this.h.get(this.X, null, a) }; b.get = function (a) { this.h.get(this.url + this.ba + a) }; b.url = "https://www.wangandi.com/"; b.ua = "https://www.wangandi.com/api/config/getSearchConfig"; b.va = "https://www.wangandi.com/api/sprites/filter/get"; b.X = "https://www.wangandi.com/api/sprites/config"; b.ba = "api/sprites/get/";
     b.sa = "api/sprites/set/"; b.h = new e.T; return b
   }(); e.SpritesAPI = f
 })(ZhuoYao || (ZhuoYao = {})); (function (e) {

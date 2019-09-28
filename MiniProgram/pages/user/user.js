@@ -35,11 +35,11 @@ Page({
       text: '分页数量设置',
       type: 'page'
     },
-    {
-      icon: 'images/setting.png',
-      text: '观看广告',
-      type: 'ad'
-    },
+    // {
+    //   icon: 'images/setting.png',
+    //   text: '观看广告',
+    //   type: 'ad'
+    // },
     {
       icon: 'images/setting.png',
       text: '设置官方小程序身份码',
