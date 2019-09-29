@@ -26,7 +26,7 @@ var ZhuoYao;
         // private static url: string = "http://127.0.0.1:3585/";
         SpritesAPI.spriteConfigUrl = "https://www.wangandi.com/api/config/getSearchConfig";
         SpritesAPI.spriteFilterUrl = "https://www.wangandi.com/api/sprites/filter/get";
-        SpritesAPI.configUrl = "http://www.wangandi.com/api/sprites/config";
+        SpritesAPI.configUrl = "https://www.wangandi.com/api/sprites/config";
         // private static spriteConfigUrl: string = "http://127.0.0.1:3585/api/config/getSearchConfig";
         SpritesAPI.getAPI = "api/sprites/get/";
         SpritesAPI.setAPI = "api/sprites/set/";

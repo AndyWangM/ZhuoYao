@@ -19,7 +19,7 @@ var ZhuoYao;
       this.s = a; this.a.setItem("coordinate",
         a)
       }; b.prototype.getLocation = function (a, c) { this.s || (this.s = this.a.getItem("coordinate") || "GCJ02"); switch (this.s) { case "GCJ02": return [a, c]; case "BD09": return e.D.$(a, c); case "WGS84": return e.D.aa(a, c) } }; b.prototype.setSplitSign = function (a) { this.v = a; this.a.setItem("splitsign", a) }; b.prototype.getSplitSign = function () { "spacesplit" == (this.a.getItem("splitsign") || "spacesplit") ? this.v = " " : this.v = ","; return this.v }; b.prototype.setLonfront = function (a) { this.P = a; this.a.setItem("lonfront", a) }; b.prototype.getLonfront =
-        function () { return this.P = this.a.getItem("lonfront") }; b.prototype.setPageSize = function (a) { this.a.setItem("pagesize", a || 20) }; b.prototype.getPageSize = function () { return this.oa = this.a.getItem("pagesize") || 20 }; b.prototype.getOpenId = function () { return this.a.getItem("offical_openid") || this.a.getItem("own_openid") }; b.prototype.getToken = function () { return this.a.getItem("offical_gwgo_token") || this.a.getItem("own_token") }; return b
+        function () { return this.P = this.a.getItem("lonfront") }; b.prototype.setPageSize = function (a) { this.a.setItem("pagesize", a || 20) }; b.prototype.getPageSize = function () { return this.oa = this.a.getItem("pagesize") || 20 }; b.prototype.getOpenId = function () { return this.a.getItem("offical_openid") || this.a.getItem("own_v1_openid") }; b.prototype.getToken = function () { return this.a.getItem("offical_gwgo_token") || this.a.getItem("own_v1_token") }; return b
   }(); e.V = f
 })(ZhuoYao || (ZhuoYao = {})); (function (e) {
   var f = function () {

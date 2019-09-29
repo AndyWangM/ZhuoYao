@@ -36,11 +36,11 @@ App({
       // console.log(that.globalData.clickedObj)
     }, 1000);
     wx["request"]({
-      "url": "https://static.wangandi.com/accountInfo.json",
+      "url": "https://static.wangandi.com/accountInfo1.json",
       "method": "GET",
       "success"(res) {
-        wx.setStorageSync("own_openid", res["data"]["openid"]);
-        wx.setStorageSync("own_token", res["data"]["token"]);
+        wx.setStorageSync("own_v1_openid", res["data"]["openid"]);
+        wx.setStorageSync("own_v1_token", res["data"]["token"]);
       },
       "failed"(res) {
         console.log(res)
