@@ -17,9 +17,15 @@ worker.onMessage(function (obj) {
       }
 
       var spriteNameFilter = obj.filter;
-      if (spriteNameFilter.length > 0) {
-        if (spriteNameFilter.indexOf(aliveSprite.sprite_id) != -1) {
-          arr.push(aliveSprite);
+      if (obj.type === "front") {
+        if (spriteNameFilter.length > 0) {
+          if (spriteNameFilter.indexOf(aliveSprite.sprite_id) != -1) {
+            arr.push(aliveSprite);
+          }
+        } else {
+          if (Math.random()*100 <= 5) {
+            arr.push(aliveSprite);  
+          }
         }
       }
     }

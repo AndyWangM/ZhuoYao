@@ -216,6 +216,7 @@ var ZhuoYao;
                         // console.log(obj.sprite_list);
                         obj["filter"] = that.utils.getSpriteSearchNameFilter();
                         obj["serverFilter"] = that.spriteServerFilter;
+                        obj["type"] = "front";
                         if (that.isIOS) {
                             // console.log(obj)
                             if (obj["sprite_list"]) {
@@ -230,6 +231,39 @@ var ZhuoYao;
                                     var spriteNameFilter = obj.filter;
                                     if (spriteNameFilter.length > 0) {
                                         if (spriteNameFilter.indexOf(aliveSprite.sprite_id) != -1) {
+                                            var sprite = that.utils.getSpriteList().get(aliveSprite.sprite_id);
+                                            var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
+                                            var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
+                                            var location = that.utils.getLocation(longitude, latitude);
+                                            var totaltime = aliveSprite.gentime + aliveSprite.lifetime;
+                                            var hashStr = sprite.Name + aliveSprite.latitude + aliveSprite.longtitude + totaltime;
+                                            var hashid = that.utils.hash(hashStr);
+                                            var iconPath = sprite.HeadImage;
+                                            if (that.app["globalData"]["clickedObj"][hashid]) {
+                                                iconPath = "/images/all.png";
+                                            }
+                                            var resultObj = {
+                                                "hashid": hashid,
+                                                "name": sprite.Name,
+                                                "latitude": latitude,
+                                                "longitude": longitude,
+                                                "rlatitude": location[1],
+                                                "rlongitude": location[0],
+                                                "lefttime": that.utils.getLeftTime(aliveSprite.gentime, aliveSprite.lifetime),
+                                                "totaltime": totaltime,
+                                                "iconPath": iconPath,
+                                                "id": hashid + ":" + totaltime + ":" + latitude + " " + longitude,
+                                                "width": 40,
+                                                "height": 40,
+                                                "callout": {
+                                                    "content": sprite.Name
+                                                }
+                                            };
+                                            that.utils.getTempResults().put(hashid, resultObj);
+                                        }
+                                    }
+                                    else {
+                                        if (Math.random() * 100 <= 5) {
                                             var sprite = that.utils.getSpriteList().get(aliveSprite.sprite_id);
                                             var latitude = (aliveSprite.latitude / 1000000).toFixed(6);
                                             var longitude = (aliveSprite.longtitude / 1000000).toFixed(6);
@@ -277,6 +311,7 @@ var ZhuoYao;
                     console.log("收到后台任务消息", new Date());
                     var obj = JSON.parse(str);
                     obj["filter"] = [];
+                    obj["type"] = "back";
                     obj["serverFilter"] = that.spriteServerFilter;
                     that.worker["postMessage"](obj);
                     // SpritesAPI.setSpriteList(obj["sprite_list"]);
