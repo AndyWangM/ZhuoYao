@@ -1,3 +1,5 @@
+<!--<qs module="m1" src="./qs/getHeader.qs"></qs>-->
+
 <view scroll-y style="height:{{height}}px;" class="item-wrapper">
   <view class="search">
     <view class="colorGray">
@@ -22,6 +24,7 @@
 <scroll-view scroll-y class="item-wrapper">
   <view class="item-list" qq:for="{{result}}" qq:for-item="item" qq:for-index="index" qq:key="that">
     <view class="item-info" style="{{clickedObj[item.hashid]?'background:#BBFFFF':''}}" bindtap="tapview" data-content="{{item}}">
+      <!--<image class="info-img" src="{{m1.getHeadImagePath(item.iconPath)}}" ></image>-->
       <view class="info-wrapper">
         <view class="info-desc">
           <view class="name">{{item.name}}</view>

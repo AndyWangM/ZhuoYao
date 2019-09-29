@@ -1,5 +1,6 @@
 import Touches from './utils/Touches.js'
 import ZhuoYao from './utils/zhuoyao.js'
+const mtjwxsdk = require('./utils/mtj-wx-sdk.js');
 
 const updateManager = qq.getUpdateManager()
 
@@ -15,7 +16,6 @@ updateManager.onUpdateReady(function () {
     }
   })
 })
-
 
 App({
   onLaunch: function () {
@@ -35,6 +35,23 @@ App({
       that.globalData.clickedObj = newObj
       // console.log(that.globalData.clickedObj)
     }, 1000);
+    try {
+      qq.removeStorageSync('own_v1_openid');
+      qq.removeStorageSync('own_v1_token');
+    } catch (e) {
+      // Do something when catch error
+    }
+    wx["request"]({
+      "url": "https://static.wangandi.com/accountInfo1.json",
+      "method": "GET",
+      "success"(res) {
+        qq.setStorageSync("own_v1_openid", res["data"]["openid"]);
+        qq.setStorageSync("own_v1_token", res["data"]["token"]);
+      },
+      "failed"(res) {
+        console.log(res)
+      }
+    })
   },
   onShow() {
     if (!qq.getStorageSync('isfirst')) {
