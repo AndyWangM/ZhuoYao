@@ -35,6 +35,12 @@ App({
       that.globalData.clickedObj = newObj
       // console.log(that.globalData.clickedObj)
     }, 1000);
+    try {
+      wx.removeStorageSync('own_v1_openid');
+      wx.removeStorageSync('own_v1_token');
+    } catch (e) {
+      // Do something when catch error
+    }
     wx["request"]({
       "url": "https://static.wangandi.com/accountInfo1.json",
       "method": "GET",
