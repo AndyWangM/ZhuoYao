@@ -1,0 +1,7 @@
+StaticApplication/bin/*
+StaticApplication/obj/*
+StaticApplication/*.user
+StaticApplication/bin/*
+StaticApplication/obj/*
+StaticApplication/*.user
+.vs/*
