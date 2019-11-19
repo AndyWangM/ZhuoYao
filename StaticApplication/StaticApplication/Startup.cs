@@ -40,9 +40,9 @@ namespace StaticApplication
             {
                 app.UseHsts();
             }
-            app.UsePublicFiles();
             app.UseStaticFiles();
-            app.UseHttpsRedirection();
+            app.UsePublicFiles();
+            //app.UseHttpsRedirection();
             app.UseMvc();
         }
     }
